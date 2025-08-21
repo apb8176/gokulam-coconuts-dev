@@ -1,0 +1,1 @@
+// Admin auth guard placeholder

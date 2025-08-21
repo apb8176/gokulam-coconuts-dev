@@ -23,6 +23,19 @@
     "strictTemplates": true
   },
   "files": [],
+  "assets": [
+    "src/assets",
+    {
+      "glob": "**/*",
+      "input": "./src/assets",
+      "output": "./assets"
+    },
+    {
+      "glob": "**/*",
+      "input": "./src/favicon.ico",
+      "output": "./"
+    }
+  ],
   "references": [
     {
       "path": "./tsconfig.app.json"
