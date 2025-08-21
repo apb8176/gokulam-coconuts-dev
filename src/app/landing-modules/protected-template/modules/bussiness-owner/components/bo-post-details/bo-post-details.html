@@ -184,7 +184,25 @@
     </ng-content>
     } @else {
     <ng-content select="[gallery]">
-        gallery
+        
+
+<div class="grid gap-4 px-5 py-5 lg:grid-cols-5 ">
+  <!-- Thumbnails -->
+  <div class="order-2 lg:order-1 lg:col-span-1 flex lg:flex-col gap-4 max-h-[70vh] overflow-y-auto">
+    <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="">
+    <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-2.jpg" alt="">
+    <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-3.jpg" alt="">
+    <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-4.jpg" alt="">
+    <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-5.jpg" alt="">
+  </div>
+
+  <!-- Main Image -->
+  <div class="order-1 lg:order-2 lg:col-span-4 p-3 max-w-[60vw] ">
+    <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/featured/image.jpg" alt="">
+  </div>
+</div>
+
+
     </ng-content>
     }
 </div>
