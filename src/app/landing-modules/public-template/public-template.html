@@ -10,27 +10,47 @@
       <a routerLink="/" class="hover:text-gray-300">Home</a>
       <a routerLink="/services" class="hover:text-gray-300">Services</a>
       <a routerLink="/about" class="hover:text-gray-300">About Us</a>
-      <a routerLink="/login" class="hover:text-gray-300">Login / Register</a>
+      <a (click)="login()" class="hover:text-gray-300">Login / Register</a>
+
+      <a (click)="logout()" class="hover:text-gray-300">Logout</a>
+
     </nav>
     <!-- Mobile Menu -->
-    
+
     @if(showMobileMenu) {
-      <div class="md:hidden bg-[#2f3e30] text-white px-8 py-4 space-y-2">
-        <a routerLink="/" class="block hover:text-gray-300">Home</a>
-        <a routerLink="/services" class="block hover:text-gray-300">Services</a>
-        <a routerLink="/about" class="block hover:text-gray-300">About Us</a>
-        <a routerLink="/login" class="block hover:text-gray-300">Login / Register</a>
-      </div>
+    <div class="md:hidden bg-[#2f3e30] text-white px-8 py-4 space-y-2">
+      <a routerLink="/" class="block hover:text-gray-300">Home</a>
+      <a routerLink="/services" class="block hover:text-gray-300">Services</a>
+      <a routerLink="/about" class="block hover:text-gray-300">About Us</a>
+      <a (click)="login()" class="block hover:text-gray-300">Login / Register</a>
+
+      <a (click)="logout()" class="hover:text-gray-300">Logout</a>
+    </div>
     }
     <button class="md:hidden text-white" (click)="showMobileMenu = !showMobileMenu">
       ☰
     </button>
-    
+
   </header>
 
   <!-- Main -->
   <main class="flex-grow bg-[#e7efff]">
-      <router-outlet></router-outlet>
+    @if(isAuthenticated){
+    <div>
+
+      <br />
+
+      Is Authenticated: {{ isAuthenticated }}
+
+      <br />
+      userData
+      <pre>{{ userData$ | async | json }}</pre>
+
+      <br />
+    </div>
+    }
+
+    <router-outlet></router-outlet>
   </main>
 
   <!-- Footer -->
