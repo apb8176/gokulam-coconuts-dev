@@ -1,208 +1,265 @@
-<div class="border-b border-gray-200 dark:border-gray-700 " >
-    <ul class="flex flex-wrap justify-center -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
-        <li class="me-2">
-            <a (click)="showInfo = true" [ngClass]="showInfo 
-        ? 'text-blue-600 border-b-2 border-blue-600 dark:text-blue-500 dark:border-blue-500' 
-        : 'border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300'"
-                class="inline-flex items-center justify-center p-4 rounded-t-lg group">
-                <svg class="w-4 h-4 me-2"
-                    [ngClass]="showInfo ? 'text-blue-600 dark:text-blue-500' : 'text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300'"
-                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
-                    <path
-                        d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z" />
-                </svg>
-                Propery Details
-            </a>
-        </li>
 
-        <li class="me-2">
-            <a (click)="showInfo = false" [ngClass]="!showInfo 
-        ? 'text-blue-600 border-b-2 border-blue-600 dark:text-blue-500 dark:border-blue-500' 
-        : 'border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300'"
-                class="inline-flex items-center justify-center p-4 rounded-t-lg group">
-                <svg class="w-4 h-4 me-2"
-                    [ngClass]="!showInfo ? 'text-blue-600 dark:text-blue-500' : 'text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300'"
-                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
-                    <path
-                        d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z" />
-                </svg>
-                Gallery
-            </a>
-        </li>
-        <!-- <li class="me-2">
-            <a href="#" class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
-                <svg class="w-4 h-4 me-2 text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M5 11.424V1a1 1 0 1 0-2 0v10.424a3.228 3.228 0 0 0 0 6.152V19a1 1 0 1 0 2 0v-1.424a3.228 3.228 0 0 0 0-6.152ZM19.25 14.5A3.243 3.243 0 0 0 17 11.424V1a1 1 0 0 0-2 0v10.424a3.227 3.227 0 0 0 0 6.152V19a1 1 0 1 0 2 0v-1.424a3.243 3.243 0 0 0 2.25-3.076Zm-6-9A3.243 3.243 0 0 0 11 2.424V1a1 1 0 0 0-2 0v1.424a3.228 3.228 0 0 0 0 6.152V19a1 1 0 1 0 2 0V8.576A3.243 3.243 0 0 0 13.25 5.5Z"/>
-                </svg>Settings
-            </a>
-        </li>
-        <li class="me-2">
-            <a href="#" class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
-                <svg class="w-4 h-4 me-2 text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
-                    <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z"/>
-                </svg>Contacts
-            </a>
-        </li>
-        <li>
-            <a class="inline-block p-4 text-gray-400 rounded-t-lg cursor-not-allowed dark:text-gray-500">Disabled</a>
-        </li> -->
-    </ul>
-</div>
-<div>
-    @if(showInfo) {
-    <ng-content select="[property-details]">
-        <form #propertyForm="ngForm" (ngSubmit)="onSubmit(propertyForm)" 
-      class="max-w-4xl my-5 mx-auto p-6 bg-white rounded-lg shadow-md space-y-6">
-
-  <!-- SECTION 1: Property Details -->
-  <h2 class="text-lg font-semibold text-gray-800 border-b pb-2">Property Details</h2>
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-    <div>
-      <label for="type" class="block mb-2 text-sm font-medium text-gray-900">Property Type</label>
-      <select id="type" name="type" [(ngModel)]="property.type" required
-        class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 focus:ring-blue-500 focus:border-blue-500">
-        <option value="">Select</option>
-        <option value="House">House</option>
-        <option value="Apartment">Apartment</option>
-        <option value="Plot">Plot</option>
-        <option value="Commercial">Commercial</option>
-      </select>
-    </div>
-    <div>
-      <label for="bhk" class="block mb-2 text-sm font-medium text-gray-900">Type (BHK)</label>
-      <select id="bhk" name="bhk" [(ngModel)]="property.bhk"
-        class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5">
-        <option value="">Select</option>
-        <option value="1BHK">1BHK</option>
-        <option value="2BHK">2BHK</option>
-        <option value="3BHK">3BHK</option>
-        <option value="4BHK+">4BHK+</option>
-      </select>
-    </div>
-  </div>
-  <div>
-    <label for="address" class="block mb-2 text-sm font-medium text-gray-900">Address</label>
-    <textarea id="address" name="address" [(ngModel)]="property.address" required
-      class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5"></textarea>
-  </div>
-  <div>
-    <label for="location" class="block mb-2 text-sm font-medium text-gray-900">Google Map Location (URL)</label>
-    <input type="url" id="location" name="location" [(ngModel)]="property.location"
-      placeholder="https://maps.google.com/..."
-      class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
-  </div>
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-    <div>
-      <label for="size" class="block mb-2 text-sm font-medium text-gray-900">Size / Dimension (sqft)</label>
-      <input type="text" id="size" name="size" [(ngModel)]="property.size" required
-        class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
-    </div>
-    <div>
-      <label for="age" class="block mb-2 text-sm font-medium text-gray-900">Building Age (years)</label>
-      <input type="number" id="age" name="age" [(ngModel)]="property.age"
-        class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
-    </div>
-  </div>
-
-  <!-- SECTION 2: Owner Details -->
-  <h2 class="text-lg font-semibold text-gray-800 border-b pb-2">Owner Details</h2>
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-    <div>
-      <label for="ownerName" class="block mb-2 text-sm font-medium text-gray-900">Owner Name</label>
-      <input type="text" id="ownerName" name="ownerName" [(ngModel)]="property.ownerName" required
-        class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
-    </div>
-    <div>
-      <label for="contact" class="block mb-2 text-sm font-medium text-gray-900">Contact Number</label>
-      <input type="tel" id="contact" name="contact" [(ngModel)]="property.contact" required pattern="[0-9]{10}"
-        placeholder="10-digit number"
-        class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
-    </div>
-  </div>
-
-  <!-- SECTION 3: Pricing -->
-  <h2 class="text-lg font-semibold text-gray-800 border-b pb-2">Pricing</h2>
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-    <div>
-      <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Price (₹)</label>
-      <input type="number" id="price" name="price" [(ngModel)]="property.price" required
-        class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
-    </div>
-    <div>
-      <label for="maintenance" class="block mb-2 text-sm font-medium text-gray-900">Maintenance Cost (₹)</label>
-      <input type="number" id="maintenance" name="maintenance" [(ngModel)]="property.maintenance"
-        class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
-    </div>
-    <div>
-      <label for="advance" class="block mb-2 text-sm font-medium text-gray-900">Advance Amount (₹)</label>
-      <input type="number" id="advance" name="advance" [(ngModel)]="property.advance"
-        class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
-    </div>
-  </div>
-
-  <!-- SECTION 4: Availability -->
-  <h2 class="text-lg font-semibold text-gray-800 border-b pb-2">Availability</h2>
-  <div>
-    <label for="startDate" class="block mb-2 text-sm font-medium text-gray-900">Available From</label>
-    <input type="date" id="startDate" name="startDate" [(ngModel)]="property.startDate" required
-      class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
-  </div>
-
-  <!-- SECTION 5: Amenities -->
-  <h2 class="text-lg font-semibold text-gray-800 border-b pb-2">Amenities</h2>
-  <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-    <label class="flex items-center">
-      <input type="checkbox" name="amenities" [(ngModel)]="property.amenities.parking" class="mr-2"> Parking
-    </label>
-    <label class="flex items-center">
-      <input type="checkbox" name="amenities" [(ngModel)]="property.amenities.water" class="mr-2"> Water Supply
-    </label>
-    <label class="flex items-center">
-      <input type="checkbox" name="amenities" [(ngModel)]="property.amenities.lift" class="mr-2"> Lift
-    </label>
-    <label class="flex items-center">
-      <input type="checkbox" name="amenities" [(ngModel)]="property.amenities.power" class="mr-2"> Power Backup
-    </label>
-    <label class="flex items-center">
-      <input type="checkbox" name="amenities" [(ngModel)]="property.amenities.security" class="mr-2"> Security
-    </label>
-    <label class="flex items-center">
-      <input type="checkbox" name="amenities" [(ngModel)]="property.amenities.gym" class="mr-2"> Gym
-    </label>
-  </div>
-
-  <!-- Submit -->
-  <div class="pt-4">
-    <button type="submit"
-      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 
-      font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">
-      Submit
+<div class="max-w-6xl mx-auto p-4 md:p-8 bg-white">
+  <!-- Toggle Button -->
+  <div class="flex justify-end mb-4">
+    <button (click)="toggleEdit()"
+      class="px-4 py-2 rounded-lg font-medium text-white bg-[#115930] hover:bg-[#0D0D0D] transition">
+      {{ isEditMode ? 'Cancel' : (property.propertyName ? 'Edit' : 'Add Property') }}
     </button>
   </div>
-</form>
 
-    </ng-content>
-    } @else {
-    <ng-content select="[gallery]">
-        
+  <!-- FORM MODE -->
+  <form *ngIf="isEditMode" (ngSubmit)="submitForm()" class="space-y-6">
+    <!-- Property Name -->
+    <div>
+      <label class="block font-semibold mb-1 text-[#0D0D0D]">Property Name</label>
+      <input [(ngModel)]="property.propertyName" name="propertyName"
+        class="w-full p-2 border border-[#F2D479] rounded-lg focus:ring-[#115930] focus:border-[#115930]" required>
+    </div>
 
-<div class="grid gap-4 px-5 py-5 lg:grid-cols-5 ">
-  <!-- Thumbnails -->
-  <div class="order-2 lg:order-1 lg:col-span-1 flex lg:flex-col gap-4 max-h-[70vh] overflow-y-auto">
-    <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="">
-    <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-2.jpg" alt="">
-    <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-3.jpg" alt="">
-    <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-4.jpg" alt="">
-    <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-5.jpg" alt="">
+    <!-- Address & Google Map -->
+    <div>
+      <label class="block font-semibold mb-1 text-[#0D0D0D]">Address</label>
+      <textarea [(ngModel)]="property.address" name="address"
+        class="w-full p-2 border border-[#F2D479] rounded-lg"></textarea>
+
+      <label class="block font-semibold mt-2 text-[#0D0D0D]">Google Map URL</label>
+      <input [(ngModel)]="property.googleMapUrl" name="googleMapUrl"
+        class="w-full p-2 border border-[#F2D479] rounded-lg">
+    </div>
+
+    <!-- Contact Info -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div>
+        <label class="block font-semibold text-[#0D0D0D]">Owner</label>
+        <input [(ngModel)]="property.contact.owner" name="owner"
+          class="w-full p-2 border border-[#F2D479] rounded-lg">
+      </div>
+      <div>
+        <label class="block font-semibold text-[#0D0D0D]">Phone</label>
+        <input [(ngModel)]="property.contact.phone" name="phone"
+          class="w-full p-2 border border-[#F2D479] rounded-lg">
+      </div>
+      <div>
+        <label class="block font-semibold text-[#0D0D0D]">Email</label>
+        <input [(ngModel)]="property.contact.email" name="email"
+          class="w-full p-2 border border-[#F2D479] rounded-lg">
+      </div>
+    </div>
+
+    <!-- Type & Details -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block font-semibold text-[#0D0D0D]">Type</label>
+        <select [(ngModel)]="property.type" name="type"
+          class="w-full p-2 border border-[#F2D479] rounded-lg">
+          <option value="">Select Type</option>
+          <option>Land</option>
+          <option>House</option>
+          <option>Apartment</option>
+        </select>
+      </div>
+      <div>
+        <label class="block font-semibold text-[#0D0D0D]">Details</label>
+        <input [(ngModel)]="property.details" name="details"
+          class="w-full p-2 border border-[#F2D479] rounded-lg" placeholder="e.g. 2BHK, 1200 sqft">
+      </div>
+    </div>
+
+    <!-- Price, Purpose, Status -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div>
+        <label class="block font-semibold text-[#0D0D0D]">Price</label>
+        <input [(ngModel)]="property.price" name="price"
+          class="w-full p-2 border border-[#F2D479] rounded-lg">
+      </div>
+      <div>
+        <label class="block font-semibold text-[#0D0D0D]">Purpose</label>
+        <select [(ngModel)]="property.purpose" name="purpose"
+          class="w-full p-2 border border-[#F2D479] rounded-lg">
+          <option value="">Select</option>
+          <option>Rent</option>
+          <option>Sale</option>
+          <option>Lease</option>
+        </select>
+      </div>
+      <div>
+        <label class="block font-semibold text-[#0D0D0D]">Status</label>
+        <select [(ngModel)]="property.status" name="status"
+          class="w-full p-2 border border-[#F2D479] rounded-lg">
+          <option>Available</option>
+          <option>Sold</option>
+          <option>Booked</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Facilities -->
+    <div>
+      <label class="block font-semibold text-[#0D0D0D]">Facilities</label>
+      <div class="flex gap-2 mb-2">
+        <input [(ngModel)]="facilityInput" name="facilityInput"
+          class="flex-1 p-2 border border-[#F2D479] rounded-lg"
+          placeholder="Add a facility">
+        <button type="button" (click)="addFacility()"
+          class="px-3 py-1 bg-[#115930] text-white rounded-lg hover:bg-[#0D0D0D]">
+          Add
+        </button>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <span *ngFor="let f of property.facilities; let i=index"
+          class="bg-[#C7D943] px-3 py-1 rounded-full text-sm flex items-center gap-2">
+          {{f}}
+          <button type="button" (click)="removeFacility(i)">✕</button>
+        </span>
+      </div>
+    </div>
+
+    <!-- Photos -->
+    <div>
+      <label class="block font-semibold text-[#0D0D0D]">Photos</label>
+      <input type="file" (change)="onPhotoSelected($event)" multiple accept="image/*"
+        class="block w-full mt-1 text-sm">
+      <div class="grid grid-cols-2 gap-4 mt-2">
+        <img *ngFor="let photo of property.photos" [src]="photo"
+          class="rounded-lg shadow object-cover h-28 w-full">
+      </div>
+    </div>
+
+    <!-- Video -->
+    <div>
+      <label class="block font-semibold text-[#0D0D0D]">Video Tour</label>
+      <input type="file" (change)="onVideoSelected($event)" accept="video/*"
+        class="block w-full mt-1 text-sm">
+      <video *ngIf="property.video" controls class="mt-2 rounded-lg w-full max-h-60"></video>
+    </div>
+
+    <!-- Building Age & Conditions -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block font-semibold text-[#0D0D0D]">Building Age</label>
+        <input [(ngModel)]="property.buildingAge" name="buildingAge"
+          class="w-full p-2 border border-[#F2D479] rounded-lg">
+      </div>
+      <div>
+        <label class="block font-semibold text-[#0D0D0D]">Conditions</label>
+        <input [(ngModel)]="property.conditions" name="conditions"
+          class="w-full p-2 border border-[#F2D479] rounded-lg">
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="flex justify-end">
+      <button type="submit"
+        class="px-6 py-2 bg-[#F2C438] text-[#0D0D0D] font-bold rounded-lg hover:bg-[#C7D943]">
+        Save & Preview
+      </button>
+    </div>
+  </form>
+
+  <!-- PREVIEW MODE -->
+  <ng-container *ngIf="!isEditMode">
+    <!-- ✅ Your existing preview template here (from previous step) -->
+    <!-- This will show with updated values after submit -->
+    <ng-container *ngTemplateOutlet="previewTemplate"></ng-container>
+  </ng-container>
+
+  <ng-template #previewTemplate>
+    <div class="max-w-6xl mx-auto p-4 md:p-8">
+  <!-- Title -->
+  <h1 class="text-3xl md:text-4xl font-bold text-[#115930] mb-6">
+    {{ propertySelected.propertyName }}
+  </h1>
+
+  <!-- Address & Contact Info -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <div class="bg-[#F2D479] rounded-xl p-4 shadow">
+      <h2 class="text-xl font-semibold text-[#0D0D0D] mb-2">Address</h2>
+      <p class="text-[#0D0D0D]/80">{{ propertySelected.address }}</p>
+      <a [href]="propertySelected.googleMapUrl" target="_blank"
+        class="inline-block mt-2 text-[#115930] font-medium hover:underline">
+        View on Google Maps
+      </a>
+    </div>
+
+    <div class="bg-[#F2D479] rounded-xl p-4 shadow">
+      <h2 class="text-xl font-semibold text-[#0D0D0D] mb-2">Contact</h2>
+      <p><span class="font-medium">Owner:</span> {{ propertySelected.contact.owner }}</p>
+      <p><span class="font-medium">Phone:</span> {{ propertySelected.contact.phone }}</p>
+      <p><span class="font-medium">Email:</span> {{ propertySelected.contact.email }}</p>
+    </div>
   </div>
 
-  <!-- Main Image -->
-  <div class="order-1 lg:order-2 lg:col-span-4 p-3 max-w-[60vw] ">
-    <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/featured/image.jpg" alt="">
+  <!-- Property Info -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+    <div class="bg-white rounded-xl p-4 shadow border border-[#F2D479]">
+      <h3 class="text-lg font-semibold text-[#0D0D0D] mb-1">Type</h3>
+      <p>{{ propertySelected.type }}</p>
+    </div>
+    <div class="bg-white rounded-xl p-4 shadow border border-[#F2D479]">
+      <h3 class="text-lg font-semibold text-[#0D0D0D] mb-1">Details</h3>
+      <p>{{ propertySelected.details }}</p>
+    </div>
+    <div class="bg-white rounded-xl p-4 shadow border border-[#F2D479]">
+      <h3 class="text-lg font-semibold text-[#0D0D0D] mb-1">Purpose</h3>
+      <p>{{ propertySelected.purpose }}</p>
+    </div>
+  </div>
+
+  <!-- Price & Status -->
+  <div class="flex flex-col md:flex-row gap-6 mb-6">
+    <div class="flex-1 bg-[#F2C438] rounded-xl p-4 shadow">
+      <h3 class="text-xl font-semibold text-[#0D0D0D] mb-1">Price</h3>
+      <p class="text-2xl font-bold text-[#0D0D0D]">{{ propertySelected.price }}</p>
+    </div>
+    <div class="flex-1 bg-white rounded-xl p-4 shadow border border-[#F2D479]">
+      <h3 class="text-xl font-semibold text-[#0D0D0D] mb-1">Status</h3>
+      <span
+        class="inline-block px-3 py-1 rounded-full text-white font-medium"
+        [ngClass]="propertySelected.status === 'Available' ? 'bg-[#115930]' : 'bg-red-600'">
+        {{ propertySelected.status }}
+      </span>
+      <p class="text-sm mt-2 text-[#0D0D0D]/70">Posted on: {{ propertySelected.postedOn }}</p>
+    </div>
+  </div>
+
+  <!-- Facilities -->
+  <div class="bg-white rounded-xl p-4 shadow border border-[#F2D479] mb-6">
+    <h3 class="text-xl font-semibold text-[#0D0D0D] mb-2">Facilities</h3>
+    <div class="flex flex-wrap gap-2">
+      <span
+        *ngFor="let facility of propertySelected.facilities"
+        class="bg-[#C7D943] text-[#0D0D0D] px-3 py-1 rounded-full text-sm font-medium">
+        {{ facility }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Photos & Video -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <div>
+      <h3 class="text-xl font-semibold text-[#0D0D0D] mb-2">Photos</h3>
+      <div class="grid grid-cols-2 gap-4">
+        <img *ngFor="let photo of propertySelected.photos" [src]="photo"
+             alt="Property photo"
+             class="rounded-lg shadow object-cover w-full h-40">
+      </div>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-semibold text-[#0D0D0D] mb-2">Video Tour</h3>
+      <video *ngIf="propertySelected.video" controls class="w-full rounded-lg shadow">
+        <source [src]="propertySelected.video" type="video/mp4">
+      </video>
+    </div>
+  </div>
+
+  <!-- Extra Info -->
+  <div class="bg-white rounded-xl p-4 shadow border border-[#F2D479]">
+    <h3 class="text-xl font-semibold text-[#0D0D0D] mb-2">Additional Details</h3>
+    <p><span class="font-medium">Building Age:</span> {{ propertySelected.buildingAge }}</p>
+    <p><span class="font-medium">Conditions:</span> {{ propertySelected.conditions }}</p>
   </div>
 </div>
-
-
-    </ng-content>
-    }
+  </ng-template>
 </div>

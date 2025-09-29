@@ -20,7 +20,7 @@ const routes: Routes = [
       component: BoPostList,
     },
     {
-      path:'details/:id',
+      path:'details',
       component: BoPostDetails, // Assuming BoPostList handles details as well
     }
 ];
