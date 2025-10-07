@@ -29,7 +29,7 @@ export const navRoutes = [
         navItems:[
             {
                 navItemLabel: 'Dashboard',
-                navItemRoute: 'bo-dashboard',
+                navItemRoute: '/landing/community-member/dashboard',
                 navItemIcon: 'pi pi-home'
             },
             {

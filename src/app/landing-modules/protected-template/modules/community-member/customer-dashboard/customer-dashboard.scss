@@ -1,0 +1,45 @@
+
+/* -------------------------------------------------- */
+/* File: customer-dashboard.component.css            */
+/* -------------------------------------------------- */
+
+/* This file remains intentionally small because Tailwind provides most styling. */
+:host {
+  display: block;
+}
+
+/* Provide a subtle elevation for each section card when printing or on low-powered clients */
+section {
+  -webkit-print-color-adjust: exact;
+}
+
+/* Small accessibility focus ring for keyboard users */
+article:focus {
+  outline: 3px solid rgba(99,102,241,0.3);
+  outline-offset: 2px;
+}
+
+/* End of component files */
+
+/* -------------------------------------------------- */
+/* Integration notes (add to your Angular module / routing)
+
+1) Register component in a module:
+
+@NgModule({
+  declarations: [CustomerDashboardComponent],
+  imports: [CommonModule, RouterModule],
+  exports: [CustomerDashboardComponent]
+})
+export class DashboardModule {}
+
+2) Add routes:
+{ path: 'dashboard', component: CustomerDashboardComponent },
+{ path: 'dashboard/real-estate', component: RealEstateListComponent },
+{ path: 'dashboard/business', component: BusinessListComponent },
+{ path: 'dashboard/posts', component: PostsListComponent },
+{ path: 'item/:category/:id', component: ItemDetailComponent }
+
+3) Tailwind: ensure tailwind is configured in your project (styles.css imports tailwind directives)
+
+*/

@@ -1,0 +1,167 @@
+<!-- Container -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
+    <div>
+      <h1 class="text-2xl sm:text-3xl font-semibold text-slate-900">Customer Dashboard</h1>
+      <p class="mt-1 text-sm text-slate-500">Latest posts and recommendations across services.</p>
+    </div>
+    <div class="flex flex-wrap justify-end gap-3">
+      <button
+        class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300">
+        Create Post
+      </button>
+      <button
+        class="inline-flex items-center gap-2 px-4 py-2 border border-slate-200 rounded-lg bg-white hover:bg-slate-50">
+        Filter
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Grid -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+    <!-- Real Estate -->
+    <section class="bg-white rounded-2xl shadow-sm p-5 flex flex-col col-span-1 lg:col-span-2">
+      <div class="flex items-start justify-between mb-4">
+        <h2 class="text-lg font-medium text-slate-800">Real Estate</h2>
+        <button (click)="onShowMore('real-estate')" class="text-indigo-600 text-sm hover:underline">Show more</button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <ng-container *ngFor="let item of realEstates | slice:0:displayLimit">
+          <article (click)="openItem(item)"
+            class="rounded-lg overflow-hidden border border-slate-100 hover:shadow-md transition cursor-pointer">
+            <img src="../../../../../../assets/bedroom.png" alt="" class="w-full h-36 object-cover">
+            <div class="p-3">
+              <div class="flex items-center justify-between">
+                <h3 class="text-sm font-semibold text-slate-900">{{ item.title }}</h3>
+                <span class="text-xs text-slate-500">{{ prettyDate(item.postedAt) }}</span>
+              </div>
+              <p class="mt-1 text-sm text-slate-500 truncate">{{ item.location }}</p>
+              <div class="mt-3 flex items-center justify-between">
+                <div class="text-xs text-slate-600 line-clamp-2">{{ item.description }}</div>
+                <span class="text-xs font-medium"
+                  [ngClass]="{
+                    'text-emerald-600': item.status === 'responded',
+                    'text-indigo-600': item.status === 'new',
+                    'text-slate-500': item.status === 'viewed'
+                  }">{{ item.status | titlecase }}</span>
+              </div>
+            </div>
+          </article>
+        </ng-container>
+      </div>
+    </section>
+
+    <!-- Yoga & Business Section (Stacked on mobile, side-by-side on large) -->
+    <section class="flex flex-col lg:flex-row gap-6 lg:gap-8 col-span-1 lg:col-span-2">
+
+      <!-- Yoga -->
+      <section class="bg-white rounded-2xl shadow-sm p-5 flex flex-col w-full">
+        <div class="flex items-start justify-between mb-4">
+          <h2 class="text-lg font-medium text-slate-800">Yoga Studio</h2>
+          <button (click)="onShowMore('yoga')" class="text-indigo-600 text-sm hover:underline">Show more</button>
+        </div>
+
+        <div class="grid grid-cols-1 gap-3">
+          <ng-container *ngFor="let item of yogaStudios | slice:0:displayLimit">
+            <article (click)="openItem(item)"
+              class="flex gap-3 items-start p-3 rounded-lg hover:bg-slate-50 transition cursor-pointer">
+              <img src="../../../../../../assets/yoga-svgrepo-com.svg" alt="" class="w-20 h-14 object-cover rounded-md flex-shrink-0">
+              <div class="flex-1 flex flex-col">
+                <h3 class="text-sm font-semibold text-slate-900">{{ item.title }}</h3>
+                <p class="mt-1 text-sm text-slate-500 truncate">{{ item.description }}</p>
+                <div class="mt-2 text-xs text-slate-500">{{ prettyDate(item.postedAt) }}</div>
+              </div>
+              <span class="text-xs px-2 py-1 rounded-full bg-slate-100 text-slate-700">{{ item.status }}</span>
+            </article>
+          </ng-container>
+        </div>
+      </section>
+
+      <!-- Business -->
+      <section class="bg-white rounded-2xl shadow-sm p-5 flex flex-col w-full">
+        <div class="flex items-start justify-between mb-4">
+          <h2 class="text-lg font-medium text-slate-800">Business</h2>
+          <button (click)="onShowMore('business')" class="text-indigo-600 text-sm hover:underline">Show more</button>
+        </div>
+
+        <div class="grid grid-cols-1 gap-3">
+          <ng-container *ngFor="let item of businesses | slice:0:displayLimit">
+            <article (click)="openItem(item)"
+              class="flex gap-3 items-start p-3 rounded-lg hover:bg-slate-50 transition cursor-pointer">
+              <img src="../../../../../../assets/shop-svgrepo-com.svg" alt="" class="w-20 h-14 object-cover rounded-md flex-shrink-0">
+              <div class="flex-1 flex flex-col">
+                <h3 class="text-sm font-semibold text-slate-900">{{ item.title }}</h3>
+                <p class="mt-1 text-sm text-slate-500 truncate">{{ item.description }}</p>
+                <div class="mt-2 text-xs text-slate-500">{{ prettyDate(item.postedAt) }}</div>
+              </div>
+              <span class="text-xs px-2 py-1 rounded-full bg-slate-100 text-slate-700">{{ item.status }}</span>
+            </article>
+          </ng-container>
+        </div>
+      </section>
+    </section>
+
+    <!-- Latest Posts -->
+    <section class="bg-white rounded-2xl shadow-sm p-5 flex flex-col col-span-1 lg:col-span-2">
+      <div class="flex items-start justify-between mb-4">
+        <h2 class="text-lg font-medium text-slate-800">Latest Posts</h2>
+        <button (click)="onShowMore('posts')" class="text-indigo-600 text-sm hover:underline">Show more</button>
+      </div>
+
+      <div class="grid grid-cols-1 gap-3">
+        <ng-container *ngFor="let item of latestPosts | slice:0:displayLimit">
+          <article (click)="openItem(item)"
+            class="flex flex-col sm:flex-row items-start gap-3 p-3 rounded-lg hover:bg-slate-50 transition cursor-pointer">
+            <img src="../../../../../../assets/bussiness-classifieds-media-svgrepo-com.svg" alt="" class="w-full sm:w-20 h-40 sm:h-14 object-cover rounded-md flex-shrink-0">
+            <div class="flex-1 flex flex-col">
+              <div class="flex items-center justify-between flex-wrap gap-1">
+                <h3 class="text-sm font-semibold text-slate-900">{{ item.title }}</h3>
+                <span class="text-xs text-slate-500">{{ prettyDate(item.postedAt) }}</span>
+              </div>
+              <p class="mt-1 text-sm text-slate-500 truncate">{{ item.description }}</p>
+              <div class="mt-2">
+                <span
+                  [ngClass]="{
+                    'inline-flex items-center gap-2 text-xs px-2 py-1 rounded-full': true,
+                    'bg-emerald-100 text-emerald-800': item.status === 'responded',
+                    'bg-yellow-100 text-yellow-800': item.status === 'viewed',
+                    'bg-indigo-100 text-indigo-800': item.status === 'new',
+                    'bg-slate-100 text-slate-700': item.status === 'in-progress'
+                  }">
+                  {{ item.status | titlecase }}
+                </span>
+              </div>
+            </div>
+          </article>
+        </ng-container>
+      </div>
+    </section>
+
+    <!-- Other Ads -->
+    <section class="bg-white rounded-2xl shadow-sm p-5 flex flex-col col-span-1 lg:col-span-2">
+      <div class="flex items-start justify-between mb-4">
+        <h2 class="text-lg font-medium text-slate-800">Other Classifieds</h2>
+        <button (click)="onShowMore('other')" class="text-indigo-600 text-sm hover:underline">Show more</button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+        <ng-container *ngFor="let item of others | slice:0:displayLimit">
+          <article (click)="openItem(item)"
+            class="rounded-lg overflow-hidden border border-slate-100 hover:shadow-md transition cursor-pointer">
+            <img src="../../../../../../assets/19199501.jpg" alt="" class="w-full h-40 object-cover">
+            <div class="p-3">
+              <h3 class="text-sm font-semibold text-slate-900">{{ item.title }}</h3>
+              <p class="mt-1 text-sm text-slate-500 line-clamp-2">{{ item.description }}</p>
+              <div class="mt-3 text-xs text-slate-500">{{ prettyDate(item.postedAt) }}</div>
+            </div>
+          </article>
+        </ng-container>
+      </div>
+    </section>
+
+  </div>
+</div>

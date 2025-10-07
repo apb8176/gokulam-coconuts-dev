@@ -14,6 +14,13 @@ const routes: Routes = [
           import('../protected-template/modules/bussiness-owner/bussiness-owner-module').then(
             (m) => m.BussinessOwnerModule
           ),
+      },
+      {
+        path: 'community-member',
+        loadChildren: () =>
+          import('../protected-template/modules/community-member/community-member-module').then(
+            (m) => m.CommunityMemberModule
+          ),
       }
     ],
   },
