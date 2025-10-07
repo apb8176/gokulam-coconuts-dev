@@ -31,7 +31,15 @@ export class BoPostDetails {
     conditions: "No pets allowed. 3-month deposit.",
     postedOn: "2025-09-25"
   };
+showInterested = false;
 
+propertySelectedPep = {
+  // ...existing fields
+  interestedPeople: [
+    { name: 'John Doe', address: '123 Street, City', phone: '9876543210', email: 'john@example.com', date: '2025-09-28', message: 'Is it still available?' },
+    { name: 'Jane Smith', address: '456 Avenue, Town', phone: '9876501234', email: 'jane@example.com', date: '2025-09-29', message: '' }
+  ]
+};
 showInfo: boolean = true;
  propertys: any = {
     type: '',
