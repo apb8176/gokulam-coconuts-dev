@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { BoDashboard } from './components/bo-dashboard/bo-dashboard';
 import { BoPostList } from './components/bo-post-list/bo-post-list';
 import { BoPostDetails } from './components/bo-post-details/bo-post-details';
+import { BoProfile } from './components/bo-profile/bo-profile';
 
 const routes: Routes = [
   {
@@ -22,6 +23,10 @@ const routes: Routes = [
     {
       path:'details',
       component: BoPostDetails, // Assuming BoPostList handles details as well
+    },
+      {
+      path:'profile',
+      component: BoProfile, // Assuming BoPostList handles details as well
     }
 ];
 

@@ -1,1 +1,221 @@
-<p>bo-profile works!</p>
+<div class="max-w-4xl mx-auto p-4 md:p-8">
+  <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-[#F2D479]">
+
+    <!-- Header -->
+    <div class="p-6 bg-[#115930] text-white flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <h1 class="text-2xl font-bold">Manage Account</h1> 
+        <!-- <h1 class="text-2xl font-bold">{{ user.firstName }} {{ user.lastName }}</h1> -->
+        <!-- <p class="text-sm opacity-90">{{ user.designation || '—' }}</p> -->
+      </div>
+      <!-- <a class="text-sm font-medium bg-[#F2C438] text-[#0D0D0D] px-3 py-1 rounded-full hover:bg-[#C7D943]" href="#">
+        Manage Account
+      </a> -->
+    </div>
+
+    <!-- Body -->
+    <div class="p-6 space-y-6">
+      
+      <!-- NAME (full width) -->
+      <div class="bg-[#FFFDF6] p-4 rounded-lg border border-[#F2D479] ">
+        <label class="block text-xs text-[#0D0D0D]/70 mb-1">Name</label>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <div class="text-lg font-semibold text-[#0D0D0D]">{{ user.firstName +' '+ user.lastName}}</div>
+            
+          </div>
+          <div>
+           
+          </div>
+        </div>
+      </div>
+
+      <!-- TWO COLUMN FIELDS -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- Phone Number -->
+        <div class="p-4 rounded-lg border border-[#F2D479] bg-[#FFFDF6]">
+          <label class="text-xs text-[#0D0D0D]/70">Phone Number</label>
+          <div class="mt-1 text-lg font-semibold text-[#0D0D0D]">{{ user.phoneNumber }}</div>
+        </div>
+
+        <!-- WhatsApp Number (editable) -->
+        <div class="bg-white p-4 rounded-lg border border-[#F2D479]">
+          <div class="flex justify-between items-start">
+            <div>
+              <label class="text-xs text-[#0D0D0D]/70">Whatsapp Number</label>
+              <div *ngIf="!edit.whatsappNumber" class="mt-1 text-lg text-[#0D0D0D]">
+                {{ user.whatsappNumber || '—' }}
+              </div>
+             
+            </div>
+            <div class="flex items-center gap-2">
+              <button *ngIf="!edit.whatsappNumber" (click)="toggleEdit('whatsappNumber')" title="Edit"
+                      class="p-2 rounded-lg hover:bg-[#F2D479]">
+                <img src="./../../../../../../../assets/edit.svg" width="18px" alt="edit" />
+              </button>
+              <div *ngIf="edit.whatsappNumber" class="flex gap-2">
+                <button (click)="saveField('whatsappNumber')" class="px-3 py-1 bg-[#F2C438] rounded-lg text-[#0D0D0D]">Save</button>
+                <button (click)="cancelField('whatsappNumber')" class="px-3 py-1 border border-[#F2D479] rounded-lg">Cancel</button>
+              </div>
+            </div>
+          </div>
+           <div *ngIf="edit.whatsappNumber" class="mt-2">
+                <input [(ngModel)]="user.whatsappNumber" name="whatsapp"
+                       class="w-full p-2 border border-[#F2D479] rounded-lg" />
+              </div>
+        </div>
+
+        <!-- Email -->
+        <div class="bg-[#FFFDF6] p-4 rounded-lg border border-[#F2D479]">
+          <label class="text-xs text-[#0D0D0D]/70">Email</label>
+          <div class="mt-1 text-lg font-semibold text-[#0D0D0D]">{{ user.email }}</div>
+        </div>
+
+        <!-- Website (editable) -->
+        <div class="bg-white p-4 rounded-lg border border-[#F2D479]">
+          <div class="flex justify-between items-start">
+            <div>
+              <label class="text-xs text-[#0D0D0D]/70">Website (optional)</label>
+              <div *ngIf="!edit.website" class="mt-1 text-[#115930]">
+                <a *ngIf="user.website" [href]="user.website" target="_blank" class="hover:underline">{{ user.website }}</a>
+                <span *ngIf="!user.website" class="text-[#0D0D0D]">—</span>
+              </div>            
+            </div>
+            <div class="flex items-center gap-2">
+              <button *ngIf="!edit.website" (click)="toggleEdit('website')" title="Edit" class="p-2 rounded-lg hover:bg-[#F2D479]">
+                <img src="./../../../../../../../assets/edit.svg" width="18px" alt="edit" />
+                </button>
+              <div *ngIf="edit.website" class="flex gap-2">
+                <button (click)="saveField('website')" class="px-3 py-1 bg-[#F2C438] rounded-lg text-[#0D0D0D]">Save</button>
+                <button (click)="cancelField('website')" class="px-3 py-1 border border-[#F2D479] rounded-lg">Cancel</button>
+              </div>
+            </div>
+          </div>
+            <div *ngIf="edit.website" class="mt-2 ">
+                <input [(ngModel)]="user.website" name="website" class="w-full p-2 border border-[#F2D479] rounded-lg" />
+              </div>
+        </div>
+
+        <!-- DOB -->
+        <div class="bg-[#FFFDF6] p-4 rounded-lg border border-[#F2D479]">
+          <label class="text-xs text-[#0D0D0D]/70">Date of Birth</label>
+          <div class="mt-1 text-lg font-semibold text-[#0D0D0D]">{{ user.dob }}</div>
+        </div>
+
+        <!-- Gender -->
+        <div class="bg-[#FFFDF6] p-4 rounded-lg border border-[#F2D479]">
+          <label class="text-xs text-[#0D0D0D]/70">Gender</label>
+          <div class="mt-2 flex items-center gap-4">
+            <span class="mt-1 text-lg font-semibold text-[#0D0D0D]">Male</span>
+            <!-- <span [class.text-[#115930]]="user.gender === 'female'">Female</span>
+            <span [class.text-[#115930]]="user.gender === 'other'">Other</span> -->
+          </div>
+        </div>
+
+        <!-- PIN Code -->
+        <div class="bg-white p-4 rounded-lg border border-[#F2D479]">
+          <div class="flex justify-between items-start">
+            <div>
+              <label class="text-xs text-[#0D0D0D]/70">PIN Code</label>
+              <div *ngIf="!edit.pinCode" class="mt-1 text-[#0D0D0D]">{{ user.pinCode }}</div>
+              <input *ngIf="edit.pinCode" [(ngModel)]="user.pinCode" name="pinCode"
+                     class="w-full mt-2 p-2 border border-[#F2D479] rounded-lg" />
+            </div>
+            <button *ngIf="!edit.pinCode" (click)="toggleEdit('pinCode')" class="p-2 hover:bg-[#F2D479]"><img src="./../../../../../../../assets/edit.svg" width="18px" alt="edit" /></button>
+           <div *ngIf="edit.pinCode" class="flex gap-2">
+                <button (click)="saveField('pinCode')" class="px-3 py-1 bg-[#F2C438] rounded-lg text-[#0D0D0D]">Save</button>
+                <button (click)="cancelField('pinCode')" class="px-3 py-1 border border-[#F2D479] rounded-lg">Cancel</button>
+              </div>
+        </div>
+        </div>
+
+        <!-- Citizenship -->
+        <div class="bg-white p-4 rounded-lg border border-[#F2D479]">
+            <div class="flex justify-between items-start">
+<label class="text-xs text-[#0D0D0D]/70 mt-2">Citizenship</label>
+          <button *ngIf="!edit.citizenship" (click)="toggleEdit('citizenship')" class="p-2 hover:bg-[#F2D479]"><img src="./../../../../../../../assets/edit.svg" width="18px" alt="edit" /></button>
+
+            </div>
+          
+          <div *ngIf="!edit.citizenship" class="mt-1 text-[#0D0D0D]">
+            {{ user.citizenship }} <span *ngIf="user.citizenship === 'Other'">- {{ user.citizenshipOther }}</span>
+          </div>
+
+          <div *ngIf="edit.citizenship" class="mt-2 space-y-2">
+            <div class="flex gap-4">
+              <label><input type="radio" [(ngModel)]="user.citizenship" value="Indian" /> Indian</label>
+              <label><input type="radio" [(ngModel)]="user.citizenship" value="Other" /> Other</label>
+            </div>
+            <div *ngIf="user.citizenship === 'Other'">
+              <input [(ngModel)]="user.citizenshipOther" placeholder="Specify citizenship"
+                     class="w-full p-2 border border-[#F2D479] rounded-lg" />
+            </div>
+          </div>
+        <div *ngIf="edit.citizenship" class="flex gap-2 mt-2">
+                <button (click)="saveField('citizenship')" class="px-3 py-1 bg-[#F2C438] rounded-lg text-[#0D0D0D]">Save</button>
+                <button (click)="cancelField('citizenship')" class="px-3 py-1 border border-[#F2D479] rounded-lg">Cancel</button>
+              </div>
+        </div>
+
+        <!-- Designation -->
+        <div class="bg-white p-4 rounded-lg border border-[#F2D479] md:col-span-2">
+          <div class="flex justify-between items-start">
+            <div class="w-full">
+              <label class="text-xs text-[#0D0D0D]/70">Designation (optional)</label>
+              <div *ngIf="!edit.designation" class="mt-1 text-[#0D0D0D]">{{ user.designation || '—' }}</div>
+              <input *ngIf="edit.designation" [(ngModel)]="user.designation"
+                     class="mt-2 w-full p-2 border border-[#F2D479] rounded-lg" />
+            </div>
+            <button *ngIf="!edit.designation" (click)="toggleEdit('designation')" class="p-2 hover:bg-[#F2D479]"><img src="./../../../../../../../assets/edit.svg" width="18px" alt="edit" /></button>
+          </div>
+           <div *ngIf="edit.designation" class="flex gap-2 mt-2">
+                <button (click)="saveField('designation')" class="px-3 py-1 bg-[#F2C438] rounded-lg text-[#0D0D0D]">Save</button>
+                <button (click)="cancelField('designation')" class="px-3 py-1 border border-[#F2D479] rounded-lg">Cancel</button>
+              </div>
+        </div>
+        
+      </div>
+
+      <!-- ADDRESSES (each full width) -->
+      <div class="bg-white p-4 rounded-lg border border-[#F2D479]">
+        <div class="flex justify-between items-start">
+          <div class="w-full">
+            <label class="text-xs text-[#0D0D0D]/70">Local Address</label>
+            <div *ngIf="!edit.localAddress" class="mt-1 text-[#0D0D0D]">{{ user.localAddress }}</div>
+            <textarea *ngIf="edit.localAddress" [(ngModel)]="user.localAddress"
+                      class="mt-2 w-full p-2 border border-[#F2D479] rounded-lg"></textarea>
+          </div>
+          <button *ngIf="!edit.localAddress" (click)="toggleEdit('localAddress')" class="p-2 hover:bg-[#F2D479]"><img src="./../../../../../../../assets/edit.svg" width="18px" alt="edit" /></button>
+        </div>
+         <div *ngIf="edit.localAddress" class="flex gap-2 mt-2">
+                <button (click)="saveField('localAddress')" class="px-3 py-1 bg-[#F2C438] rounded-lg text-[#0D0D0D]">Save</button>
+                <button (click)="cancelField('localAddress')" class="px-3 py-1 border border-[#F2D479] rounded-lg">Cancel</button>
+              </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg border border-[#F2D479]">
+        <div class="flex justify-between items-start">
+          <div class="w-full">
+            <label class="text-xs text-[#0D0D0D]/70">Permanent Address</label>
+            <div *ngIf="!edit.permanentAddress" class="mt-1 text-[#0D0D0D]">{{ user.permanentAddress }}</div>
+            <textarea *ngIf="edit.permanentAddress" [(ngModel)]="user.permanentAddress"
+                      class="mt-2 w-full p-2 border border-[#F2D479] rounded-lg"></textarea>
+          </div>
+          <button *ngIf="!edit.permanentAddress" (click)="toggleEdit('permanentAddress')" class="p-2 hover:bg-[#F2D479]"><img src="./../../../../../../../assets/edit.svg" width="18px" alt="edit" /></button>
+        </div>
+         <div *ngIf="edit.permanentAddress" class="flex gap-2 mt-2">
+                <button (click)="saveField('permanentAddress')" class="px-3 py-1 bg-[#F2C438] rounded-lg text-[#0D0D0D]">Save</button>
+                <button (click)="cancelField('permanentAddress')" class="px-3 py-1 border border-[#F2D479] rounded-lg">Cancel</button>
+              </div>
+      </div>
+
+    </div>
+
+    <!-- Footer actions -->
+    <div class="p-6 border-t border-[#F2D479] flex justify-end gap-3 ">
+      <button class="px-4 py-2 rounded-lg border border-[#F2D479]">Reset</button>
+      <!-- <button class="px-4 py-2 rounded-lg bg-[#115930] text-white hover:bg-[#0D0D0D]">Save All</button> -->
+    </div>
+  </div>
+</div>

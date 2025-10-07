@@ -9,7 +9,7 @@ export const navRoutes = [
             },
             {
                 navItemLabel: 'Profile',
-                navItemRoute: 'bo-profile',
+                navItemRoute: '/landing/property-owner/profile',
                 navItemIcon: 'pi pi-user'
             },
             {

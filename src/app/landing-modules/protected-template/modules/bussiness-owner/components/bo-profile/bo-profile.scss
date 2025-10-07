@@ -1,0 +1,14 @@
+.non-editable {
+  color: #0a2763;              /* deeper navy tone */
+  font-weight: 600;            /* slightly bolder */
+  letter-spacing: 0.3px;       /* mild spacing for emphasis */
+  text-transform: uppercase;   /* gives it formality */
+  user-select: none;           /* prevent text selection */
+  pointer-events: none;        /* prevent clicks or copying */
+}
+
+/* Optional: a soft underline indicator (remove if unwanted) */
+.non-editable.underline {
+  border-bottom: 1px dashed #a5b1cc;
+  padding-bottom: 2px;
+}
