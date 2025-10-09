@@ -1,0 +1,126 @@
+<div *ngIf="isVisible" class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black bg-opacity-60 backdrop-blur-sm">
+  <div class="relative bg-white p-6 sm:p-8 rounded-xl shadow-2xl max-w-full sm:max-w-lg w-full transform transition-all duration-300 scale-100 opacity-100 border-2 border-[#115930] h-full sm:h-auto overflow-y-auto">
+    
+    <button (click)="closePopup()" class="absolute top-3 right-3 sm:top-4 sm:right-4 text-[#115930] hover:text-[#0D0D0D] transition-colors z-10">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+
+    <h2 class="text-2xl sm:text-3xl font-extrabold text-[#115930] mb-4 sm:mb-6 text-center pt-2 sm:pt-0">
+        Create account <br> 
+        <span class="text-sm sm:text-base text-[#0D0D0D] font-normal">(**Email verification required)</span>
+    </h2>
+
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label for="firstName" class="block text-sm font-semibold text-[#0D0D0D] mb-1">First name</label>
+          <input
+            id="firstName"
+            type="text"
+            formControlName="firstName"
+            placeholder="First name"
+            class="w-full px-4 py-2 border border-[#C7D943] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#115930] bg-white text-[#0D0D0D] placeholder-gray-500"
+            [ngClass]="{'border-red-500': f['firstName'].invalid && f['firstName'].touched}"
+          />
+          <div *ngIf="f['firstName'].invalid && f['firstName'].touched" class="text-red-500 text-xs mt-1">
+            <span *ngIf="f['firstName'].errors?.['minlength']">First name must be at least 2 characters.</span>
+          </div>
+        </div>
+        <div>
+          <label for="lastName" class="block text-sm font-semibold text-[#0D0D0D] mb-1">Last name</label>
+          <input
+            id="lastName"
+            type="text"
+            formControlName="lastName"
+            placeholder="Last name"
+            class="w-full px-4 py-2 border border-[#C7D943] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#115930] bg-white text-[#0D0D0D] placeholder-gray-500"
+            [ngClass]="{'border-red-500': f['lastName'].invalid && f['lastName'].touched}"
+          />
+          <div *ngIf="f['lastName'].invalid && f['lastName'].touched" class="text-red-500 text-xs mt-1">
+            <span *ngIf="f['lastName'].errors?.['minlength']">Last name must be at least 2 characters.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label for="email" class="block text-sm font-semibold text-[#0D0D0D] mb-1">Email</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="you@example.com"
+          class="w-full px-4 py-2 border border-[#C7D943] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#115930] bg-white text-[#0D0D0D] placeholder-gray-500"
+          [ngClass]="{'border-red-500': f['email'].invalid && f['email'].touched}"
+        />
+        <div *ngIf="f['email'].invalid && f['email'].touched" class="text-red-500 text-xs mt-1">
+          <span *ngIf="f['email'].errors?.['required']">Email is required.</span>
+          <span *ngIf="f['email'].errors?.['email']">Please enter a valid email address.</span>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label for="phoneNumber" class="block text-sm font-semibold text-[#0D0D0D] mb-1">Phone Number (Optional)</label>
+        <input
+          id="phoneNumber"
+          type="tel"
+          formControlName="phoneNumber"
+          placeholder="+1234567890 (optional)"
+          class="w-full px-4 py-2 border border-[#C7D943] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#115930] bg-white text-[#0D0D0D] placeholder-gray-500"
+          [ngClass]="{'border-red-500': f['phoneNumber'].invalid && f['phoneNumber'].touched}"
+        />
+        <div *ngIf="f['phoneNumber'].invalid && f['phoneNumber'].touched" class="text-red-500 text-xs mt-1">
+          <span *ngIf="f['phoneNumber'].errors?.['pattern']">Please enter a valid phone number (e.g., +1234567890).</span>
+        </div>
+      </div>
+
+      <div class="mb-4">
+          <label for="password" class="block text-sm font-semibold text-[#0D0D0D] mb-1">Password</label>
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            placeholder="Choose a strong password"
+            class="w-full px-4 py-2 border border-[#C7D943] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#115930] bg-white text-[#0D0D0D] placeholder-gray-500"
+            [ngClass]="{'border-red-500': f['password'].invalid && f['password'].touched}"
+          />
+          <div *ngIf="f['password'].invalid && f['password'].touched" class="text-red-500 text-xs mt-1">
+            <span *ngIf="f['password'].errors?.['required']">Password is required.</span>
+            <span *ngIf="f['password'].errors?.['minlength']">Password must be at least 8 characters.</span>
+            <span *ngIf="f['password'].errors?.['pattern']">Password needs complexity.</span>
+          </div>
+      </div>
+
+      <div class="mb-6">
+          <label for="role" class="block text-sm font-semibold text-[#0D0D0D] mb-1">Select role</label>
+          <select
+            id="role"
+            formControlName="role"
+            class="w-full px-4 py-2 border border-[#C7D943] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#115930] bg-white text-[#0D0D0D]"
+            [ngClass]="{'border-red-500': f['role'].invalid && f['role'].touched}"
+          >
+            <option value="" disabled>-- choose role --</option>
+            <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+          </select>
+          <div *ngIf="f['role'].invalid && f['role'].touched" class="text-red-500 text-xs mt-1">
+            <span *ngIf="f['role'].errors?.['required']">Role is required.</span>
+          </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 text-sm" role="alert">
+        <strong class="font-bold">Oops!</strong>
+        <span class="block sm:inline ml-1">{{ errorMessage }}</span>
+      </div>
+
+      <button
+        type="submit"
+        class="w-full bg-[#115930] text-[#F2D479] py-3 rounded-lg font-bold text-lg hover:bg-[#0D0D0D] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#C7D943]"
+        [disabled]="signupForm.invalid"
+      >
+        Sign up
+      </button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,81 @@
+<div class="min-h-screen bg-[#F2D479] flex flex-col">
+  <!-- Tabs -->
+  <div class="bg-[#115930] flex justify-center shadow-md border-b border-[#F2C438]">
+    <div class="flex w-full max-w-4xl">
+      <button
+        *ngFor="let section of sections"
+        (click)="activeSection = section; selectedItem = null"
+        class="flex-1 py-3 text-sm md:text-base font-semibold transition duration-200 text-center"
+        [ngClass]="{
+          'bg-[#F2C438] text-[#0D0D0D] shadow-inner': activeSection === section,
+          'text-[#F2C438] hover:font-bold hover:scale-110 ': activeSection !== section
+        }"
+      >
+        {{ section }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="flex flex-col md:flex-row flex-1 overflow-hidden">
+    <!-- Left: Cards List -->
+    <div
+      class="w-full md:w-1/3 bg-white p-4 overflow-y-auto border-r border-gray-200"
+      [class.hidden]="selectedItem && isMobileView"
+    >
+      <!-- Search -->
+      <input
+        type="text"
+        [(ngModel)]="searchText"
+        placeholder="Search {{ activeSection }}..."
+        class="w-full p-3 mb-4 border border-[#C7D943] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#115930] bg-white text-[#0D0D0D] placeholder-gray-500"
+      />
+
+      <!-- Cards -->
+      <div
+        *ngFor="let item of getFilteredItems()"
+        (click)="selectItem(item)"
+        class="p-4 mb-3 rounded-xl cursor-pointer shadow-xl border-[#F2C438] transition transform hover:scale-[1.01]"
+        [ngClass]="{
+          'bg-white text-[#0D0D0D] border border-[#F2C438] hover:bg-[#F2C438] hover:bg-opacity-30': selectedItem?.id !== item.id,
+          'bg-[#115930] text-[#F2D479] shadow-xl': selectedItem?.id === item.id
+        }"
+      >
+        <h3 class="font-bold">{{ item.title }}</h3>
+        <p class="text-sm" [ngClass]="{'opacity-80': selectedItem?.id === item.id, 'text-[#0D0D0D] opacity-60': selectedItem?.id !== item.id}">
+          {{ item.shortDesc }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Right: Details -->
+    <div
+      class="flex-1 bg-white p-6 overflow-y-auto"
+      [class.hidden]="!selectedItem && isMobileView"
+    >
+      <ng-container *ngIf="selectedItem; else noSelection">
+        <!-- Back Button (mobile only) -->
+        <button
+          *ngIf="isMobileView"
+          (click)="selectedItem = null"
+          class="mb-4 text-sm text-[#365B48] font-semibold flex items-center gap-1"
+        >
+          ← Back
+        </button>
+
+        <h2 class="text-3xl font-extrabold text-[#115930] mb-4 border-b-2 border-[#C7D943] pb-2">
+          {{ selectedItem.title }}
+        </h2>
+        <p class="text-[#0D0D0D] leading-relaxed mt-4">
+          {{ selectedItem.details }}
+        </p>
+      </ng-container>
+
+      <ng-template #noSelection>
+        <p class="text-center text-[#0D0D0D] opacity-60 mt-10 p-4 border-2 border-dashed border-[#C7D943] rounded-lg">
+          👋 Select an item from the left to view its details.
+        </p>
+      </ng-template>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+/* Optional scrollbar styling for left list */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #c7d943;
+  border-radius: 10px;
+}

@@ -10,8 +10,8 @@
       <a routerLink="/" class="hover:text-white">Home</a>
       <a routerLink="/services" class="hover:text-white">Services</a>
       <a routerLink="/about" class="hover:text-white">About Us</a>
-      <a (click)="login()" class="hover:text-white">Login / Register</a>
-
+      <a (click)="login()" class="hover:text-white">Login</a>
+      <a (click)="handleSignup()" class="hover:text-white">Register</a>
       <a (click)="logout()" class="hover:text-white">Logout</a>
 
     </nav>
@@ -49,7 +49,11 @@
       <br />
     </div>
     }
-
+<app-signup-popup
+  [isVisible]="showSignupPopup"
+  (close)="showSignupPopup = false"
+  (signup)="handleSignup()"
+></app-signup-popup>
     <router-outlet></router-outlet>
   </main>
 

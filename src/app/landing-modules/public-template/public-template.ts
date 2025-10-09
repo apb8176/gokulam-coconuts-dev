@@ -30,6 +30,15 @@ showMobileMenu: boolean = false;
    login(): void {
     this.oidcSecurityService.authorize();
   }
+    showSignupPopup: boolean = false;
+
+  handleSignup(): void {
+    this.showSignupPopup = !this.showSignupPopup;
+   // formData = {}
+   // console.log('Signup data received in parent:', formData);
+    // Here you would typically send this data to a backend API
+    //alert('Signup successful for ' + formData.username + '!');
+  }
   logout(): void {
   // Clear session storage
   if (window.sessionStorage) {

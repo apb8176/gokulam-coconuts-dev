@@ -5,9 +5,12 @@ import { PublicTemplateModule } from './landing-modules/public-template/public-t
 import { ProtectedTemplateModule } from './landing-modules/protected-template/protected-template-module';
 import { provideHttpClient } from '@angular/common/http';
 import { AuthModule } from 'angular-auth-oidc-client';
+import { EntityDetails } from './components/entity-details/entity-details';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
 @NgModule({
     imports: [
-    
+    FormsModule, BrowserModule, ReactiveFormsModule,
     PublicTemplateModule,ProtectedTemplateModule,  AuthModule.forRoot({
       config: {
         authority: 'https://cognito-idp.eu-north-1.amazonaws.com/eu-north-1_M6dp7rfAC',
@@ -18,8 +21,10 @@ import { AuthModule } from 'angular-auth-oidc-client';
       },
     }),
   ],
-  exports: [AuthModule],
+  exports: [AuthModule,FormsModule,  ReactiveFormsModule],
   
- declarations: [], 
+ declarations: [
+    EntityDetails
+  ], 
   providers: [ provideHttpClient()]})
 export class AppModule {}
