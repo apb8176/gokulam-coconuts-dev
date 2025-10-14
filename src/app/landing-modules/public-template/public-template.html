@@ -3,15 +3,16 @@
   <header class="sticky z-50 bg-[#D4B04C] text-white top-0 px-8 py-2 flex justify-between items-center">
     <!-- Logo -->
     <div class="flex items-center space-x-2">
-      <div class="gap-4 flex items-center"><img width="60px" height="60px" src="'../../../../../assets/logo.png"><span class="font-semibold text-2xl">GOKULAM COCONUTS</span></div>
+      <div class="gap-4 flex items-center"><img width="60px" height="60px" src="'../../../../../assets/logo.png"><span
+          class="font-semibold text-2xl">GOKULAM COCONUTS</span></div>
     </div>
     <!-- Nav -->
     <nav class="space-x-8 hidden md:flex text-lg font-semibold text-slate-800">
       <a routerLink="/" class="hover:text-white">Home</a>
       <a routerLink="/services" class="hover:text-white">Services</a>
       <a routerLink="/about" class="hover:text-white">About Us</a>
-      <a (click)="login()" class="hover:text-white">Login</a>
-      <a (click)="handleSignup()" class="hover:text-white">Register</a>
+      <a (click)="handleLogin()" class="hover:text-white">Login</a>
+      <a (click)="handleSignup($event)" class="hover:text-white">Register</a>
       <a (click)="logout()" class="hover:text-white">Logout</a>
 
     </nav>
@@ -49,11 +50,19 @@
       <br />
     </div>
     }
-<app-signup-popup
-  [isVisible]="showSignupPopup"
-  (close)="showSignupPopup = false"
-  (signup)="handleSignup()"
-></app-signup-popup>
+    <app-signup-popup [isVisible]="showSignupPopup" (close)="showSignupPopup = false"
+      (signup)="returnSignupData($event)"></app-signup-popup>
+    @if(showLoginForm){
+<app-signin-popup [isVisible]="showLoginForm" (close)="showLoginForm = false" 
+      (signup)="handleSignup($event)"></app-signin-popup>
+    }
+
+      @if(showConfirmUserForm){
+<app-confirm-code-popup [isVisible]="showConfirmUserForm" (close)="showConfirmUserForm = false" 
+      (signup)="returnConfirmData($event)"></app-confirm-code-popup>
+    }
+    
+
     <router-outlet></router-outlet>
   </main>
 

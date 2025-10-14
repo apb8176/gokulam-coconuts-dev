@@ -9,6 +9,19 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
   
 })
 export class PublicTemplate {
+showConfirmUserForm:boolean = false;
+returnSignupData(event: any) {
+    console.log('---->',event);
+    this.showSignupPopup = false; 
+    this.showConfirmUserForm = true;
+
+}
+returnConfirmData(event: any) {
+    console.log('---->',event);
+  
+    this.showConfirmUserForm = false; 
+
+}
 showMobileMenu: boolean = false;
   private readonly oidcSecurityService = inject(OidcSecurityService);
 
@@ -17,6 +30,7 @@ showMobileMenu: boolean = false;
   userData$ = this.oidcSecurityService.userData$;
 
   isAuthenticated = false;
+  showLoginForm: boolean = false;
 
   ngOnInit(): void {
     this.oidcSecurityService.isAuthenticated$.subscribe(
@@ -32,12 +46,14 @@ showMobileMenu: boolean = false;
   }
     showSignupPopup: boolean = false;
 
-  handleSignup(): void {
+  handleSignup(event:any): void {
     this.showSignupPopup = !this.showSignupPopup;
-   // formData = {}
-   // console.log('Signup data received in parent:', formData);
-    // Here you would typically send this data to a backend API
-    //alert('Signup successful for ' + formData.username + '!');
+   let formData = {}
+   console.log('Signup data received in parent:', event);
+    
+  }
+  handleLogin(){
+    this.showLoginForm = !this.showLoginForm;
   }
   logout(): void {
   // Clear session storage
@@ -45,6 +61,8 @@ showMobileMenu: boolean = false;
     window.sessionStorage.clear();
   }
 
-  window.location.href = "https://eu-north-1m6dp7rfac.auth.eu-north-1.amazoncognito.com/logout?client_id=1e3316k9pmltncrvkgps2is19m&logout_uri=http://localhost:4200";
+  // window.location.href = "https://eu-north-1m6dp7rfac.auth.eu-north-1.amazoncognito.com/logout?client_id=1e3316k9pmltncrvkgps2is19m&logout_uri=http://localhost:4200";
+  window.location.href = "http://localhost:4200";
+
 }
 }

@@ -6,7 +6,7 @@ import { BoDashboard } from './components/bo-dashboard/bo-dashboard';
 import { BoProfile } from './components/bo-profile/bo-profile';
 import { BoPostList } from './components/bo-post-list/bo-post-list';
 import { BoPostDetails } from './components/bo-post-details/bo-post-details';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -17,7 +17,7 @@ import { FormsModule } from '@angular/forms';
     BoPostDetails
   ],
   imports: [
-    CommonModule,FormsModule,
+    CommonModule,FormsModule,ReactiveFormsModule,
     BussinessOwnerRoutingModule
   ]
 })

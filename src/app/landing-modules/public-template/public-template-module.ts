@@ -6,12 +6,14 @@ import { PublicTemplate } from './public-template';
 import { HomeComponent } from './home/home.component';
 import { SignupPopupComponent } from './signup-popup-component/signup-popup-component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ConfirmCodePopup } from './confirm-code-popup/confirm-code-popup';
+import { SigninPopup } from './signin-popup/signin-popup';
 
 
 @NgModule({
   declarations: [
     PublicTemplate,
-    HomeComponent,SignupPopupComponent
+    HomeComponent,SignupPopupComponent, ConfirmCodePopup, SigninPopup
   ],
   imports: [
     CommonModule,FormsModule,  ReactiveFormsModule,

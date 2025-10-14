@@ -1,0 +1,191 @@
+
+<div class="min-h-screen flex flex-col" style="background-color: #F2D479; color: #0D0D0D;">
+    <!-- Header -->
+    <header class="w-full shadow-md" style="background-color: #115930; color: white;">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-md flex items-center justify-center font-bold text-lg"
+                    style="background-color: #C7D943; color: #0D0D0D;">GC</div>
+                <div>
+                    <h1 class="text-xl font-semibold">GCIBN — Real-Estate Scouters</h1>
+                    <p class="text-sm opacity-90">Dashboard</p>
+                </div>
+            </div>
+
+
+            <nav class="flex items-center gap-3">
+                <button class="hidden md:inline-block px-4 py-2 rounded-lg font-medium"
+                    style="background-color: #F2C438; color: #0D0D0D;">How it works</button>
+                <!-- <button class="px-3 py-2 rounded-md text-sm"
+                    style="border: 1px solid rgba(255,255,255,0.08);">Profile</button> -->
+            </nav>
+        </div>
+    </header>
+
+
+    <!-- Main -->
+    <main class="flex-1 max-w-6xl mx-auto w-full px-4 py-6">
+        <!-- Overview cards -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="p-4 rounded-2xl shadow-md" style="background-color: white;">
+                <div class="text-xs uppercase font-semibold text-gray-500">Active Landlords</div>
+                <div class="mt-2 text-2xl font-bold">{{landlords().length}}</div>
+                <div class="text-sm text-gray-600 mt-1">Added by you</div>
+            </div>
+
+
+            <div class="p-4 rounded-2xl shadow-md" style="background-color: white;">
+                <div class="text-xs uppercase font-semibold text-gray-500">Potential Income</div>
+                <div class="mt-2 text-2xl font-bold">₹{{potentialIncome | number}}</div>
+                <div class="text-sm text-gray-600 mt-1">(2.5% GMP estimate)</div>
+            </div>
+
+
+            <div class="p-4 rounded-2xl shadow-md flex flex-col justify-between" style="background-color: white;">
+                <div>
+                    <div class="text-xs uppercase font-semibold text-gray-500">Transactions</div>
+                    <div class="mt-2 text-2xl font-bold">{{transactions}}</div>
+                    <div class="text-sm text-gray-600 mt-1">Total recorded</div>
+                </div>
+            </div>
+
+
+            <div class="p-4 rounded-2xl shadow-md" style="background-color: white;">
+                <div class="text-xs uppercase font-semibold text-gray-500">Referral Bonus</div>
+                <div class="mt-2 text-2xl font-bold">₹{{referralBonus | number}}</div>
+                <div class="text-sm text-gray-600 mt-1">Lifetime</div>
+            </div>
+        </section>
+        <!-- Actions + Filters -->
+        <section class="flex flex-col lg:flex-row gap-4 mb-6">
+            <div class="flex-1 p-4 rounded-2xl shadow-md bg-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-lg font-semibold">Your Landlords</h2>
+                        <p class="text-sm text-gray-500">Landlords you added to the GCIBN group</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input [(ngModel)]="filter" placeholder="Search by name, phone, city"
+                            class="px-3 py-2 rounded-md border" />
+                        <button (click)="openAdd()" class="px-4 py-2 rounded-md font-semibold"
+                            style="background-color:#F2C438;">Add Landlord</button>
+                    </div>
+                </div>
+
+
+                <!-- Landlord list (responsive) -->
+                <div class="mt-4">
+                    <ul class="space-y-3">
+                        @for (l of landlords(); track l.name) {
+                        <li 
+                            class="p-3 rounded-xl border flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-md flex items-center justify-center font-semibold text-white"
+                                    [style.background]="avatarColor(l.name)">{{ initials(l.name) }}</div>
+                                <div>
+                                    <div class="font-semibold">{{l.name}}</div>
+                                    <div class="text-xs text-gray-600">{{l.property}} • {{l.city}}</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="text-sm text-gray-600">Added {{l.added | date:'mediumDate'}}</div>
+                                <button (click)="copyGroupLink(l)" class="px-3 py-1 rounded-md text-sm"
+                                    style="background-color: #C7D943;">Copy Details</button>
+                            </div>
+                        </li>}
+                    </ul>
+
+
+                    <div *ngIf="landlords.length === 0" class="mt-6 text-center text-gray-600">No landlords yet. Click
+                        <strong>Add Landlord</strong> to add your first one.</div>
+                </div>
+            </div>
+            <!-- Right column: Tips & How it works -->
+            <aside class="w-full lg:w-80 p-4 rounded-2xl shadow-md bg-white">
+                <h3 class="font-semibold">How Scouting Works</h3>
+                <ol class="mt-3 text-sm text-gray-700 list-decimal list-inside space-y-2">
+                    <li>Spot a house for rent/sale.</li>
+                    <li>Approach the landlord and add them to the GCIBN Real-Estate group.</li>
+                    <li>The addition is recorded — you'll earn 2.5% GMP when transactions occur through GCIBN.</li>
+                    <li>Earn recurring income for future transactions with the same landlord.</li>
+                </ol>
+
+
+                <!-- <div class="mt-4">
+                    <h4 class="font-semibold">Color Palette</h4>
+                    <div class="mt-2 grid grid-cols-5 gap-2 items-center">
+                        <div class="h-10 rounded" style="background:#115930"></div>
+                        <div class="h-10 rounded" style="background:#C7D943"></div>
+                        <div class="h-10 rounded" style="background:#F2C438"></div>
+                        <div class="h-10 rounded" style="background:#F2D479"></div>
+                        <div class="h-10 rounded" style="background:#0D0D0D"></div>
+                    </div>
+                </div> -->
+            </aside>
+        </section>
+
+
+        <!-- Recent activity -->
+        <section class="p-4 rounded-2xl shadow-md bg-white">
+            <h3 class="font-semibold mb-3">Recent Activity</h3>
+            <div *ngIf="activity.length; else emptyAct" class="space-y-2">
+                @for (a of activity(); track a) {
+                <div class="p-3 rounded-lg border flex items-start gap-3">
+                    <div class="w-3 h-3 mt-2 rounded-full"
+                        [style.background]="a.type === 'added' ? '#115930' : '#F2C438'"></div>
+                    <div>
+                        <div class="text-sm"><strong>{{a.title}}</strong></div>
+                        <div class="text-xs text-gray-600">{{a.desc}}</div>
+                    </div>
+                    <div class="ml-auto text-xs text-gray-500">{{a.date | date:'short'}}</div>
+                </div>}
+            </div>
+
+
+            <ng-template #emptyAct>
+                <div class="text-gray-600">No recent activity to show.</div>
+            </ng-template>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <!-- <footer class="w-full mt-6 py-4" style="background-color: #0D0D0D; color: white;">
+        <div class="max-w-6xl mx-auto px-4 text-center text-sm">© GCIBN — Real-Estate Scouters</div>
+    </footer> -->
+
+
+    <!-- Add Landlord Modal (simple slide-over) -->
+    <div *ngIf="showAdd" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40">
+        <div class="w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl bg-white p-6">
+            <h3 class="text-lg font-semibold">Add Landlord</h3>
+            <form (ngSubmit)="addLandlord()" class="mt-4 space-y-3">
+                <div>
+                    <label class="text-xs font-medium">Name</label>
+                    <input [(ngModel)]="newLandlord.name" name="name" required
+                        class="w-full px-3 py-2 rounded-md border" />
+                </div>
+                <div>
+                    <label class="text-xs font-medium">Phone</label>
+                    <input [(ngModel)]="newLandlord.phone" name="phone" required
+                        class="w-full px-3 py-2 rounded-md border" />
+                </div>
+                <div>
+                    <label class="text-xs font-medium">City</label>
+                    <input [(ngModel)]="newLandlord.city" name="city" class="w-full px-3 py-2 rounded-md border" />
+                </div>
+                <div>
+                    <label class="text-xs font-medium">Property (short)</label>
+                    <input [(ngModel)]="newLandlord.property" name="property"
+                        class="w-full px-3 py-2 rounded-md border" />
+                </div>
+
+
+                <div class="flex items-center justify-end gap-3">
+                    <button type="button" (click)="closeAdd()" class="px-4 py-2 rounded-md">Cancel</button>
+                    <button type="submit" class="px-4 py-2 rounded-md font-semibold"
+                        style="background-color: #115930; color: white;">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

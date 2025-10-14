@@ -1,5 +1,8 @@
 import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Cognito } from '../../../services/cognito.service';
+
+
 
 @Component({
   selector: 'app-signup-popup',
@@ -13,10 +16,18 @@ export class SignupPopupComponent implements OnInit {
   @Output() signup = new EventEmitter<any>(); // Emits form data on successful signup
 
   signupForm!: FormGroup;
-  roles: string[] = ['Admin', 'Editor', 'Viewer']; // Example roles
+  roles :any = [
+  { key: 'property-owner', value: 'Property Owner' },
+  { key: 'business-owner', value: 'Business Owner' },
+  { key: 'yoga-studio-owner', value: 'Yoga Studio Owner' },
+  { key: 'community-member', value: 'Community Member' },
+  { key: 'scouter', value: 'Scouter' }
+];
+
+//  roles: string[] = ['Admin', 'Editor', 'Viewer']; // Example roles
   errorMessage: string = '';
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder,private cognitoService: Cognito) { }
 
   ngOnInit(): void {
     this.signupForm = this.fb.group({
@@ -44,27 +55,37 @@ export class SignupPopupComponent implements OnInit {
     });
   }
 
-  // Method to handle form submission
-  onSubmit(): void {
-    this.errorMessage = ''; // Clear previous errors
-
-    this.signupForm.markAllAsTouched();
-
-    if (this.signupForm.valid) {
-      console.log('Form Submitted!', this.signupForm.value);
-      this.signup.emit(this.signupForm.value);
-      this.closePopup(); 
-    } else {
-      // Collect specific errors for display
-      const invalidFields: string[] = [];
-      if (this.f['email'].invalid) invalidFields.push('Email');
-      if (this.f['password'].invalid) invalidFields.push('Password');
-      if (this.f['role'].invalid) invalidFields.push('Role');
-      
-      this.errorMessage = `Please provide valid: ${invalidFields.join(', ')}.`;
-      if (this.f['password'].errors?.['pattern']) {
-        this.errorMessage += ' Password needs at least one uppercase, one lowercase, one number, and one special character.';
-      }
-    }
+async confirmSignup() {
+  try {
+  //  const result = await this.cognitoService.confirmUser(this.email, this.verificationCode);
+ //   console.log('User confirmed:', result);
+  } catch (error) {
+    console.error('Confirmation failed:', error);
   }
+}
+
+async onSubmit(): Promise<void> {
+  this.errorMessage = '';
+  this.signupForm.markAllAsTouched();
+
+  if (this.signupForm.valid) {
+    try {
+      const result = await this.cognitoService.signUpUser(this.signupForm.value);
+      console.log('Cognito signup success:', result);
+      this.signup.emit(result);
+      this.closePopup();
+    } catch (error: any) {
+      console.error('Cognito signup error:', error);
+      this.errorMessage = error.message || 'Signup failed. Please try again.';
+    }
+  } else {
+    const invalidFields: string[] = [];
+    if (this.f['email'].invalid) invalidFields.push('Email');
+    if (this.f['password'].invalid) invalidFields.push('Password');
+    if (this.f['role'].invalid) invalidFields.push('Role');
+    this.errorMessage = `Please provide valid: ${invalidFields.join(', ')}.`;
+  }
+}
+  // Method to handle form submission
+
 }

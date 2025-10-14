@@ -102,7 +102,7 @@
             [ngClass]="{'border-red-500': f['role'].invalid && f['role'].touched}"
           >
             <option value="" disabled>-- choose role --</option>
-            <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+            <option *ngFor="let role of roles" [value]="role.key">{{ role.value }}</option>
           </select>
           <div *ngIf="f['role'].invalid && f['role'].touched" class="text-red-500 text-xs mt-1">
             <span *ngIf="f['role'].errors?.['required']">Role is required.</span>

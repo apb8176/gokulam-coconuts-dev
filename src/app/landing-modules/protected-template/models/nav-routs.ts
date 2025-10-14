@@ -48,5 +48,25 @@ export const navRoutes = [
                 navItemIcon: 'pi pi-info-circle'
             }
         ]
+    },
+    {   
+        userType: 'scout',
+        navItems:[
+            {
+                navItemLabel: 'Dashboard',
+                navItemRoute: '/landing/scout/dashboard',
+                navItemIcon: 'pi pi-home'
+            },
+            {
+                navItemLabel: 'Profile',
+                navItemRoute: '/landing/scout/dashboard',
+                navItemIcon: 'pi pi-user'
+            },
+            {
+                navItemLabel: 'Benefits',
+                navItemRoute: 'bo-post-details',
+                navItemIcon: 'pi pi-info-circle'
+            }
+        ]
     }
 ]

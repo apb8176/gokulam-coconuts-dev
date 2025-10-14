@@ -122,7 +122,7 @@
               <input *ngIf="edit.pinCode" [(ngModel)]="user.pinCode" name="pinCode"
                      class="w-full mt-2 p-2 border border-[#F2D479] rounded-lg" />
             </div>
-            <button *ngIf="!edit.pinCode" (click)="toggleEdit('pinCode')" class="p-2 hover:bg-[#F2D479]"><img src="./../../../../../../../assets/edit.svg" width="18px" alt="edit" /></button>
+            <button *ngIf="!edit.pinCode" (click)="toggleEdit('pinCode')" class="p-2 hover:bg-[#F2D479] rounded-lg"><img src="./../../../../../../../assets/edit.svg" width="18px" alt="edit" /></button>
            <div *ngIf="edit.pinCode" class="flex gap-2">
                 <button (click)="saveField('pinCode')" class="px-3 py-1 bg-[#F2C438] rounded-lg text-[#0D0D0D]">Save</button>
                 <button (click)="cancelField('pinCode')" class="px-3 py-1 border border-[#F2D479] rounded-lg">Cancel</button>
@@ -134,7 +134,7 @@
         <div class="bg-white p-4 rounded-lg border border-[#F2D479]">
             <div class="flex justify-between items-start">
 <label class="text-xs text-[#0D0D0D]/70 mt-2">Citizenship</label>
-          <button *ngIf="!edit.citizenship" (click)="toggleEdit('citizenship')" class="p-2 hover:bg-[#F2D479]"><img src="./../../../../../../../assets/edit.svg" width="18px" alt="edit" /></button>
+          <button *ngIf="!edit.citizenship" (click)="toggleEdit('citizenship')" class="p-2 hover:bg-[#F2D479] rounded-lg"><img src="./../../../../../../../assets/edit.svg" width="18px" alt="edit" /></button>
 
             </div>
           
@@ -167,7 +167,7 @@
               <input *ngIf="edit.designation" [(ngModel)]="user.designation"
                      class="mt-2 w-full p-2 border border-[#F2D479] rounded-lg" />
             </div>
-            <button *ngIf="!edit.designation" (click)="toggleEdit('designation')" class="p-2 hover:bg-[#F2D479]"><img src="./../../../../../../../assets/edit.svg" width="18px" alt="edit" /></button>
+            <button *ngIf="!edit.designation" (click)="toggleEdit('designation')" class="p-2 hover:bg-[#F2D479] rounded-lg"><img src="./../../../../../../../assets/edit.svg" width="18px" alt="edit" /></button>
           </div>
            <div *ngIf="edit.designation" class="flex gap-2 mt-2">
                 <button (click)="saveField('designation')" class="px-3 py-1 bg-[#F2C438] rounded-lg text-[#0D0D0D]">Save</button>
@@ -186,7 +186,7 @@
             <textarea *ngIf="edit.localAddress" [(ngModel)]="user.localAddress"
                       class="mt-2 w-full p-2 border border-[#F2D479] rounded-lg"></textarea>
           </div>
-          <button *ngIf="!edit.localAddress" (click)="toggleEdit('localAddress')" class="p-2 hover:bg-[#F2D479]"><img src="./../../../../../../../assets/edit.svg" width="18px" alt="edit" /></button>
+          <button *ngIf="!edit.localAddress" (click)="toggleEdit('localAddress')" class="p-2 hover:bg-[#F2D479] rounded-lg"><img src="./../../../../../../../assets/edit.svg" width="18px" alt="edit" /></button>
         </div>
          <div *ngIf="edit.localAddress" class="flex gap-2 mt-2">
                 <button (click)="saveField('localAddress')" class="px-3 py-1 bg-[#F2C438] rounded-lg text-[#0D0D0D]">Save</button>
@@ -202,7 +202,7 @@
             <textarea *ngIf="edit.permanentAddress" [(ngModel)]="user.permanentAddress"
                       class="mt-2 w-full p-2 border border-[#F2D479] rounded-lg"></textarea>
           </div>
-          <button *ngIf="!edit.permanentAddress" (click)="toggleEdit('permanentAddress')" class="p-2 hover:bg-[#F2D479]"><img src="./../../../../../../../assets/edit.svg" width="18px" alt="edit" /></button>
+          <button *ngIf="!edit.permanentAddress" (click)="toggleEdit('permanentAddress')" class="p-2 hover:bg-[#F2D479] rounded-lg"><img src="./../../../../../../../assets/edit.svg" width="18px" alt="edit" /></button>
         </div>
          <div *ngIf="edit.permanentAddress" class="flex gap-2 mt-2">
                 <button (click)="saveField('permanentAddress')" class="px-3 py-1 bg-[#F2C438] rounded-lg text-[#0D0D0D]">Save</button>

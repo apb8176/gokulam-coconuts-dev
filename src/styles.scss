@@ -1,2 +1,35 @@
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
+
+/* Tailwind base + components + utilities */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS variables for theme */
+:root{
+  --gcibn-forest: #115930;
+  --gcibn-lime: #C7D943;
+  --gcibn-marigold: #F2C438;
+  --gcibn-cream: #F2D479;
+  --gcibn-black: #0D0D0D;
+}
+
+/* small utility to ensure contrast for buttons */
+.btn-primary {
+  @apply px-3 py-1 rounded-md font-medium;
+  background-color: var(--gcibn-forest);
+  color: white;
+}
+
+.btn-accent {
+  @apply px-3 py-1 rounded-md font-medium;
+  background-color: var(--gcibn-marigold);
+  color: var(--gcibn-black);
+}
+
+/* Focus outline for accessibility */
+:focus {
+  outline: 3px solid var(--gcibn-cream);
+  outline-offset: 2px;
+}

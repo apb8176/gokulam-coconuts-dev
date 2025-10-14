@@ -21,6 +21,13 @@ const routes: Routes = [
           import('../protected-template/modules/community-member/community-member-module').then(
             (m) => m.CommunityMemberModule
           ),
+      },
+      {
+        path: 'scout',
+        loadChildren: () =>
+          import('../protected-template/modules/scouter/scouter-module').then(
+            (m) => m.ScouterModule
+          ),
       }
     ],
   },
