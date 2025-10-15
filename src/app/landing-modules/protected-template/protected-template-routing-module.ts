@@ -11,6 +11,13 @@ const routes: Routes = [
       {
         path: 'property-owner',
         loadChildren: () =>
+          import('../protected-template/modules/property-owner/property-owner-module').then(
+            (m) => m.PropertyOwnerModule
+          ),
+      },
+      {
+        path: 'busines-owner',
+        loadChildren: () =>
           import('../protected-template/modules/bussiness-owner/bussiness-owner-module').then(
             (m) => m.BussinessOwnerModule
           ),

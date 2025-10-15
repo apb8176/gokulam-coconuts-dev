@@ -1,5 +1,5 @@
 <!-- Property Owner Dashboard - Tailwind responsive version -->
-<div class="po-dashboard font-sans text-[#0D0D0D] p-4">
+<div class="po-dashboard font-sans text-[#0D0D0D] p-4 lg:px-[20%] lg:py-[1%] md:px-[20%] md:py-[1%]">
 
   <!-- TOP BAR -->
 <!-- Responsive Property Owner Dashboard Header (Tailwind CSS) -->
@@ -64,24 +64,25 @@
 
       <!-- Mobile: hamburger / compact menu (visible on < md) -->
       <div class="md:hidden">
-        <button
-          (click)="toggleMobileMenu()"
-          aria-controls="mobile-menu"
-          [attr.aria-expanded]="mobileMenuOpen"
-          class="p-2 rounded-md border border-[rgba(0,0,0,0.08)] bg-white/20"
-        >
-          <span class="sr-only">Open menu</span>
-          <!-- hamburger / X -->
-          <svg *ngIf="!mobileMenuOpen" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M3 12h18M3 6h18M3 18h18"></path>
-          </svg>
-          <svg *ngIf="mobileMenuOpen" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </button>
-      </div>
+    <button
+        (click)="toggleMobileMenu()"
+        aria-controls="mobile-menu"
+        [attr.aria-expanded]="mobileMenuOpen"
+        class="p-2 rounded-md border border-[rgba(0,0,0,0.08)] bg-white/20"
+    >
+        <span class="sr-only">Open menu</span>
+        
+        <svg *ngIf="!mobileMenuOpen" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+        
+        <svg *ngIf="mobileMenuOpen" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+</div>
     </div>
   </div>
 
@@ -273,6 +274,29 @@
         </ng-template>
       </div>
 
+      
+
+      <!-- INVOICES -->
+      <div class="bg-white p-3 rounded-lg">
+        <div class="flex justify-between items-center">
+          <div class="font-semibold">Invoices</div>
+          <a class="text-sm text-[#115930] cursor-pointer" (click)="openInvoices()">View</a>
+        </div>
+
+        <div class="mt-2 flex flex-col gap-2">
+          <div *ngFor="let inv of invoices" class="flex justify-between items-center border border-gray-100 p-2 rounded-md">
+            <div>
+              <div class="font-semibold">{{inv.id}}</div>
+              <div class="text-xs text-gray-600">{{inv.date}}</div>
+            </div>
+            <div class="text-right">
+              <div class="font-bold">₹{{inv.amount}}</div>
+              <button class="mt-2 px-2 py-1 rounded-md border border-gray-200 text-sm" (click)="downloadInvoicePDF(inv)">Download</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- CLASSIFIEDS -->
       <div class="bg-white p-3 rounded-lg">
         <div class="flex justify-between items-center">
@@ -309,27 +333,6 @@
           <div class="flex gap-2">
             <button class="px-2 py-1 rounded-md border border-gray-200 text-sm" (click)="prevClassifieds()" [disabled]="classifiedsPage===1">Previous</button>
             <button class="px-2 py-1 rounded-md border border-gray-200 text-sm" (click)="nextClassifieds()" [disabled]="classifiedsPage*classifiedsPageSize >= classifiedsTotal">Next</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- INVOICES -->
-      <div class="bg-white p-3 rounded-lg">
-        <div class="flex justify-between items-center">
-          <div class="font-semibold">Invoices</div>
-          <a class="text-sm text-[#115930] cursor-pointer" (click)="openInvoices()">View</a>
-        </div>
-
-        <div class="mt-2 flex flex-col gap-2">
-          <div *ngFor="let inv of invoices" class="flex justify-between items-center border border-gray-100 p-2 rounded-md">
-            <div>
-              <div class="font-semibold">{{inv.id}}</div>
-              <div class="text-xs text-gray-600">{{inv.date}}</div>
-            </div>
-            <div class="text-right">
-              <div class="font-bold">₹{{inv.amount}}</div>
-              <button class="mt-2 px-2 py-1 rounded-md border border-gray-200 text-sm" (click)="downloadInvoicePDF(inv)">Download</button>
-            </div>
           </div>
         </div>
       </div>

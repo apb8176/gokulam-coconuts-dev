@@ -1,0 +1,478 @@
+<!-- Property Owner Dashboard - Tailwind responsive version -->
+<div class="po-dashboard font-sans text-[#0D0D0D] p-4 lg:px-[20%] lg:py-[1%] md:px-[20%] md:py-[1%]">
+
+  <!-- TOP BAR -->
+<!-- Responsive Property Owner Dashboard Header (Tailwind CSS) -->
+<header class="w-full bg-[#F2D479] rounded-lg p-3 md:p-4">
+  <div class="mx-auto flex items-center justify-between gap-3">
+    <!-- Left: Title -->
+    <div class="flex items-start gap-3 min-w-0">
+      <div class="flex-shrink-0">
+        <!-- optional logo / avatar -->
+        <div class="h-10 w-10 rounded-md bg-white/30 flex items-center justify-center text-sm font-semibold">
+          PO
+        </div>
+      </div>
+
+      <div class="min-w-0">
+        <h1 id="dashboardTitle" class="text-base sm:text-lg md:text-xl font-semibold leading-tight truncate">
+          Property Owner Dashboard
+        </h1>
+        <p class="text-xs sm:text-sm text-[#333] truncate">
+          Manage your properties, requests &amp; transactions
+        </p>
+      </div>
+    </div>
+
+    <!-- Right: Actions -->
+    <div class="flex items-center gap-2">
+      <!-- Desktop action group (visible on md+) -->
+      <div class="hidden md:flex items-center gap-2">
+        <button
+          class="px-3 py-2 rounded-md bg-[#115930] text-white text-sm hover:opacity-95 transition"
+          (click)="openNewProperty()"
+        >
+          New Property
+        </button>
+
+        <button
+          aria-label="Notifications"
+          class="relative p-2 rounded-md border border-[rgba(0,0,0,0.08)] bg-transparent hover:bg-white/30 transition"
+          (click)="markAllRead()"
+        >
+          <span class="sr-only">Notifications</span>
+          <!-- bell icon -->
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0 1 18 14.158V11a6 6 0 1 0-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+
+          <span *ngIf="unreadNotifications > 0"
+                class="absolute -top-1 -right-1 text-[11px] px-2 py-[2px] rounded-full bg-[#F44336] text-white font-medium">
+            {{ unreadNotifications }}
+          </span>
+        </button>
+
+        <button
+          class="px-3 py-2 rounded-md bg-[#F2C438] text-sm hover:opacity-95 transition"
+          (click)="openInvoices()"
+        >
+          Invoices
+        </button>
+      </div>
+
+      <!-- Mobile: hamburger / compact menu (visible on < md) -->
+      <div class="md:hidden">
+    <button
+        (click)="toggleMobileMenu()"
+        aria-controls="mobile-menu"
+        [attr.aria-expanded]="mobileMenuOpen"
+        class="p-2 rounded-md border border-[rgba(0,0,0,0.08)] bg-white/20"
+    >
+        <span class="sr-only">Open menu</span>
+        
+        <svg *ngIf="!mobileMenuOpen" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+        
+        <svg *ngIf="mobileMenuOpen" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+</div>
+    </div>
+  </div>
+
+  <!-- Mobile menu panel -->
+  <nav
+    id="mobile-menu"
+    *ngIf="mobileMenuOpen"
+    class="md:hidden mt-3 max-w-7xl mx-auto px-2"
+    aria-label="Mobile actions"
+  >
+    <div class="flex flex-col gap-2">
+      <button
+        class="w-full text-left px-4 py-2 rounded-md bg-[#115930] text-white text-sm"
+        (click)="openNewProperty(); toggleMobileMenu()"
+      >
+        New Property
+      </button>
+
+      <button
+        class="w-full text-left px-4 py-2 rounded-md border border-[rgba(0,0,0,0.06)] bg-white/20 flex items-center justify-between"
+        (click)="markAllRead(); toggleMobileMenu()"
+        aria-label="Notifications"
+      >
+        <div class="flex items-center gap-2">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0 1 18 14.158V11a6 6 0 1 0-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span>Notifications</span>
+        </div>
+
+        <span *ngIf="unreadNotifications > 0"
+              class="text-[11px] px-2 py-[2px] rounded-full bg-[#F44336] text-white font-medium">
+          {{ unreadNotifications }}
+        </span>
+      </button>
+
+      <button
+        class="w-full text-left px-4 py-2 rounded-md bg-[#F2C438] text-sm"
+        (click)="openInvoices(); toggleMobileMenu()"
+      >
+        Invoices
+      </button>
+    </div>
+  </nav>
+</header>
+
+
+  <!-- MAIN GRID: mobile-first, becomes two-column with aside on md -->
+  <main class="mt-4 grid gap-4 grid-cols-1 md:[grid-template-columns:1fr_320px]">
+
+    <!-- LEFT: main content -->
+    <div class="space-y-4">
+
+      <!-- RECENT PROPERTIES (limit 2) -->
+      <section aria-labelledby="recentPropsTitle"
+               class="bg-white p-3 rounded-lg shadow-sm">
+        <div class="flex justify-between items-center">
+          <h2 id="recentPropsTitle" class="text-base font-semibold m-0">Recently posted properties</h2>
+          <a class="text-sm text-[#115930] cursor-pointer">Show more</a>
+        </div>
+
+        <div #propertiesListContainer class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <ng-container *ngFor="let p of recentProperties">
+            <article [attr.data-prop-id]="p.id"
+                     class="flex flex-col border border-gray-100 rounded-lg overflow-hidden">
+              <div class="h-36 md:h-40 overflow-hidden">
+                <img [src]="p.photos?.[0]" alt="{{p.title}}" class="w-full h-full object-cover" />
+              </div>
+
+              <div class="p-3 flex flex-col gap-2">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <div class="font-semibold text-sm">{{p.title}}</div>
+                    <div class="text-xs text-gray-600">{{p.location}}</div>
+                  </div>
+
+                  <div class="text-right">
+                    <div class="font-bold">₹{{p.price | number}}</div>
+                    <div class="text-[11px] text-gray-600">{{p.status}}</div>
+                  </div>
+                </div>
+
+                <div class="text-sm text-gray-700">{{p.description}}</div>
+
+                <div class="flex justify-between items-center mt-2">
+                  <div class="text-xs text-gray-500">Posted: {{formatShort(p.postedDate)}}</div>
+                  <div class="flex gap-2">
+                    <button class="px-2 py-1 rounded-md bg-[#115930] text-white text-sm"
+                            (click)="openEditModal(p)" aria-label="Edit property">Edit</button>
+                    <button class="px-2 py-1 rounded-md border border-gray-200 text-sm"
+                            (click)="deleteProperty(p.id)">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </ng-container>
+        </div>
+      </section>
+
+      <!-- INTERESTS -->
+      <section aria-labelledby="interestsTitle" class="bg-white p-3 rounded-lg">
+        <div class="flex justify-between items-center">
+          <h2 id="interestsTitle" class="text-base font-semibold m-0">Recent requests / interests</h2>
+          <a class="text-sm text-[#115930] cursor-pointer">Show more</a>
+        </div>
+
+        <div class="mt-3 flex flex-col gap-2">
+          <ng-container *ngFor="let it of interests">
+            <div class="flex justify-between items-start border border-gray-100 p-3 rounded-lg">
+              <div class="flex-1">
+                <div class="font-semibold">{{it.userName}} <span class="text-xs text-gray-600">• {{formatShort(it.date)}}</span></div>
+                <div class="text-sm text-gray-800 mt-2">{{it.message}}</div>
+                <div class="text-xs text-gray-600 mt-2">Contact: {{maskContact(it.contact)}}</div>
+
+                <div *ngIf="it.status === 'accepted'" class="text-[#115930] font-semibold mt-2">Accepted</div>
+                <div *ngIf="it.status === 'rejected'" class="text-[#c53030] font-semibold mt-2">Rejected</div>
+              </div>
+
+              <div class="ml-3 flex flex-col gap-2 shrink-0">
+                <button *ngIf="it.status==='pending'"
+                        class="px-3 py-1 rounded-md bg-[#115930] text-white text-sm"
+                        (click)="acceptInterest(it)">Accept</button>
+                <button *ngIf="it.status==='pending'"
+                        class="px-3 py-1 rounded-md border border-gray-200 text-sm"
+                        (click)="rejectInterest(it)">Reject</button>
+                <button *ngIf="it.status==='accepted'"
+                        class="px-3 py-1 rounded-md bg-[#F2C438] text-sm"
+                        (click)="contactReveal = { interestId: it.id, contact: it.contact }">Reveal</button>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </section>
+
+      <!-- ADMIN RESPONSES -->
+      <section aria-labelledby="adminTitle" class="bg-white p-3 rounded-lg">
+        <div class="flex justify-between items-center">
+          <h2 id="adminTitle" class="text-base font-semibold m-0">Recent Admin responses</h2>
+          <a class="text-sm text-[#115930] cursor-pointer">Show more</a>
+        </div>
+
+        <div class="mt-3 flex flex-col gap-2">
+          <ng-container *ngFor="let a of adminResponses">
+            <div class="p-2 border border-gray-100 rounded-lg">
+              <div class="flex justify-between items-center">
+                <div class="font-semibold">{{a.type}}</div>
+                <div class="text-xs text-gray-600">{{formatShort(a.date)}}</div>
+              </div>
+              <div class="mt-2 text-sm">{{a.comment}}</div>
+              <div class="mt-2">
+                <a class="text-[#115930] cursor-pointer" (click)="gotoRelatedPost(a.relatedId)">View related post</a>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- RIGHT: scouter, classifieds, invoices -->
+    <aside class="flex flex-col gap-3">
+      <!-- SCOUTER -->
+      <div class="bg-white p-3 rounded-lg">
+        <div class="flex justify-between items-center">
+          <div class="font-semibold">Scouter</div>
+          <a class="text-sm text-[#115930] cursor-pointer">Show more</a>
+        </div>
+
+        <ng-container *ngIf="getScouterForOwner(); else noScouter">
+          <div class="mt-3">
+            <div class="font-bold">{{getScouterForOwner().name}}</div>
+            <div class="text-sm text-gray-600">Phone: {{maskContact(getScouterForOwner().phone)}}</div>
+            <div class="text-sm text-gray-600">Commission: {{getScouterForOwner().commission}}%</div>
+
+            <div class="mt-3 text-sm text-gray-800">Transactions:</div>
+            <ul class="mt-2 ml-4 text-gray-600 text-sm">
+              <li *ngFor="let t of getScouterForOwner().transactions">{{t.date}} — ₹{{t.amount}}</li>
+            </ul>
+
+            <button class="mt-3 w-full px-3 py-2 rounded-md bg-[#115930] text-white text-sm"
+                    (click)="openContactComposer(getScouterForOwner().phone,'Scouter contact','Hello, I want to talk about a property')">Contact</button>
+          </div>
+        </ng-container>
+
+        <ng-template #noScouter>
+          <div class="mt-3 text-gray-600">No scouter associated.</div>
+        </ng-template>
+      </div>
+
+      
+
+      <!-- INVOICES -->
+      <div class="bg-white p-3 rounded-lg">
+        <div class="flex justify-between items-center">
+          <div class="font-semibold">Invoices</div>
+          <a class="text-sm text-[#115930] cursor-pointer" (click)="openInvoices()">View</a>
+        </div>
+
+        <div class="mt-2 flex flex-col gap-2">
+          <div *ngFor="let inv of invoices" class="flex justify-between items-center border border-gray-100 p-2 rounded-md">
+            <div>
+              <div class="font-semibold">{{inv.id}}</div>
+              <div class="text-xs text-gray-600">{{inv.date}}</div>
+            </div>
+            <div class="text-right">
+              <div class="font-bold">₹{{inv.amount}}</div>
+              <button class="mt-2 px-2 py-1 rounded-md border border-gray-200 text-sm" (click)="downloadInvoicePDF(inv)">Download</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLASSIFIEDS -->
+      <div class="bg-white p-3 rounded-lg">
+        <div class="flex justify-between items-center">
+          <div class="font-semibold">Other Classifieds</div>
+          <a class="text-sm text-[#115930] cursor-pointer">Show more</a>
+        </div>
+
+        <div class="mt-2 flex gap-2">
+          <input placeholder="Search" [(ngModel)]="classifiedsQ"
+                 class="flex-1 p-2 border border-gray-200 rounded-md text-sm" />
+          <select [(ngModel)]="classifiedsCategory" class="p-2 border border-gray-200 rounded-md text-sm">
+            <option value="">All</option>
+            <option value="services">Services</option>
+            <option value="items">Items</option>
+          </select>
+        </div>
+
+        <div class="mt-3 flex flex-col gap-2">
+          <ng-container *ngFor="let c of pagedClassifieds">
+            <div class="flex justify-between items-center border border-gray-100 p-2 rounded-md">
+              <div>
+                <div class="font-semibold">{{c.title}}</div>
+                <div class="text-xs text-gray-600">{{c.category}} • {{c.date}}</div>
+              </div>
+              <div class="flex gap-2">
+                <button class="px-2 py-1 rounded-md border border-gray-200 text-sm" (click)="viewClassified(c)">View</button>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+
+        <div class="mt-2 flex justify-between items-center text-sm text-gray-600">
+          <div>{{(classifiedsPage-1)*classifiedsPageSize + 1}} - {{min(classifiedsPage*classifiedsPageSize, classifiedsTotal)}} of {{classifiedsTotal}}</div>
+          <div class="flex gap-2">
+            <button class="px-2 py-1 rounded-md border border-gray-200 text-sm" (click)="prevClassifieds()" [disabled]="classifiedsPage===1">Previous</button>
+            <button class="px-2 py-1 rounded-md border border-gray-200 text-sm" (click)="nextClassifieds()" [disabled]="classifiedsPage*classifiedsPageSize >= classifiedsTotal">Next</button>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- ================= Modals & Drawers ================= -->
+
+  <!-- EDIT PROPERTY MODAL -->
+  <div *ngIf="editingProperty" role="dialog" aria-modal="true"
+       class="fixed inset-0 z-50 flex items-center justify-center">
+    <div class="absolute inset-0 bg-black/40" (click)="editingProperty=null" aria-hidden="true"></div>
+
+    <div class="relative bg-white rounded-lg p-4 z-10 w-[900px] max-w-[96%] shadow-2xl">
+      <h3 class="text-lg font-semibold m-0 mb-2">Edit property</h3>
+
+      <form [formGroup]="editForm" (ngSubmit)="saveEditedProperty()"
+            class="grid gap-4 grid-cols-1 lg:grid-cols-[1fr_240px]">
+        <div>
+          <label class="block text-sm font-medium">Title</label>
+          <input formControlName="title" autofocus class="w-full p-2 border border-gray-200 rounded-md" />
+
+          <div class="flex gap-2 mt-2">
+            <div class="flex-1">
+              <label class="block text-sm font-medium">Price</label>
+              <input formControlName="price" type="number" class="w-full p-2 border border-gray-200 rounded-md" />
+            </div>
+
+            <div class="w-36">
+              <label class="block text-sm font-medium">Status</label>
+              <select formControlName="status" class="w-full p-2 border border-gray-200 rounded-md">
+                <option value="active">Active</option>
+                <option value="draft">Draft</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+          </div>
+
+          <label class="block text-sm font-medium mt-3">Description</label>
+          <textarea formControlName="description" rows="4" class="w-full p-2 border border-gray-200 rounded-md"></textarea>
+
+          <label class="block text-sm font-medium mt-3">Facilities</label>
+          <div class="flex gap-2 items-center">
+            <input #facInput placeholder="Add facility" class="flex-1 p-2 border border-gray-200 rounded-md" />
+            <button type="button" class="px-3 py-2 rounded-md bg-[#115930] text-white" (click)="addFacility(facInput)">Add</button>
+          </div>
+
+          <div class="mt-2 flex gap-2 flex-wrap">
+            <span *ngFor="let f of editForm.get('facilities')?.value; let i = index" class="inline-flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-sm">
+              {{f}}
+              <button type="button" aria-label="remove" (click)="removeFacility(i)" class="text-gray-500">✕</button>
+            </span>
+          </div>
+        </div>
+
+        <aside>
+          <div>
+            <label class="block text-sm font-medium">Photos (mock upload)</label>
+            <input type="file" (change)="onPhotoSelected($event)" class="mt-2" />
+            <div class="mt-2 flex gap-2 flex-wrap">
+              <img *ngFor="let p of filePreview" [src]="p" class="w-24 h-16 object-cover rounded-md border border-gray-100" />
+            </div>
+          </div>
+
+          <div class="mt-4 flex justify-end gap-2">
+            <button type="button" (click)="editingProperty=null" class="px-3 py-2 rounded-md border border-gray-200">Cancel</button>
+            <button type="submit" class="px-3 py-2 rounded-md bg-[#115930] text-white">Save</button>
+          </div>
+        </aside>
+      </form>
+    </div>
+  </div>
+
+  <!-- Contact reveal modal -->
+  <div *ngIf="contactReveal" role="dialog" aria-modal="true"
+       class="fixed inset-0 z-50 flex items-center justify-center">
+    <div class="absolute inset-0 bg-black/30" (click)="closeContactReveal()" aria-hidden="true"></div>
+    <div class="relative bg-white p-4 rounded-md w-[420px] max-w-[92%] z-10">
+      <h4 class="m-0 mb-2 text-lg font-semibold">Contact details</h4>
+      <div *ngIf="contactReveal?.contact">
+        <div class="font-semibold">{{contactReveal.contact}}</div>
+        <div class="mt-3 flex justify-end gap-2">
+          <button (click)="openContactComposer(contactReveal.contact, 'Re: interest', 'Hello, I am interested in discussing')" class="px-3 py-2 rounded-md bg-[#115930] text-white">Message</button>
+          <button (click)="closeContactReveal()" class="px-3 py-2 rounded-md border border-gray-200">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Classified viewer drawer -->
+  <div *ngIf="viewingClassified" class="fixed right-0 top-0 h-full w-[360px] max-w-[92%] bg-white z-50 shadow-2xl p-4">
+    <button (click)="closeClassifiedViewer()" class="float-right text-lg">✕</button>
+    <h4 class="mt-8 text-lg font-semibold">{{viewingClassified.title}}</h4>
+    <div class="text-sm text-gray-600">{{viewingClassified.category}} • {{viewingClassified.date}}</div>
+    <p class="mt-3 text-sm text-gray-700">{{viewingClassified.details}}</p>
+  </div>
+
+  <!-- Contact composer modal -->
+  <div *ngIf="composerData" class="fixed inset-0 z-50 flex items-center justify-center">
+    <div class="absolute inset-0 bg-black/35" (click)="composerData=null"></div>
+    <div class="relative bg-white p-4 rounded-md w-[640px] max-w-[96%] z-10">
+      <h4 class="text-lg font-semibold">Message composer</h4>
+      <div class="mt-3 grid gap-2">
+        <input [(ngModel)]="composerData.to" placeholder="To" class="p-2 border border-gray-200 rounded-md" />
+        <input [(ngModel)]="composerData.subject" placeholder="Subject" class="p-2 border border-gray-200 rounded-md" />
+        <textarea [(ngModel)]="composerData.body" rows="6" class="p-2 border border-gray-200 rounded-md"></textarea>
+        <div class="flex justify-end gap-2">
+          <button (click)="composerData=null" class="px-3 py-2 rounded-md border border-gray-200">Cancel</button>
+          <button (click)="sendComposer()" class="px-3 py-2 rounded-md bg-[#115930] text-white">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Invoices modal -->
+  <div *ngIf="showInvoices" class="fixed inset-0 z-50 flex items-start justify-center pt-10">
+    <div class="absolute inset-0 bg-black/35" (click)="closeInvoices()"></div>
+    <div class="relative bg-white p-4 rounded-md w-[760px] max-w-[96%] z-10">
+      <div class="flex justify-between items-center">
+        <h3 class="m-0 text-lg font-semibold">Invoices</h3>
+        <button (click)="closeInvoices()" class="text-xl">✕</button>
+      </div>
+
+      <div class="mt-3 flex flex-col gap-2">
+        <div *ngFor="let inv of invoices" class="flex justify-between items-center border border-gray-100 p-2 rounded-md">
+          <div>
+            <div class="font-semibold">{{inv.id}}</div>
+            <div class="text-xs text-gray-600">{{inv.date}}</div>
+          </div>
+          <div class="text-right">
+            <div class="font-bold">₹{{inv.amount}}</div>
+            <div class="mt-2">
+              <button (click)="downloadInvoicePDF(inv)" class="px-2 py-1 rounded-md border border-gray-200 text-sm">Download PDF</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

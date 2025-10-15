@@ -24,6 +24,32 @@ export const navRoutes = [
             }
         ]
     },
+      {   
+        userType: 'busines-owner',
+        navItems:[
+            {
+                navItemLabel: 'Dashboard',
+                navItemRoute: '/landing/busines-owner/dashboard',
+                navItemIcon: 'pi pi-home'
+            },
+            {
+                navItemLabel: 'Profile',
+                navItemRoute: '/landing/busines-owner/profile',
+                navItemIcon: 'pi pi-user'
+            },
+            {
+                navItemLabel: 'Post List',
+                navItemRoute: '/landing/busines-owner/listing',
+                navItemIcon: 'pi pi-list'
+            },
+            {
+                navItemLabel: 'Logout',
+                navItemRoute: 'busines-owner-post-details',
+                navItemIcon: 'pi pi-info-circle'
+            }
+        ]
+    },
+    
     {   
         userType: 'community-member',
         navItems:[
