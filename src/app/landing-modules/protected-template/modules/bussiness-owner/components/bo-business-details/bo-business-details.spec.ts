@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BoPostList } from './bo-post-list';
+import { BoBusinessDetails } from './bo-business-details';
 
-describe('BoPostList', () => {
-  let component: BoPostList;
-  let fixture: ComponentFixture<BoPostList>;
+describe('BoBusinessDetails', () => {
+  let component: BoBusinessDetails;
+  let fixture: ComponentFixture<BoBusinessDetails>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BoPostList]
+      declarations: [BoBusinessDetails]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(BoPostList);
+    fixture = TestBed.createComponent(BoBusinessDetails);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BoPostDetails } from './bo-post-details';
+import { BoEventList } from './bo-event-list';
 
-describe('BoPostDetails', () => {
-  let component: BoPostDetails;
-  let fixture: ComponentFixture<BoPostDetails>;
+describe('BoEventList', () => {
+  let component: BoEventList;
+  let fixture: ComponentFixture<BoEventList>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BoPostDetails]
+      declarations: [BoEventList]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(BoPostDetails);
+    fixture = TestBed.createComponent(BoEventList);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

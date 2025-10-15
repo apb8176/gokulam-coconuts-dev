@@ -38,10 +38,16 @@ export const navRoutes = [
                 navItemIcon: 'pi pi-user'
             },
             {
-                navItemLabel: 'Post List',
-                navItemRoute: '/landing/busines-owner/listing',
+                navItemLabel: 'Business Details',
+                navItemRoute: '/landing/busines-owner/business-details',
                 navItemIcon: 'pi pi-list'
             },
+              {
+                navItemLabel: 'Offers/Events',
+                navItemRoute: '/landing/busines-owner/events',
+                navItemIcon: 'pi pi-list'
+            },
+            
             {
                 navItemLabel: 'Logout',
                 navItemRoute: 'busines-owner-post-details',

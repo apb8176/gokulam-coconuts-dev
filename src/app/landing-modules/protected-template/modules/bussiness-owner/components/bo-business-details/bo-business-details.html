@@ -1,0 +1,269 @@
+<div class="max-w-4xl mx-auto p-4 md:p-8 ">
+  <div class="max-w-6xl mx-auto bg-white rounded-xl p-4 md:p-8 shadow border border-[#F2D479]">
+  <div
+    class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 md:gap-6">
+    <!-- Left: Title + subtitle -->
+    <div class="flex-1 min-w-0">
+      <h2 class="text-xl sm:text-2xl font-bold text-[#0D0D0D] leading-snug">Add / Edit Business</h2>
+      <p class="mt-1 text-sm text-[#0D0D0D]/70 truncate">
+        Details about your bussiness, feel free to update.
+      </p>
+    </div>
+
+    <!-- Right: Buttons -->
+    <div class="w-full md:w-auto">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3">
+        <button
+          (click)="toggleEdit()"
+          class="w-full sm:w-auto px-4 py-2 rounded-lg font-medium text-white bg-[#115930] hover:bg-[#0D0D0D] transition"
+          >
+          {{ isEditMode ? 'Close Form' : 'Edit / Add Business' }}
+        </button>
+
+        <button
+          (click)="togglePreviewOnly()"
+          [ngClass]="isPreviewOnly
+            ? 'w-full sm:w-auto px-4 py-2 rounded-lg font-medium border border-[#F2D479] bg-white text-[#0D0D0D]'
+            : 'w-full sm:w-auto px-4 py-2 rounded-lg font-medium text-white bg-[#F2C438] hover:bg-[#C7D943]'">
+          {{ isPreviewOnly ? 'Back to Edit' : 'Preview Only' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- FORM -->
+  <form *ngIf="isEditMode" [formGroup]="businessForm" (ngSubmit)="onSubmit()" class="space-y-6 mt-6 p-4 rounded-xl p-4 md:p-8 shadow border border-[#F2D479] bg-white">
+    <!-- Row: Name | Type -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="md:col-span-2">
+        <label class="block font-semibold mb-1 text-[#0D0D0D]">Business Name <span class="text-red-500">*</span></label>
+        <input formControlName="name" type="text"
+               class="w-full p-2 border border-[#F2D479] rounded-lg focus:ring-[#115930] focus:border-[#115930]"
+               placeholder="Enter business name">
+        <div *ngIf="f.name.touched && f.name.invalid" class="text-red-500 text-sm mt-1">Business name is required.</div>
+      </div>
+
+      <div>
+        <label class="block font-semibold mb-1 text-[#0D0D0D]">Type <span class="text-red-500">*</span></label>
+        <select formControlName="type"
+                class="w-full p-2 border border-[#F2D479] rounded-lg">
+          <option value="">Select</option>
+          <option value="product">Product</option>
+          <option value="service">Service</option>
+          <option value="both">Both</option>
+        </select>
+        <div *ngIf="f.type.touched && f.type.invalid" class="text-red-500 text-sm mt-1">Type is required.</div>
+      </div>
+    </div>
+
+    <!-- Tagline -->
+    <div>
+      <label class="block font-semibold mb-1 text-[#0D0D0D]">Tagline</label>
+      <input formControlName="tagline" type="text"
+             class="w-full p-2 border border-[#F2D479] rounded-lg" placeholder="Short tagline / slogan">
+    </div>
+
+    <!-- Details -->
+    <div>
+      <label class="block font-semibold mb-1 text-[#0D0D0D]">Details of product / service <span class="text-red-500">*</span></label>
+      <textarea formControlName="details" rows="4"
+                class="w-full p-2 border border-[#F2D479] rounded-lg" placeholder="Describe offerings, specialties..."></textarea>
+      <div *ngIf="f.details.touched && f.details.invalid" class="text-red-500 text-sm mt-1">Details are required.</div>
+    </div>
+
+    <!-- Address & Google Map -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block font-semibold mb-1 text-[#0D0D0D]">Address <span class="text-red-500">*</span></label>
+        <textarea formControlName="address" rows="3"
+                  class="w-full p-2 border border-[#F2D479] rounded-lg"></textarea>
+        <div *ngIf="f.address.touched && f.address.invalid" class="text-red-500 text-sm mt-1">Address is required.</div>
+      </div>
+
+      <div>
+        <label class="block font-semibold mb-1 text-[#0D0D0D]">Google Map URL</label>
+        <input formControlName="googleMapUrl" type="url"
+               class="w-full p-2 border border-[#F2D479] rounded-lg" placeholder="https://maps.google.com/?q=...">
+        <div class="mt-2">
+          <label class="block font-semibold mb-1 text-[#0D0D0D]">GSTIN</label>
+          <input formControlName="gstin" type="text"
+                 class="w-full p-2 border border-[#F2D479] rounded-lg" placeholder="Optional">
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div>
+        <label class="block font-semibold mb-1 text-[#0D0D0D]">Owner / Contact Name</label>
+        <input formControlName="owner" class="w-full p-2 border border-[#F2D479] rounded-lg">
+      </div>
+      <div>
+        <label class="block font-semibold mb-1 text-[#0D0D0D]">Phone</label>
+        <input formControlName="phone" class="w-full p-2 border border-[#F2D479] rounded-lg">
+      </div>
+      <div>
+        <label class="block font-semibold mb-1 text-[#0D0D0D]">Email</label>
+        <input formControlName="email" type="email" class="w-full p-2 border border-[#F2D479] rounded-lg">
+      </div>
+    </div>
+
+    <!-- Logo / Photos / Video -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div>
+        <label class="block font-semibold mb-1 text-[#0D0D0D]">Logo</label>
+        <input type="file" (change)="onLogoSelected($event)" accept="image/*" class="block w-full mt-1 text-sm">
+        <div *ngIf="logoPreview" class="mt-3">
+          <img [src]="logoPreview" alt="logo" class="h-24 w-24 object-cover rounded-lg border border-[#F2D479] shadow">
+        </div>
+      </div>
+
+      <div>
+        <label class="block font-semibold mb-1 text-[#0D0D0D]">Photos</label>
+        <input type="file" (change)="onPhotosSelected($event)" accept="image/*" multiple class="block w-full mt-1 text-sm">
+        <div class="grid grid-cols-3 gap-2 mt-3">
+          <img *ngFor="let p of photosPreview; let i=index" [src]="p" alt="photo" class="h-20 w-full object-cover rounded" />
+        </div>
+      </div>
+
+      <div>
+        <label class="block font-semibold mb-1 text-[#0D0D0D]">Video (optional)</label>
+        <input type="file" (change)="onVideoSelected($event)" accept="video/*" class="block w-full mt-1 text-sm">
+        <video *ngIf="videoPreview" controls class="mt-2 rounded-lg w-full max-h-44"></video>
+      </div>
+    </div>
+
+    <!-- Amenities & Tags -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block font-semibold mb-2 text-[#0D0D0D]">Amenities</label>
+        <div class="grid grid-cols-2 gap-2">
+          <label class="flex items-center gap-2">
+            <input type="checkbox" formControlName="amenities_parking" class="h-4 w-4" />
+            <span class="text-sm">Parking</span>
+          </label>
+          <label class="flex items-center gap-2">
+            <input type="checkbox" formControlName="amenities_wifi" class="h-4 w-4" />
+            <span class="text-sm">WiFi</span>
+          </label>
+          <label class="flex items-center gap-2">
+            <input type="checkbox" formControlName="amenities_delivery" class="h-4 w-4" />
+            <span class="text-sm">Home Delivery</span>
+          </label>
+          <label class="flex items-center gap-2">
+            <input type="checkbox" formControlName="amenities_dinein" class="h-4 w-4" />
+            <span class="text-sm">Dine-in / On-site</span>
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <label class="block font-semibold mb-1 text-[#0D0D0D]">Tags</label>
+        <div class="flex gap-2 mb-2">
+          <input [(ngModel)]="tagInput" (keydown.enter)="addTag($event)" name="tagInput" placeholder="Press Enter to add"
+                 class="flex-1 p-2 border border-[#F2D479] rounded-lg" />
+          <button type="button" (click)="addTag($event)" class="px-3 py-1 bg-[#115930] text-white rounded-lg">Add</button>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+          <span *ngFor="let t of tags; let idx=index" class="bg-[#C7D943] text-[#0D0D0D] px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2">
+            {{ t }}
+            <button type="button" (click)="removeTag(idx)" class="ml-1 text-sm">✕</button>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Save & Preview -->
+    <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="text-sm text-[#0D0D0D]/70">Fields marked <span class="text-red-500">*</span> are mandatory.</div>
+      <div class="flex gap-2">
+        <button type="button" (click)="resetForm()" class="px-4 py-2 rounded-lg border border-[#F2D479]">Reset</button>
+        <button type="submit" class="px-6 py-2 bg-[#F2C438] text-[#0D0D0D] font-bold rounded-lg hover:bg-[#C7D943]">Save & Preview</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- PREVIEW -->
+  <div *ngIf="!isEditMode || isPreviewOnly" class="mt-6 ">
+    <div class="bg-white rounded-xl p-4 md:p-6 shadow border border-[#F2D479]">
+      <div class="flex flex-col md:flex-row gap-4">
+        <div class="w-full md:w-1/4 flex items-start">
+          <div class="h-28 w-28 rounded-lg border border-[#F2D479] overflow-hidden bg-[#F9F7ED] flex items-center justify-center">
+            <img *ngIf="logoPreview" [src]="logoPreview" alt="logo" class="h-full w-full object-cover">
+            <div *ngIf="!logoPreview" class="text-center text-sm px-2">No Logo</div>
+          </div>
+        </div>
+
+        <div class="flex-1">
+          <h1 class="text-2xl font-bold text-[#0D0D0D]">{{ previewData.name || 'Business Name' }}</h1>
+          <div class="flex items-center gap-3 mt-1">
+            <span class="text-sm text-[#0D0D0D]/70">{{ previewData.type | titlecase }}</span>
+            <span *ngIf="previewData.gstin" class="px-2 py-0.5 text-xs bg-[#F2D479] rounded">{{ previewData.gstin }}</span>
+            <div class="ml-auto text-sm text-[#0D0D0D]/70">Posted: {{ previewData.postedOn }}</div>
+          </div>
+
+          <p class="mt-3 text-[#0D0D0D]/90">{{ previewData.tagline }}</p>
+
+          <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-[#F2D479] rounded-xl p-3">
+              <h3 class="text-sm font-semibold text-[#0D0D0D]">Address</h3>
+              <p class="text-sm text-[#0D0D0D]/80 mt-1">{{ previewData.address }}</p>
+              <a *ngIf="previewData.googleMapUrl" [href]="previewData.googleMapUrl" target="_blank" class="text-sm text-[#115930] mt-2 inline-block">Open map</a>
+            </div>
+
+            <div class="bg-white rounded-xl p-3 border border-[#F2D479]">
+              <h3 class="text-sm font-semibold text-[#0D0D0D]">Contact</h3>
+              <p class="text-sm mt-1"><span class="font-medium">Owner:</span> {{ previewData.owner }}</p>
+              <p class="text-sm"><span class="font-medium">Phone:</span> {{ previewData.phone }}</p>
+              <p class="text-sm"><span class="font-medium">Email:</span> {{ previewData.email }}</p>
+            </div>
+
+            <div class="bg-white rounded-xl p-3 border border-[#F2D479]">
+              <h3 class="text-sm font-semibold text-[#0D0D0D]">Tags & Amenities</h3>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span *ngFor="let t of previewData.tags" class="bg-[#C7D943] px-3 py-1 rounded-full text-sm font-medium">{{ t }}</span>
+              </div>
+              <div class="mt-3 text-sm text-[#0D0D0D]/80">
+                <div *ngFor="let a of previewData.amenitiesSelected">{{ a }}</div>
+                <div *ngIf="!previewData.amenitiesSelected.length">No amenities selected</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Photos & Video -->
+          <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="text-lg font-semibold text-[#0D0D0D] mb-2">Photos</h3>
+              <div class="grid grid-cols-2 gap-3">
+                <img *ngFor="let p of previewData.photos" [src]="p" class="rounded-lg object-cover h-36 w-full" />
+                <div *ngIf="!previewData.photos.length" class="text-sm text-[#0D0D0D]/70">No photos uploaded</div>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="text-lg font-semibold text-[#0D0D0D] mb-2">Video Tour</h3>
+              <video *ngIf="videoPreview" controls class="w-full rounded-lg shadow">
+                <source [src]="videoPreview" type="video/mp4">
+              </video>
+              <div *ngIf="!videoPreview" class="text-sm text-[#0D0D0D]/70">No video uploaded</div>
+            </div>
+          </div>
+
+          <!-- Google Map Embed -->
+          <div *ngIf="previewData.googleMapUrl" class="mt-6">
+            <h3 class="text-lg font-semibold text-[#0D0D0D] mb-2">Location</h3>
+            <div class="w-full aspect-video rounded-lg overflow-hidden border border-[#F2D479]">
+              <iframe [src]="safeMapUrl(previewData.googleMapUrl)" class="w-full h-full" loading="lazy"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end mt-4">
+        <button (click)="editFromPreview()" class="px-4 py-2 rounded-lg bg-[#115930] text-white">Edit</button>
+      </div>
+    </div>
+  </div>
+</div>

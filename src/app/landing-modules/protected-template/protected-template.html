@@ -6,9 +6,9 @@
       <div class="gap-4 flex items-center"><img width="60px" height="60px" src="'../../../../../assets/logo.png"><span class="font-semibold text-2xl">GOKULAM COCONUTS</span></div>
     </div>
     <!-- Nav -->
-    <nav class="space-x-8 hidden md:flex text-lg font-semibold text-slate-800">
+    <nav class="space-x-8 hidden md:flex text-lg font-semibold text-slate-800 outline-none">
             @for(item of selectedNavItem;track  item) {
-                <a [routerLink]="item.navItemRoute" class="hover:text-gray-300">{{ item.navItemLabel }}</a>
+                <a [routerLink]="item.navItemRoute" class="hover:text-gray-300  outline-none" [routerLinkActive]="'text-white'">{{ item.navItemLabel }}</a>
 
             }
                 
@@ -22,7 +22,7 @@
         @if(showMobileMenu) {
         <div class="md:hidden flex flex-col  text-white px-8 py-4 space-y-2">
              @for(item of selectedNavItem;track  item) {
-                <a [routerLink]="item.navItemRoute" class="hover:text-gray-300">{{ item.navItemLabel }}</a>
+                <a [routerLink]="item.navItemRoute" class="hover:text-gray-300  outline-none" [routerLinkActive]="'text-white'">{{ item.navItemLabel }}</a>
 
             }
             <!-- <a routerLink="/" class="hover:text-gray-300">Dashboard</a>
