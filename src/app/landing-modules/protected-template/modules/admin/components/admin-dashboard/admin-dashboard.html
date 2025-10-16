@@ -1,0 +1,373 @@
+<div class="min-h-screen p-4 md:p-8" style="background-color:#f7f7f9;">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+      <div class="flex items-center gap-3">
+        <!-- <img src="/assets/Gokulam Coconuts Final Logo.png" alt="logo" class="w-12 h-12 rounded-md" /> -->
+        <div>
+          <h1 class="text-2xl md:text-3xl font-extrabold" style="color:#075f38;">Admin Dashboard</h1>
+          <p class="text-sm md:text-base" style="color:#8b8b93;">Review and moderate incoming requests across the platform</p>
+        </div>
+      </div>
+
+      <!-- <div class="flex items-center gap-3">
+        <button class="px-3 py-2 rounded-lg border text-sm"
+                style="border-color:#e6e6e6; color:#0b0b0c; background-color:transparent;">
+          Filter
+        </button>
+        <button class="px-3 py-2 rounded-lg text-sm"
+                style="background-color:#0b7a4a; color:#ffffff; border:1px solid #0b7a4a;">
+          Export
+        </button>
+      </div> -->
+    </header>
+
+    <!-- Grid: mobile 1 col, md 2 cols, lg 3 cols -->
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- Approve User Registrations -->
+      <div class="bg-white shadow-sm rounded-2xl p-4">
+        <div class="flex items-start justify-between">
+          <div>
+            <h2 class="text-lg font-semibold" style="color:#0b0b0c;">Approve User Registrations</h2>
+            <p class="text-xs mt-1" style="color:#8b8b93;">Latest requests — action required</p>
+          </div>
+        </div>
+
+        <ul class="mt-4 space-y-3">
+          <li *ngFor="let it of approveUserRegs | slice:0:2" class="flex items-start gap-3">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="text-sm font-medium truncate" style="color:#0b0b0c;">{{it.name}}</div>
+                  <div class="text-xs" style="color:#8b8b93;">{{it.type}} • {{it.date}}</div>
+                </div>
+                <div class="text-xs" style="color:#8b8b93;">ID: {{it.id}}</div>
+              </div>
+
+              <p class="text-xs mt-1 line-clamp-2" style="color:#8b8b93;">{{it.summary}}</p>
+
+              <div class="flex gap-2 mt-3">
+          
+                <button (click)="respond(it, 'users')"
+                        class="px-3 py-1 text-sm rounded-md"
+                        style="background-color:#f2f2f4; color:#0b0b0c; border:1px solid #e6e6e6;">
+                  Respond
+                </button>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <div class="mt-4 text-right">
+          <button (click)="seeMore('users')"
+                  class="text-sm px-3 py-2 rounded-lg"
+                  style="background-color:#f6fbf7; color:#075f38; border:1px solid #e6f5ea;">
+            See More
+          </button>
+        </div>
+      </div>
+
+      <!-- Property Approvals / Updates -->
+      <div class="bg-white shadow-sm rounded-2xl p-4">
+        <div class="flex items-start justify-between">
+          <div>
+            <h2 class="text-lg font-semibold" style="color:#0b0b0c;">Property Approvals / Updates</h2>
+            <p class="text-xs mt-1" style="color:#8b8b93;">Latest property posts & edits</p>
+          </div>
+        </div>
+
+        <ul class="mt-4 space-y-3">
+          <li *ngFor="let it of approveProperties | slice:0:2" class="flex items-start gap-3">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="text-sm font-medium truncate" style="color:#0b0b0c;">{{it.name}}</div>
+                  <div class="text-xs" style="color:#8b8b93;">{{it.type}} • {{it.date}}</div>
+                </div>
+                <div class="text-xs" style="color:#8b8b93;">ID: {{it.id}}</div>
+              </div>
+
+              <p class="text-xs mt-1 line-clamp-2" style="color:#8b8b93;">{{it.summary}}</p>
+
+              <div class="flex gap-2 mt-3">
+       
+                <button (click)="respond(it, 'properties')"
+                        class="px-3 py-1 text-sm rounded-md"
+                        style="background-color:#f2f2f4; color:#0b0b0c; border:1px solid #e6e6e6;">
+                  Respond
+                </button>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <div class="mt-4 text-right">
+          <button (click)="seeMore('properties')"
+                  class="text-sm px-3 py-2 rounded-lg"
+                  style="background-color:#f6fbf7; color:#075f38; border:1px solid #e6f5ea;">
+           See More
+          </button>
+        </div>
+      </div>
+
+      <!-- Community Service Requests -->
+      <div class="bg-white shadow-sm rounded-2xl p-4">
+        <div class="flex items-start justify-between">
+          <div>
+            <h2 class="text-lg font-semibold" style="color:#0b0b0c;">Community Service Requests</h2>
+            <p class="text-xs mt-1" style="color:#8b8b93;">Requests for services and classifieds</p>
+          </div>
+        </div>
+
+        <ul class="mt-4 space-y-3">
+          <li *ngFor="let it of communityRequests | slice:0:2" class="flex items-start gap-3">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="text-sm font-medium truncate" style="color:#0b0b0c;">{{it.name}}</div>
+                  <div class="text-xs" style="color:#8b8b93;">{{it.type}} • {{it.date}}</div>
+                </div>
+                <div class="text-xs" style="color:#8b8b93;">ID: {{it.id}}</div>
+              </div>
+
+              <p class="text-xs mt-1 line-clamp-2" style="color:#8b8b93;">{{it.summary}}</p>
+
+              <div class="flex gap-2 mt-3">
+            
+                <button (click)="respond(it, 'community')"
+                        class="px-3 py-1 text-sm rounded-md"
+                        style="background-color:#f2f2f4; color:#0b0b0c; border:1px solid #e6e6e6;">
+                  Respond
+                </button>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <div class="mt-4 text-right">
+          <button (click)="seeMore('community')"
+                  class="text-sm px-3 py-2 rounded-lg"
+                  style="background-color:#f6fbf7; color:#075f38; border:1px solid #e6f5ea;">
+           See More
+          </button>
+        </div>
+      </div>
+
+      <!-- Small Business Events / Offers -->
+      <div class="bg-white shadow-sm rounded-2xl p-4">
+        <div class="flex items-start justify-between">
+          <div>
+            <h2 class="text-lg font-semibold" style="color:#0b0b0c;">Small Business Events / Offers</h2>
+            <p class="text-xs mt-1" style="color:#8b8b93;">Events, offers and updates from small businesses</p>
+          </div>
+        </div>
+
+        <ul class="mt-4 space-y-3">
+          <li *ngFor="let it of businessOffers | slice:0:2" class="flex items-start gap-3">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="text-sm font-medium truncate" style="color:#0b0b0c;">{{it.name}}</div>
+                  <div class="text-xs" style="color:#8b8b93;">{{it.type}} • {{it.date}}</div>
+                </div>
+                <div class="text-xs" style="color:#8b8b93;">ID: {{it.id}}</div>
+              </div>
+
+              <p class="text-xs mt-1 line-clamp-2" style="color:#8b8b93;">{{it.summary}}</p>
+
+              <div class="flex gap-2 mt-3">
+              
+                <button (click)="respond(it, 'business')"
+                        class="px-3 py-1 text-sm rounded-md"
+                        style="background-color:#f2f2f4; color:#0b0b0c; border:1px solid #e6e6e6;">
+                  Respond
+                </button>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <div class="mt-4 text-right">
+          <button (click)="seeMore('business')"
+                  class="text-sm px-3 py-2 rounded-lg"
+                  style="background-color:#f6fbf7; color:#075f38; border:1px solid #e6f5ea;">
+        See More
+          </button>
+        </div>
+      </div>
+
+      <!-- Scout - Landlord Add/Edit -->
+      <div class="bg-white shadow-sm rounded-2xl p-4">
+        <div class="flex items-start justify-between">
+          <div>
+            <h2 class="text-lg font-semibold" style="color:#0b0b0c;">Scout - Landlord Add/Edit</h2>
+            <p class="text-xs mt-1" style="color:#8b8b93;">Add or edit landlord records submitted by scouts</p>
+          </div>
+        </div>
+
+        <ul class="mt-4 space-y-3">
+          <li *ngFor="let it of landlordRequests | slice:0:2" class="flex items-start gap-3">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="text-sm font-medium truncate" style="color:#0b0b0c;">{{it.name}}</div>
+                  <div class="text-xs" style="color:#8b8b93;">{{it.type}} • {{it.date}}</div>
+                </div>
+                <div class="text-xs" style="color:#8b8b93;">ID: {{it.id}}</div>
+              </div>
+
+              <p class="text-xs mt-1 line-clamp-2" style="color:#8b8b93;">{{it.summary}}</p>
+
+              <div class="flex gap-2 mt-3">
+              
+                <button (click)="respond(it, 'scout')"
+                        class="px-3 py-1 text-sm rounded-md"
+                        style="background-color:#f2f2f4; color:#0b0b0c; border:1px solid #e6e6e6;">
+                  Respond
+                </button>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <div class="mt-4 text-right">
+          <button (click)="seeMore('scout')"
+                  class="text-sm px-3 py-2 rounded-lg"
+                  style="background-color:#f6fbf7; color:#075f38; border:1px solid #e6f5ea;">
+           See More
+          </button>
+        </div>
+      </div>
+
+    </section>
+  </div>
+</div>
+<!-- Modal (keep in DOM for smooth transitions) -->
+<div *ngIf ="isModalOpen()"
+  
+  class="fixed inset-0 z-50 flex items-center justify-center"
+  [class.pointer-events-none]="!isModalOpen()"
+>
+  <!-- Backdrop -->
+  <div
+    class="fixed inset-0 transition-opacity duration-200"
+    [class.opacity-0]="!isModalOpen()"
+    [class.opacity-60]="isModalOpen()"
+    style="background-color: rgba(0,0,0,0.6);">
+  </div>
+
+  <!-- Modal panel wrapper (centers & provides small spacing on mobile) -->
+  <div
+    class="relative max-w-lg w-full mx-4 sm:mx-6 transition-all transform duration-200"
+    [class.opacity-0]="!isModalOpen()"
+    [class.scale-95]="!isModalOpen()"
+    [class.opacity-100]="isModalOpen()"
+    [class.scale-100]="isModalOpen()"
+    role="dialog" aria-modal="true"
+  >
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+      <!-- Header -->
+      <div class="px-4 py-3 sm:px-6 flex items-start justify-between">
+        <div>
+          <h3 class="text-lg font-semibold" style="color:#0b0b0c;">
+            Respond to Request
+          </h3>
+          <p class="text-sm mt-0.5" style="color:#8b8b93;">
+            Admin response — will update the item status
+          </p>
+        </div>
+
+        <button
+          type="button"
+          (click)="closeModal()"
+          class="ml-3 rounded-md p-2 text-sm"
+          aria-label="Close"
+          style="color:#0b0b0c;"
+        >
+          ✕
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="px-4 pb-4 sm:px-6">
+        <!-- Selected user / event details -->
+        <div class="border rounded-lg p-3 mb-4" style="border-color:#e6e6e6;">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <div class="text-sm font-medium" style="color:#0b0b0c;">
+                {{ selectedItem()?.name || '—' }}
+              </div>
+              <div class="text-xs mt-1" style="color:#8b8b93;">
+                {{ selectedItem()?.type || '—' }} • {{ selectedItem()?.date || '—' }}
+              </div>
+              <p class="text-xs mt-2 line-clamp-3" style="color:#8b8b93;">{{ selectedItem()?.summary }}</p>
+            </div>
+
+            <div class="text-xs text-right" style="color:#8b8b93;">
+              <div class="mb-1">Section</div>
+              <div class="font-medium">{{ selectedItem()?.section || selectedSection() || '—' }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Radio options -->
+        <fieldset class="mb-3">
+          <legend class="sr-only">Response Type</legend>
+          <div class="flex flex-col sm:flex-row gap-2">
+       <label class="inline-flex items-center gap-2 cursor-pointer">
+  <input type="radio" name="respType" class="form-radio h-4 w-4"
+         [checked]="responseType() === 'accept'"
+         (change)="responseType.set('accept')" />
+  <span class="text-sm">✅ Accept</span>
+</label>
+
+<label class="inline-flex items-center gap-2 cursor-pointer">
+  <input type="radio" name="respType" class="form-radio h-4 w-4"
+         [checked]="responseType() === 'reject'"
+         (change)="responseType.set('reject')" />
+  <span class="text-sm">❌ Reject</span>
+</label>
+
+<label class="inline-flex items-center gap-2 cursor-pointer">
+  <input type="radio" name="respType" class="form-radio h-4 w-4"
+         [checked]="responseType() === 'custom'"
+         (change)="responseType.set('custom')" />
+  <span class="text-sm">✉️ Custom Response</span>
+</label>
+          </div>
+        </fieldset>
+
+        <!-- Comment textarea -->
+        <label class="block text-sm mb-2" style="color:#0b0b0c;">Admin comment</label>
+        <textarea
+          class="w-full min-h-[96px] resize-y rounded-lg p-3 border transition focus:outline-none focus:ring-2 focus:ring-opacity-50"
+          style="border-color:#e6e6e6;"
+          [value]="comment()"
+          (input)="comment.set($any($event.target).value)"
+          placeholder="Add any comment for this response (optional)"
+        ></textarea>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="px-4 py-3 sm:px-6 bg-gray-50 flex items-center justify-end gap-3">
+        <button
+          (click)="closeModal()"
+          class="px-4 py-2 rounded-lg text-sm"
+          style="background-color:transparent; color:#0b0b0c; border:1px solid #e6e6e6;"
+        >
+          Close
+        </button>
+
+        <button
+          (click)="saveResponse()"
+          class="px-4 py-2 rounded-lg text-sm"
+          style="background-color:#0b7a4a; color:#ffffff; border:1px solid #0b7a4a;"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

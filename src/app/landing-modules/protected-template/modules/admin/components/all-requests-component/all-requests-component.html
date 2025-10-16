@@ -1,0 +1,328 @@
+<!-- File: src/app/all-requests/all-requests.component.html -->
+<div class="min-h-screen p-4 md:p-6" style="background-color:#f7f7f9;">
+    <div class="max-w-7xl mx-auto">
+
+        <!-- Header -->
+        <div class="mb-4">
+            <div class="max-w-7xl mx-auto sm:px-6">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <!-- Title -->
+                    <div class="flex items-start gap-3">
+                        <div>
+                            <h1 class="text-lg sm:text-2xl font-bold" style="color:#075f38;">All Requests</h1>
+                            <p class="text-xs sm:text-sm mt-0.5" style="color:#8b8b93;">Browse & respond to incoming
+                                requests</p>
+                        </div>
+                    </div>
+
+                    <!-- Filters (mobile stacked, desktop inline) -->
+                    <div class="w-full md:w-auto">
+                        <div class="bg-transparent">
+                            <div class="flex flex-col sm:flex-row sm:items-end sm:gap-3 gap-3">
+                                <!-- Category Select -->
+                                <div class="relative w-full sm:w-52">
+                                    <label class="block text-xs font-medium mb-1"
+                                        style="color:#0b0b0c;">Category</label>
+                                    <select [(ngModel)]="selectedCategory"
+                                        class="w-full px-3 py-2 rounded-lg border text-sm appearance-none bg-white focus:outline-none focus:ring-2"
+                                        style="border-color:#e6e6e6; color:#0b0b0c;" aria-label="Filter by category">
+                                        <option value="">All Categories</option>
+                                        <option value="registration">Registration</option>
+                                        <option value="newPost">New Post</option>
+                                        <option value="updatePost">Update Post</option>
+                                        <option value="publicVisibility">Request for Public Visibility</option>
+                                    </select>
+
+                                    <!-- Chevron Icon centered vertically -->
+                                    <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor" style="color:#8b8b93;">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <!-- User Type Select -->
+                                <div class="relative w-full sm:w-52">
+                                    <label class="block text-xs font-medium mb-1" style="color:#0b0b0c;">User
+                                        Type</label>
+                                    <select [(ngModel)]="selectedUserType"
+                                        class="w-full px-3 py-2 rounded-lg border text-sm appearance-none bg-white focus:outline-none focus:ring-2"
+                                        style="border-color:#e6e6e6; color:#0b0b0c;" aria-label="Filter by user type">
+                                        <option value="">All Users</option>
+                                        <option value="community">Community Member</option>
+                                        <option value="propertyOwner">Property Owner</option>
+                                        <option value="businessOwner">Business Owner</option>
+                                        <option value="yogaStudio">Yoga Studio</option>
+                                        <option value="scout">Scout</option>
+                                    </select>
+
+                                    <!-- Chevron Icon centered vertically -->
+                                    <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor" style="color:#8b8b93;">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <!-- Buttons group: apply + reset -->
+                                <div class="flex items-center gap-2 w-full sm:w-auto">
+                                    <button (click)="applyFilters()"
+                                        class="flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-medium"
+                                        style="background-color:#0b7a4a; color:#ffffff; border:1px solid #0b7a4a;"
+                                        aria-label="Apply filters">
+                                        Apply
+                                    </button>
+
+                                    <button (click)="selectedCategory=''; selectedUserType=''; applyFilters()"
+                                        class="flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-medium"
+                                        style="background-color:transparent; color:#0b0b0c; border:1px solid #e6e6e6;"
+                                        aria-label="Reset filters">
+                                        Reset
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="flex flex-col md:flex-row gap-6">
+            <!-- Sidebar -->
+            <aside class="w-full md:w-64 shrink-0" [class.hidden]="!sidebarOpen()">
+                <div class="bg-white rounded-2xl shadow-sm p-3 mb-4 md:block" [class.hidden]="!sidebarOpen() && true"
+                    style="border:1px solid #e6e6e6;">
+                    <nav class="flex flex-col gap-1">
+                        <button *ngFor="let c of categories" (click)="setCategory(c.key)"
+                            [class.font-semibold]="activeCategory() === c.key"
+                            class="text-left w-full px-3 py-2 rounded-md text-sm flex items-center justify-between"
+                            [ngClass]="{'bg-[#f6fbf7]': activeCategory() === c.key}" style="color:#0b0b0c;">
+                            <span>{{ c.label }}</span>
+                            <span class="text-xs" style="color:#8b8b93;">
+                                {{ getCategoryCount(c.key) }}
+                            </span>
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- On desktop keep a persistent sidebar -->
+                <div class="hidden md:block bg-white rounded-2xl shadow-sm p-3" style="border:1px solid #e6e6e6;">
+                    <nav class="flex flex-col gap-1">
+                        <button *ngFor="let c of categories" (click)="setCategory(c.key)"
+                            [class.font-semibold]="activeCategory() === (c.key)"
+                            class="text-left w-full px-3 py-2 rounded-md text-sm flex items-center justify-between"
+                            [ngClass]="{'bg-[#f6fbf7]': activeCategory() === (c.key)}" style="color:#0b0b0c;">
+                            <span>{{ c.label }}</span>
+                            <span class="text-xs" style="color:#8b8b93;">
+                                {{ getCategoryCount(c.key) }}
+                            </span>
+                        </button>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- Content: list -->
+            <main class="flex-1">
+  <div class="grid grid-cols-1 gap-4">
+    <div *ngIf="filteredItems.length === 0" class="bg-white p-6 rounded-2xl shadow-sm" style="border:1px solid #e6e6e6;">
+      <p class="text-sm" style="color:#8b8b93;">No requests found for this category.</p>
+    </div>
+
+    <!-- Loop items -->
+    <ng-container *ngFor="let it of filteredItems">
+      <!-- single item card (one wrapper only) -->
+      <div class="bg-white rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3"
+           style="border:1px solid #e6e6e6;">
+        <div class="flex-1">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <div class="text-sm font-medium truncate" style="color:#0b0b0c;">{{ it.name }}</div>
+              <div class="text-xs mt-1" style="color:#8b8b93;">{{ it.type }} • {{ it.date }}</div>
+            </div>
+
+            <div class="hidden sm:block text-xs text-right" style="color:#8b8b93;">
+              <div>Status</div>
+              <div class="mt-1 font-medium">
+                <span *ngIf="it.adminStatus; else noStatus">{{ it.adminStatus }}</span>
+                <ng-template #noStatus><span class="text-xs" style="color:#8b8b93;">Pending</span></ng-template>
+              </div>
+            </div>
+          </div>
+
+          <p class="text-xs mt-3" style="color:#8b8b93;">{{ it.summary }}</p>
+
+          <div class="flex items-center gap-2 mt-3">
+            <button (click)="openRespondModal(it)" class="px-3 py-1 rounded-md text-sm" style="border:1px solid #0b7a4a; color:#0b7a4a;">
+              Respond
+            </button>
+
+            <button (click)="toggleDetails(it.id)"
+                    class="px-3 py-1 rounded-md text-sm"
+                    [attr.aria-expanded]="expandedItem() === it.id"
+                    style="border:1px solid #e6e6e6; color:#0b0b0c;">
+              Details
+            </button>
+
+            <div class="sm:hidden ml-auto text-xs" style="color:#8b8b93;">
+              <div class="font-medium">{{ it.adminStatus ?? 'Pending' }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Animated details preview panel: appears just below the card -->
+      <div
+        class="overflow-hidden transition-all duration-200 ease-in-out"
+        [ngClass]="{
+          'max-h-0 opacity-0': expandedItem() !== it.id,
+          'max-h-[36rem] opacity-100': expandedItem() === it.id
+        }"
+        style="border-left: 4px solid rgba(50, 90, 73, 0.945); background-color:#ffffff; margin-top:-0.5rem; margin-bottom:0.75rem; border-radius:0.75rem;"
+      >
+        <div class="p-4 sm:p-5" [ngClass]="{ 'pb-0': expandedItem() !== it.id, 'pb-4': expandedItem() === it.id }">
+          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+            <div class="flex-1">
+              <div class="text-sm font-semibold" style="color:#075f38;">Preview</div>
+              <p class="text-xs mt-1" style="color:#8b8b93;">
+                <span class="block"><strong>ID:</strong> {{ it.id }}</span>
+                <span class="block"><strong>Name:</strong> {{ it.name }}</span>
+                <span class="block"><strong>Type:</strong> {{ it.type }}</span>
+                <span class="block"><strong>Date:</strong> {{ it.date }}</span>
+                <span class="block"><strong>Category / Source:</strong> {{ it.source || '—' }}</span>
+              </p>
+            </div>
+
+            <div class="w-full sm:w-72">
+              <div class="text-sm font-medium" style="color:#0b0b0c;">Admin Status</div>
+              <div class="text-xs mt-1" style="color:#8b8b93;">{{ it.adminStatus ?? 'Pending' }}</div>
+
+              <div class="mt-3">
+                <div class="text-sm font-medium" style="color:#0b0b0c;">Admin Comment</div>
+                <div class="text-xs mt-1" style="color:#8b8b93;">{{ it.adminComment ?? '—' }}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Long content / extra metadata -->
+          <div class="mt-3 border-t pt-3" style="border-color:#e6e6e6;">
+            <div class="text-sm font-medium" style="color:#0b0b0c;">Full Details</div>
+
+            <dl class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-xs" style="color:#8b8b93;">
+              <div>
+                <dt class="font-medium">Summary</dt>
+                <dd class="mt-0.5">{{ it.summary ?? '—' }}</dd>
+              </div>
+              <div>
+                <dt class="font-medium">Extra field 1</dt>
+                <dd class="mt-0.5">{{ it.extraField1 ?? '—' }}</dd>
+              </div>
+              <div>
+                <dt class="font-medium">Extra field 2</dt>
+                <dd class="mt-0.5">{{ it.extraField2 ?? '—' }}</dd>
+              </div>
+            </dl>
+
+            <div class="mt-4 flex items-center gap-2">
+              <button (click)="openRespondModal(it)" class="px-3 py-1 rounded-md text-sm" style="border:1px solid #0b7a4a; color:#0b7a4a;">
+                Respond
+              </button>
+              <button (click)="toggleDetails(it.id)" class="px-3 py-1 rounded-md text-sm" style="border:1px solid #e6e6e6; color:#0b0b0c;">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</main>
+
+        </div>
+    </div>
+
+    <!-- Modal (keeps in DOM for smooth transitions) -->
+    <div class="fixed inset-0 z-50 flex items-center justify-center" [class.pointer-events-none]="!isModalOpen()">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 transition-opacity duration-200" [class.opacity-0]="!isModalOpen()"
+            [class.opacity-60]="isModalOpen()" style="background-color: rgba(0,0,0,0.6);"></div>
+
+        <!-- Modal panel -->
+        <div class="relative max-w-lg w-full mx-4 sm:mx-6 transition-all transform duration-200"
+            [class.opacity-0]="!isModalOpen()" [class.scale-95]="!isModalOpen()" [class.opacity-100]="isModalOpen()"
+            [class.scale-100]="isModalOpen()" role="dialog" aria-modal="true">
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div class="px-4 py-3 sm:px-6 flex items-start justify-between">
+                    <div>
+                        <h3 class="text-lg font-semibold" style="color:#0b0b0c;">Respond to Request</h3>
+                        <p class="text-sm mt-0.5" style="color:#8b8b93;">Your response will update the item's status</p>
+                    </div>
+                    <button (click)="closeModal()" class="ml-3 rounded-md p-2 text-sm" aria-label="Close"
+                        style="color:#0b0b0c;">✕</button>
+                </div>
+
+                <div class="px-4 pb-4 sm:px-6">
+                    <div class="border rounded-lg p-3 mb-4" style="border-color:#e6e6e6;">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <div class="text-sm font-medium" style="color:#0b0b0c;">{{ selectedItem()?.name || '—'
+                                    }}</div>
+                                <div class="text-xs mt-1" style="color:#8b8b93;">{{ selectedItem()?.type || '—' }} • {{
+                                    selectedItem()?.date || '—' }}</div>
+                                <p class="text-xs mt-2" style="color:#8b8b93;">{{ selectedItem()?.summary }}</p>
+                            </div>
+                            <div class="text-xs text-right" style="color:#8b8b93;">
+                                <div class="mb-1">Category</div>
+                                <div class="font-medium">{{ selectedItem()?.source || '—' }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- radio -->
+                    <fieldset class="mb-3">
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="resp2" class="form-radio h-4 w-4"
+                                    [checked]="responseType() === 'accept'" (change)="responseType.set('accept')" />
+                                <span class="text-sm" style="color:#0b0b0c;">✅ Accept</span>
+                            </label>
+
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="resp2" class="form-radio h-4 w-4"
+                                    [checked]="responseType() === 'reject'" (change)="responseType.set('reject')" />
+                                <span class="text-sm" style="color:#0b0b0c;">❌ Reject</span>
+                            </label>
+
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="resp2" class="form-radio h-4 w-4"
+                                    [checked]="responseType() === 'custom'" (change)="responseType.set('custom')" />
+                                <span class="text-sm" style="color:#0b0b0c;">✉️ Custom Response</span>
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <label class="block text-sm mb-2" style="color:#0b0b0c;">Admin comment</label>
+                    <textarea class="w-full min-h-[96px] resize-y rounded-lg p-3 border" style="border-color:#e6e6e6;"
+                        [value]="comment()" (input)="comment.set($any($event.target).value)"
+                        placeholder="Add any comment for this response (optional)"></textarea>
+                </div>
+
+                <div class="px-4 py-3 sm:px-6 bg-gray-50 flex items-center justify-end gap-3">
+                    <button (click)="closeModal()" class="px-4 py-2 rounded-lg text-sm"
+                        style="background-color:transparent; color:#0b0b0c; border:1px solid #e6e6e6;">
+                        Close
+                    </button>
+
+                    <button (click)="saveResponse()" class="px-4 py-2 rounded-lg text-sm"
+                        style="background-color:#0b7a4a; color:#ffffff; border:1px solid #0b7a4a;">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -100,5 +100,20 @@ export const navRoutes = [
                 navItemIcon: 'pi pi-info-circle'
             }
         ]
+    },
+     {   
+        userType: 'admin',
+        navItems:[
+            {
+                navItemLabel: 'Dashboard',
+                navItemRoute: '/landing/admin/dashboard',
+                navItemIcon: 'pi pi-home'
+            },
+            {
+                navItemLabel: 'Requests',
+                navItemRoute: '/landing/admin/requests',
+                navItemIcon: 'pi pi-home'
+            }
+        ]
     }
 ]

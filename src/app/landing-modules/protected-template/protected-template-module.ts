@@ -4,6 +4,8 @@ import { ProtectedTemplateRoutingModule } from './protected-template-routing-mod
 import { ProtectedTemplate } from './protected-template';
 import { BussinessOwnerModule } from './modules/bussiness-owner/bussiness-owner-module';
 import { CommunityMemberModule } from './modules/community-member/community-member-module';
+import { AdminModule } from './modules/admin/admin-module';
+import { PropertyOwnerModule } from './modules/property-owner/property-owner-module';
 
 
 @NgModule({
@@ -11,7 +13,7 @@ import { CommunityMemberModule } from './modules/community-member/community-memb
     ProtectedTemplate
   ],
   imports: [
-    CommonModule,BussinessOwnerModule,
+    CommonModule,BussinessOwnerModule,AdminModule,PropertyOwnerModule,
     ProtectedTemplateRoutingModule,CommunityMemberModule
   ]
 })

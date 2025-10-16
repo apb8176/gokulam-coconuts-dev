@@ -35,6 +35,13 @@ const routes: Routes = [
           import('../protected-template/modules/scouter/scouter-module').then(
             (m) => m.ScouterModule
           ),
+      },
+      {
+        path: 'admin',
+        loadChildren: () =>
+          import('../protected-template/modules/admin/admin-module').then(
+            (m) => m.AdminModule
+          ),
       }
     ],
   },
