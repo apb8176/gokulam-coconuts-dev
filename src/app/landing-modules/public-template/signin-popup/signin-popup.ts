@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Cognito } from '../../../services/cognito.service';
+import { TokenManagerService } from '../../../services/token-manager';
 
 @Component({
   selector: 'app-signin-popup',
@@ -16,7 +17,7 @@ export class SigninPopup implements OnInit {
   signinForm!: FormGroup;
   errorMessage: string = '';
 
-  constructor(private fb: FormBuilder, private cognitoService: Cognito) {}
+  constructor(private fb: FormBuilder, private cognitoService: Cognito, private tokenManager: TokenManagerService) {}
 
   ngOnInit(): void {
     this.signinForm = this.fb.group({
@@ -41,25 +42,39 @@ export class SigninPopup implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
-    this.errorMessage = '';
-    this.signinForm.markAllAsTouched();
+  this.errorMessage = '';
+  this.signinForm.markAllAsTouched();
 
-    if (this.signinForm.valid) {
-      const { username, password } = this.signinForm.value;
-      try {
-        const result = await this.cognitoService.signIn(username, password);
-        console.log('Signed in successfully:', result);
-        this.signin.emit(result);
-        this.closePopup();
-      } catch (error: any) {
-        console.error('Sign-in failed:', error);
-        this.errorMessage = error.message || 'Sign-in failed. Please try again.';
+  if (this.signinForm.valid) {
+    const { username, password } = this.signinForm.value;
+
+    try {
+      let result:any = {};
+      result = await this.cognitoService.signIn(username, password);
+     
+      console.log('Signed in successfully:', result);
+
+      // ✅ Store tokens immediately
+      if (result?.AuthenticationResult) {
+        this.tokenManager.storeTokens(result.AuthenticationResult);
       }
-    } else {
-      const invalidFields: string[] = [];
-      if (this.f['username'].invalid) invalidFields.push('Username');
-      if (this.f['password'].invalid) invalidFields.push('Password');
-      this.errorMessage = `Please provide valid: ${invalidFields.join(', ')}.`;
+
+      // (optional) decode for debugging
+      // console.log(this.tokenManager.decodeIdToken());
+
+      this.signin.emit(result);
+      this.closePopup();
+
+    } catch (error: any) {
+      console.error('Sign-in failed:', error);
+      this.errorMessage = error.message || 'Sign-in failed. Please try again.';
     }
+  } else {
+    const invalidFields: string[] = [];
+    if (this.f['username'].invalid) invalidFields.push('Username');
+    if (this.f['password'].invalid) invalidFields.push('Password');
+    this.errorMessage = `Please provide valid: ${invalidFields.join(', ')}.`;
   }
+}
+
 }

@@ -1,36 +1,57 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { postList } from '../../../../models/sampleData';
 import { Router } from '@angular/router';
 import { PoApi } from '../../services/po-api';
+import { MultipartUpload } from '../../services/multipart-upload';
 
 @Component({
   selector: 'app-bo-post-list',
   standalone: false,
   templateUrl: './property-owner-post-list.html',
-  styleUrl: './property-owner-post-list.scss'
+  styleUrl: './property-owner-post-list.scss',
 })
 export class PropertyOwnerPostList {
-  constructor(private router: Router, private propertyService : PoApi) {}
-  ngOnInit(){
+  response: any;
+
+  constructor(
+    private router: Router,
+    private propertyService: PoApi,
+    private cdr: ChangeDetectorRef,
+    private uploadService: MultipartUpload
+  ) {}
+  ngOnInit() {
     this.getPropertyList();
   }
 
-
-navigateToForm() {
-  this.router.navigateByUrl('landing/property-owner/details');
-}
-    postList :any[]=postList;
-
-getPropertyList() {
-   this.propertyService.getPropertyList().subscribe({
+  navigateToForm() {
+    this.router.navigateByUrl('landing/property-owner/details');
+  }
+  postList: any = [];
+  goToDetails(_t8: any) {
+    this.uploadService.setSelectedItem(_t8);
+    this.router.navigateByUrl('/landing/property-owner/details');
+  }
+  getPropertyList() {
+    this.propertyService.getPropertyList().subscribe({
       next: (response: any) => {
-        console.log('✅ Property added successfully:', response);
+        this.response = response.items;
+        this.postList = response.items.map((item: any) => {
+          return {
+            propertyName: item.propertyName,
+            status: item.status,
+            postedOn: item.createdAt,
+            location: item.address,
+            description: item.details,
+            action: 'View',
+          };
+        });
+        console.log('Table Data', this.postList);
+        this.cdr.detectChanges();
+        console.log('✅ Property added successfully:', this.postList);
       },
-      error: (error:any) => {
+      error: (error: any) => {
         console.error('❌ Error adding property:', error);
-      }
+      },
     });
+  }
 }
-}
-
-

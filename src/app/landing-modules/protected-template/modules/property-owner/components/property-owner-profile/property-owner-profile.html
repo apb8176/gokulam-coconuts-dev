@@ -21,7 +21,7 @@
         <label class="block text-xs text-[#0D0D0D]/70 mb-1">Name</label>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <div class="text-lg font-semibold text-[#0D0D0D]">{{ user.firstName +' '+ user.lastName}}</div>
+            <div class="text-lg font-semibold text-[#0D0D0D]">{{ user.name}}</div>
             
           </div>
           <div>
@@ -98,9 +98,13 @@
         </div>
 
         <!-- DOB -->
-        <div class="bg-[#FFFDF6] p-4 rounded-lg border border-[#F2D479]">
+        <div class="bg-white p-4 rounded-lg border border-[#F2D479]">
+          <div>
           <label class="text-xs text-[#0D0D0D]/70">Date of Birth</label>
-          <div class="mt-1 text-lg font-semibold text-[#0D0D0D]">{{ user.dob }}</div>
+           <div *ngIf="!edit.pinCode" class="mt-1 text-[#0D0D0D]">{{ user.dob }}</div>
+              <input *ngIf="edit.dob" [(ngModel)]="user.dob" name="pinCode"
+                     class="w-full mt-2 p-2 border border-[#F2D479] rounded-lg" />
+            </div>
         </div>
 
         <!-- Gender -->
@@ -214,6 +218,7 @@
 
     <!-- Footer actions -->
     <div class="p-6 border-t border-[#F2D479] flex justify-end gap-3 ">
+      <button class="px-4 py-2 rounded-lg bg-[#115930] text-white" (click)="putProfile()">Save</button>
       <button class="px-4 py-2 rounded-lg border border-[#F2D479]">Reset</button>
       <!-- <button class="px-4 py-2 rounded-lg bg-[#115930] text-white hover:bg-[#0D0D0D]">Save All</button> -->
     </div>

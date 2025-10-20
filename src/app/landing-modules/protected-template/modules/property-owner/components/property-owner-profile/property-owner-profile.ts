@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { PoApi } from '../../services/po-api';
 
 @Component({
   selector: 'property-owner-profile',
@@ -9,6 +10,15 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './property-owner-profile.scss'
 })
 export class PropertyOwnerProfile {
+  inputData: any;
+updateProfile() {
+throw new Error('Method not implemented.');
+}
+  response: any;
+  constructor(private propertyService: PoApi, private cdr : ChangeDetectorRef){}
+  ngOnInit(){
+    this.getProfile();
+  }
 structuredClone(arg0: any) {
   this.original = JSON.parse(JSON.stringify(arg0));
 
@@ -73,5 +83,44 @@ original:any;;
   // helper to check if a field is editable
   isEditable(field: string) {
     return Object.prototype.hasOwnProperty.call(this.edit, field);
+  }
+  getProfile() {
+    this.propertyService.getProfile().subscribe({
+      next: (response: any) => {
+        this.response = response.profile;
+        this.user = this.response;
+        console.log('Table Data', this.user);
+        this.cdr.detectChanges();
+        
+      },
+      error: (error: any) => {
+        console.error('❌ Error adding property:', error);
+      },
+    });
+  }
+  deleteSensitiveFields(): void {
+   this.inputData  = JSON.stringify(JSON.parse(this.user));
+  let keysToDelete = ['first_name', 'last_name', 'email', 'phoneNumber', 'gender'];
+
+  for (const key of keysToDelete) {
+    delete this.inputData[key];
+  }
+}
+  putProfile() {
+    this.deleteSensitiveFields();
+    setTimeout(() => {
+      this.propertyService.putProfile(this.inputData).subscribe({
+      next: (response: any) => {
+        this.response = response.profile;
+        this.user = this.response;
+        console.log('Table Data', this.user);
+        this.cdr.detectChanges();        
+      },
+      error: (error: any) => {
+        console.error('❌ Error adding property:', error);
+      },
+    });
+    }, 50);
+    
   }
 }

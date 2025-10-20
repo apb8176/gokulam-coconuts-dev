@@ -40,12 +40,12 @@
         <div class="space-y-2 text-[#0D0D0D]/80 mb-4">
           <p><span class="font-medium text-[#0D0D0D]">Location:</span> {{item.location}}</p>
           <p><span class="font-medium text-[#0D0D0D]">Description:</span> {{item.description}}</p>
-          <p><span class="font-medium text-[#0D0D0D]">Enquiries:</span> {{item.numberOfEnquiries}}</p>
+          <!-- <p><span class="font-medium text-[#0D0D0D]">Enquiries:</span> {{item.numberOfEnquiries}}</p> -->
           <p><span class="font-medium text-[#0D0D0D]">Posted On:</span> {{item.postedOn}}</p>
         </div>
 
         <div class="mt-4">
-          <a href="#" class="font-medium text-[#115930] hover:text-[#0D0D0D] hover:underline">See More</a>
+          <a class="font-medium text-[#115930] hover:text-[#0D0D0D] hover:underline" (click)="goToDetails(item)">See More</a>
         </div>
       </div>
       }
@@ -89,7 +89,7 @@
             <th scope="col" class="px-6 py-3">Property Name</th>
             <th scope="col" class="px-6 py-3">Location</th>
             <th scope="col" class="px-6 py-3">Description</th>
-            <th scope="col" class="px-6 py-3">Number of Enquiries</th>
+            <!-- <th scope="col" class="px-6 py-3">Number of Enquiries</th> -->
             <th scope="col" class="px-6 py-3">Posted On</th>
             <th scope="col" class="px-6 py-3">Status</th>
             <th scope="col" class="px-6 py-3">Action</th>
@@ -107,7 +107,7 @@
 
             <td class="px-6 py-4">{{item.location}}</td>
             <td class="px-6 py-4 max-w-lg">{{item.description}}</td>
-            <td class="px-6 py-4">{{item.numberOfEnquiries}}</td>
+            <!-- <td class="px-6 py-4">{{item.numberOfEnquiries}}</td> -->
             <td class="px-6 py-4">{{item.postedOn}}</td>
 
             <td class="px-6 py-4">
@@ -130,7 +130,7 @@
             </td>
 
             <td class="px-6 py-4">
-              <a href="#" class="font-medium text-[#115930] hover:text-[#0D0D0D] hover:underline">See More</a>
+              <a  class="font-medium text-[#115930] hover:text-[#0D0D0D] hover:underline" (click)="goToDetails(item)">See More</a>
             </td>
           </tr>
           }

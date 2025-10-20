@@ -31,6 +31,7 @@
     "@aws-sdk/client-cognito-identity-provider": "^3.908.0",
     "@tailwindcss/postcss": "^4.1.12",
     "angular-auth-oidc-client": "19.0.2",
+    "jwt-decode": "^4.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },

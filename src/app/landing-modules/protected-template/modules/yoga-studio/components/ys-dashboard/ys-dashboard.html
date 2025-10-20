@@ -1,0 +1,270 @@
+<div class="max-w-6xl mx-auto p-4 md:p-8 bg-white font-sans text-[#0D0D0D]">
+
+  <!-- HEADER -->
+  <header class="w-full bg-[#F2D479] rounded-lg p-3 md:p-4">
+    <div class="mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="h-10 w-10 rounded-md bg-white/30 flex items-center justify-center text-sm font-semibold">BO</div>
+        <div class="min-w-0">
+          <h1 class="text-base sm:text-lg md:text-xl font-semibold leading-tight truncate">Business Owner Dashboard</h1>
+          <p class="text-xs sm:text-sm text-[#333] truncate">Manage your business profile.</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <div class="hidden md:flex items-center gap-2">
+          <button class="px-3 py-2 rounded-md bg-[#115930] text-white text-sm" (click)="openBrandEdit()">Update Brand</button>
+          <button class="px-3 py-2 rounded-md bg-[#F2C438] text-sm" (click)="openInvoices()">Invoices</button>
+          <button class="relative p-2 rounded-md border border-[rgba(0,0,0,0.06)] bg-transparent hover:bg-white/30"
+                  (click)="markAllRead()">
+            <span class="sr-only">Notifications</span>
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                 stroke-linecap="round" stroke-linejoin="round"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0 1 18 14.158V11a6 6 0 1 0-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <span *ngIf="unreadNotifications>0" class="absolute -top-1 -right-1 text-[11px] px-2 py-[2px] rounded-full bg-[#F44336] text-white font-medium">
+              {{ unreadNotifications }}
+            </span>
+          </button>
+        </div>
+
+        <!-- mobile compact -->
+        <div class="md:hidden">
+          <button (click)="mobileMenuOpen = !mobileMenuOpen" class="p-2 rounded-md border border-[rgba(0,0,0,0.06)] bg-white/20">
+            <svg *ngIf="!mobileMenuOpen" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            <svg *ngIf="mobileMenuOpen" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <nav *ngIf="mobileMenuOpen" class="mt-3 md:hidden">
+      <div class="flex flex-col gap-2">
+        <button (click)="openBrandEdit(); mobileMenuOpen=false" class="w-full text-left px-4 py-2 rounded-md bg-[#115930] text-white text-sm">Update Brand</button>
+        <button (click)="openInvoices(); mobileMenuOpen=false" class="w-full text-left px-4 py-2 rounded-md bg-[#F2C438] text-sm">Invoices</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- GRID -->
+  <main class="mt-4 grid gap-4 grid-cols-1 md:grid-cols-[1fr_320px]">
+
+    <!-- MAIN -->
+    <div class="space-y-4">
+
+      <!-- BRAND CARD (Logo / Tagline / Description) -->
+      <section class="bg-white rounded-xl p-4 md:p-6 shadow border border-[#F2D479]">
+        <div class="flex flex-col md:flex-row items-start md:items-center gap-4">
+          <div class="h-28 w-28 rounded-lg bg-[#F9F7ED] border border-[#F2D479] flex items-center justify-center overflow-hidden">
+            <img *ngIf="brand.logo" [src]="brand.logo" alt="logo" class="h-full w-full object-cover" />
+            <div *ngIf="!brand.logo" class="text-sm text-[#0D0D0D]/70 px-2">No Logo</div>
+          </div>
+
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h2 class="text-xl font-semibold text-[#0D0D0D] truncate">{{ brand.name || 'Business Name' }}</h2>
+                <p class="text-sm text-[#0D0D0D]/80 mt-1 truncate">{{ brand.tagline || 'Short tagline or slogan' }}</p>
+              </div>
+              <div class="text-sm text-[#0D0D0D]/70">{{ brand.postedOn }}</div>
+            </div>
+
+            <p class="mt-3 text-sm text-[#0D0D0D]/90 line-clamp-4">{{ brand.description || 'Business description will appear here.' }}</p>
+
+            <div class="mt-4 flex gap-2">
+              <button class="px-4 py-2 rounded-lg bg-[#115930] text-white text-sm" (click)="openBrandEdit()">Update</button>
+              <button class="px-4 py-2 rounded-lg border border-[#F2D479] text-sm" (click)="previewPublic()">Preview Public</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RECENT OFFERS / EVENTS -->
+      <section class="bg-white rounded-xl p-4 md:p-6 shadow border border-[#F2D479]">
+        <div class="flex items-center justify-between">
+          <h2 class="text-base font-semibold m-0">Recently posted offers & events</h2>
+          <a class="text-sm text-[#115930] cursor-pointer" (click)="openOffers()">Show more</a>
+        </div>
+
+        <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <ng-container *ngFor="let ev of recentOffers">
+            <article class="border border-gray-100 rounded-lg overflow-hidden flex flex-col">
+              <div class="h-36 overflow-hidden bg-[#F9F7ED] flex items-center justify-center">
+                <img *ngIf="ev.poster" [src]="ev.poster" alt="poster" class="w-full h-full object-cover" />
+                <div *ngIf="!ev.poster" class="text-sm text-[#0D0D0D]/70 p-3">No poster</div>
+              </div>
+
+              <div class="p-3 flex flex-col gap-2">
+                <div class="flex items-start justify-between gap-3">
+                  <div class="min-w-0">
+                    <h4 class="font-semibold text-sm truncate">{{ ev.title }}</h4>
+                    <div class="text-xs text-[#0D0D0D]/70">{{ ev.type  }} • {{ ev.value }}</div>
+                  </div>
+                  <div class="text-right">
+                    <div class="text-xs text-[#0D0D0D]/70">Valid</div>
+                    <div class="text-xs font-medium">{{ ev.validFrom || 'N/A' }} — {{ ev.validTo || 'N/A' }}</div>
+                  </div>
+                </div>
+
+                <p class="text-sm text-[#0D0D0D]/90 line-clamp-3">{{ ev.description }}</p>
+
+                <div class="flex items-center justify-between mt-2">
+                  <div class="text-xs text-[#0D0D0D]/70">{{ ev.venue || '—' }}</div>
+                  <div class="flex gap-2">
+                    <button class="px-3 py-1 rounded-md bg-[#115930] text-white text-sm" (click)="editOffer(ev)">Edit</button>
+                    <button class="px-3 py-1 rounded-md border border-gray-200 text-sm" (click)="deleteOffer(ev)">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </ng-container>
+
+          <div *ngIf="!recentOffers.length" class="text-sm text-[#0D0D0D]/70 p-4">No offers or events posted yet.</div>
+        </div>
+      </section>
+
+      <!-- ADMIN RESPONSES -->
+      <section class="bg-white rounded-xl p-4 md:p-6 shadow border border-[#F2D479]">
+        <div class="flex items-center justify-between">
+          <h2 class="text-base font-semibold m-0">Recent admin responses</h2>
+          <a class="text-sm text-[#115930] cursor-pointer" (click)="openAdminResponses()">Show more</a>
+        </div>
+
+        <div class="mt-3 flex flex-col gap-2">
+          <ng-container *ngFor="let a of adminResponses">
+            <div class="p-3 border border-gray-100 rounded-lg">
+              <div class="flex justify-between items-start">
+                <div>
+                  <div class="font-semibold text-sm">{{ a.type  }}</div>
+                  <div class="text-xs text-[#0D0D0D]/70">{{ formatShort(a.date) }}</div>
+                </div>
+                <div>
+                  <span class="inline-block px-2 py-0.5 rounded text-xs font-medium"
+                        [ngClass]="a.type.includes('rejected') ? 'bg-red-500 text-white' : 'bg-[#115930] text-white'">
+                    {{ a.type.includes('reject') ? 'Rejected' : 'Approved' }}
+                  </span>
+                </div>
+              </div>
+
+              <p class="mt-2 text-sm text-[#0D0D0D]/90">{{ a.comment }}</p>
+              <div class="mt-2">
+                <a class="text-[#115930] cursor-pointer" (click)="gotoRelated(a.relatedId)">View related</a>
+              </div>
+            </div>
+          </ng-container>
+
+          <div *ngIf="!adminResponses.length" class="text-sm text-[#0D0D0D]/70 p-3">No admin responses yet.</div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- RIGHT COLUMN: INVOICES & QUICK ACTIONS -->
+    <aside class="flex flex-col gap-3">
+      <!-- INVOICES -->
+      <div class="bg-white p-3 rounded-lg shadow border border-[#F2D479]">
+        <div class="flex justify-between items-center">
+          <div class="font-semibold">Invoices</div>
+          <a class="text-sm text-[#115930] cursor-pointer" (click)="openInvoices()">View</a>
+        </div>
+
+        <div class="mt-2 flex flex-col gap-2">
+          <ng-container *ngFor="let inv of invoices | slice:0:3">
+            <div class="flex justify-between items-center border border-gray-100 p-2 rounded-md">
+              <div>
+                <div class="font-semibold">{{ inv.id }}</div>
+                <div class="text-xs text-[#0D0D0D]/70">{{ inv.date }}</div>
+              </div>
+              <div class="text-right">
+                <div class="font-bold">₹{{ inv.amount }}</div>
+                <button class="mt-2 px-2 py-1 rounded-md border border-gray-200 text-sm" (click)="downloadInvoicePDF(inv)">Download</button>
+              </div>
+            </div>
+          </ng-container>
+
+          <div *ngIf="!invoices.length" class="text-sm text-[#0D0D0D]/70 p-2">No invoices yet.</div>
+        </div>
+      </div>
+
+      <!-- QUICK ACTIONS -->
+      <div class="bg-white p-3 rounded-lg shadow border border-[#F2D479]">
+        <div class="font-semibold mb-2">Quick actions</div>
+        <div class="flex flex-col gap-2">
+          <button class="w-full px-3 py-2 rounded-md bg-[#115930] text-white text-sm" (click)="openOffers()">Add Offer / Event</button>
+          <button class="w-full px-3 py-2 rounded-md border border-[#F2D479] text-sm" (click)="openBrandEdit()">Edit Brand</button>
+          <button class="w-full px-3 py-2 rounded-md bg-[#F2C438] text-sm" (click)="openInvoices()">Invoices</button>
+        </div>
+      </div>
+
+      <!-- OTHER CLASSIFIEDS (kept small) -->
+      <div class="bg-white p-3 rounded-lg shadow border border-[#F2D479]">
+        <div class="flex justify-between items-center">
+          <div class="font-semibold">Other Classifieds</div>
+          <a class="text-sm text-[#115930] cursor-pointer">Show more</a>
+        </div>
+        <div class="mt-2 text-sm text-[#0D0D0D]/70">Browse local classifieds for promotions and partnerships.</div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- BRAND EDIT MODAL -->
+  <div *ngIf="brandEditOpen" class="fixed inset-0 z-50 flex items-center justify-center">
+    <div class="absolute inset-0 bg-black/40" (click)="brandEditOpen=false"></div>
+    <div class="relative bg-white rounded-lg p-4 z-10 w-[900px] max-w-[96%] shadow-2xl">
+      <h3 class="text-lg font-semibold m-0 mb-3">Update Brand</h3>
+
+      <form [formGroup]="brandForm" (ngSubmit)="saveBrand()">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-sm font-medium">Logo</label>
+            <input type="file" (change)="onBrandLogo($event)" accept="image/*" class="mt-2" />
+            <div *ngIf="brand.logo" class="mt-3 h-28 w-28 rounded-lg overflow-hidden border border-[#F2D479]">
+              <img [src]="brand.logo" class="h-full w-full object-cover" />
+            </div>
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium">Business Name</label>
+            <input formControlName="name" class="w-full p-2 border border-gray-200 rounded-md" />
+
+            <label class="block text-sm font-medium mt-3">Tagline</label>
+            <input formControlName="tagline" class="w-full p-2 border border-gray-200 rounded-md" />
+
+            <label class="block text-sm font-medium mt-3">Description</label>
+            <textarea formControlName="description" rows="4" class="w-full p-2 border border-gray-200 rounded-md"></textarea>
+
+            <div class="mt-4 flex justify-end gap-2">
+              <button type="button" class="px-3 py-2 rounded-md border border-gray-200" (click)="brandEditOpen=false">Cancel</button>
+              <button type="submit" class="px-3 py-2 rounded-md bg-[#115930] text-white">Save</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- INVOICES DRAWER / MODAL -->
+  <div *ngIf="showInvoices" class="fixed inset-0 z-50 flex items-start justify-center pt-10">
+    <div class="absolute inset-0 bg-black/35" (click)="closeInvoices()"></div>
+    <div class="relative bg-white p-4 rounded-md w-[760px] max-w-[96%] z-10">
+      <div class="flex justify-between items-center">
+        <h3 class="m-0 text-lg font-semibold">Invoices</h3>
+        <button (click)="closeInvoices()" class="text-xl">✕</button>
+      </div>
+      <div class="mt-3 flex flex-col gap-2">
+        <div *ngFor="let inv of invoices" class="flex justify-between items-center border border-gray-100 p-2 rounded-md">
+          <div>
+            <div class="font-semibold">{{inv.id}}</div>
+            <div class="text-xs text-[#0D0D0D]/70">{{inv.date}}</div>
+          </div>
+          <div class="text-right">
+            <div class="font-bold">₹{{inv.amount}}</div>
+            <div class="mt-2">
+              <button (click)="downloadInvoicePDF(inv)" class="px-2 py-1 rounded-md border border-gray-200 text-sm">Download PDF</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

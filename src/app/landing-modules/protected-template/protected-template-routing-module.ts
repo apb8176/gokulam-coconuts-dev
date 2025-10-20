@@ -30,6 +30,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'yoga-studio',
+        loadChildren: () =>
+          import('../protected-template/modules/yoga-studio/yoga-studio-module').then(
+            (m) => m.YogaStudioModule
+          ),
+      },
+      {
         path: 'scout',
         loadChildren: () =>
           import('../protected-template/modules/scouter/scouter-module').then(

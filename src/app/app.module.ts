@@ -3,11 +3,12 @@ import { PublicTemplate } from './landing-modules/public-template/public-templat
 import { ProtectedTemplate } from './landing-modules/protected-template/protected-template';
 import { PublicTemplateModule } from './landing-modules/public-template/public-template-module';
 import { ProtectedTemplateModule } from './landing-modules/protected-template/protected-template-module';
-import { provideHttpClient } from '@angular/common/http';
-import { AuthModule } from 'angular-auth-oidc-client';
+import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
+import { AuthInterceptor, AuthModule } from 'angular-auth-oidc-client';
 import { EntityDetails } from './components/entity-details/entity-details';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { TokenManagerService } from './services/token-manager';
 @NgModule({
     imports: [
     FormsModule, BrowserModule, ReactiveFormsModule,
@@ -26,5 +27,9 @@ import { BrowserModule } from '@angular/platform-browser';
  declarations: [
     EntityDetails
   ], 
-  providers: [ provideHttpClient()]})
+  providers: [ {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },TokenManagerService]})
 export class AppModule {}

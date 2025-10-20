@@ -55,7 +55,37 @@ export const navRoutes = [
             }
         ]
     },
-    
+    {   
+        userType: 'yoga-studio',
+        navItems:[
+            {
+                navItemLabel: 'Dashboard',
+                navItemRoute: '/landing/yoga-studio/dashboard',
+                navItemIcon: 'pi pi-home'
+            },
+            {
+                navItemLabel: 'Profile',
+                navItemRoute: '/landing/yoga-studio/profile',
+                navItemIcon: 'pi pi-user'
+            },
+            {
+                navItemLabel: 'Yoga Studio Details',
+                navItemRoute: '/landing/yoga-studio/yoga-studio-details',
+                navItemIcon: 'pi pi-list'
+            },
+              {
+                navItemLabel: 'Offers/Events',
+                navItemRoute: '/landing/yoga-studio/events',
+                navItemIcon: 'pi pi-list'
+            },
+            
+            {
+                navItemLabel: 'Logout',
+                navItemRoute: 'busines-owner-post-details',
+                navItemIcon: 'pi pi-info-circle'
+            }
+        ]
+    },
     {   
         userType: 'community-member',
         navItems:[

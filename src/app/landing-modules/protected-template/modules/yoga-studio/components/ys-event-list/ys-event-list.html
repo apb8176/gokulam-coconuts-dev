@@ -1,0 +1,215 @@
+<div class="max-w-6xl mx-auto p-4 md:p-8">
+    <div class="bg-white rounded-xl p-4 md:p-6 shadow border border-[#F2D479]">
+        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+            <div class="min-w-0">
+                <h2 class="text-xl sm:text-2xl font-bold text-[#0D0D0D]">Offers & Events</h2>
+                <p class="mt-1 text-sm text-[#0D0D0D]/70">Create and manage promotional offers, events, coupons and
+                    seasonal sales.</p>
+            </div>
+
+            <div class="w-full md:w-auto">
+                <div class="flex gap-3 flex-col sm:flex-row">
+                    <button (click)="openCreate()"
+                        class="w-full sm:w-auto px-4 py-2 rounded-lg font-medium text-white bg-[#115930] hover:bg-[#0D0D0D]">
+                        + New Offer / Event
+                    </button>
+                    <button (click)="toggleListView()"
+                        class="w-full sm:w-auto px-4 py-2 rounded-lg font-medium border border-[#F2D479] bg-white text-[#0D0D0D]">
+                        {{ showForm ? 'Close Form' : 'View Offers' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form -->
+    <div *ngIf="showForm" class="mt-6">
+        <form [formGroup]="offerForm" (ngSubmit)="saveOffer()"
+            class="space-y-6 bg-white p-4 md:p-6 rounded-xl shadow border border-[#F2D479]">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="md:col-span-2">
+                    <label class="block font-semibold text-[#0D0D0D] mb-1">Offer / Event Name <span
+                            class="text-red-500">*</span></label>
+                    <input formControlName="title" type="text" placeholder="e.g. Monsoon Sale - Up to 40% off"
+                        class="w-full p-2 border border-[#F2D479] rounded-lg" />
+                    <div *ngIf="f.title.touched && f.title.invalid" class="text-red-500 text-sm mt-1">Name is required.
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-[#0D0D0D] mb-1">Type <span
+                            class="text-red-500">*</span></label>
+                    <select formControlName="type" class="w-full p-2 border border-[#F2D479] rounded-lg">
+                        <option value="">Select Type</option>
+                        <option value="offer">Offer</option>
+                        <option value="event">Event</option>
+                        <option value="coupon">Coupon</option>
+                        <option value="sale">Seasonal Sale</option>
+                    </select>
+                    <div *ngIf="f.type.touched && f.type.invalid" class="text-red-500 text-sm mt-1">Type is required.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dates & Venue -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block font-semibold text-[#0D0D0D] mb-1">Valid From</label>
+                    <input formControlName="validFrom" type="date"
+                        class="w-full p-2 border border-[#F2D479] rounded-lg" />
+                </div>
+                <div>
+                    <label class="block font-semibold text-[#0D0D0D] mb-1">Valid To</label>
+                    <input formControlName="validTo" type="date"
+                        class="w-full p-2 border border-[#F2D479] rounded-lg" />
+                </div>
+                <div>
+                    <label class="block font-semibold text-[#0D0D0D] mb-1">Venue (if any)</label>
+                    <input formControlName="venue" type="text" placeholder="e.g. Main Street Store / Online"
+                        class="w-full p-2 border border-[#F2D479] rounded-lg" />
+                </div>
+            </div>
+
+            <!-- Value / Benefits -->
+            <div>
+                <label class="block font-semibold text-[#0D0D0D] mb-1">Value / Price / Benefits</label>
+                <input formControlName="value" type="text" placeholder="e.g. 40% off, ₹100 cashback, Free delivery"
+                    class="w-full p-2 border border-[#F2D479] rounded-lg" />
+            </div>
+
+            <!-- Conditions & Description -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block font-semibold text-[#0D0D0D] mb-1">Description</label>
+                    <textarea formControlName="description" rows="4" placeholder="Describe the offer or event..."
+                        class="w-full p-2 border border-[#F2D479] rounded-lg"></textarea>
+                </div>
+                <div>
+                    <label class="block font-semibold text-[#0D0D0D] mb-1">Conditions</label>
+                    <textarea formControlName="conditions" rows="4"
+                        placeholder="e.g. Min purchase ₹500; Not valid on sale items..."
+                        class="w-full p-2 border border-[#F2D479] rounded-lg"></textarea>
+                </div>
+            </div>
+
+            <!-- Poster Upload & Status -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+                <div>
+                    <label class="block font-semibold text-[#0D0D0D] mb-1">Poster (optional)</label>
+                    <input type="file" (change)="onPosterSelected($event)" accept="image/*"
+                        class="block w-full text-sm" />
+                    <div *ngIf="posterPreview" class="mt-3">
+                        <img [src]="posterPreview" alt="poster"
+                            class="h-36 w-full object-cover rounded-lg border border-[#F2D479]" />
+                    </div>
+                </div>
+
+                <div class="md:col-span-2 flex items-center gap-4">
+                    <div class="flex-1">
+                        <label class="block font-semibold text-[#0D0D0D] mb-1">Status</label>
+                        <div class="flex items-center gap-3">
+                            <label class="inline-flex items-center gap-2">
+                                <input type="radio" formControlName="status" value="active" class="h-4 w-4" />
+                                <span class="text-sm">Active</span>
+                            </label>
+                            <label class="inline-flex items-center gap-2">
+                                <input type="radio" formControlName="status" value="upcoming" class="h-4 w-4" />
+                                <span class="text-sm">Upcoming</span>
+                            </label>
+                            <label class="inline-flex items-center gap-2">
+                                <input type="radio" formControlName="status" value="expired" class="h-4 w-4" />
+                                <span class="text-sm">Expired</span>
+                            </label>
+                        </div>
+                        <div class="text-xs text-[#0D0D0D]/70 mt-2">If dates are provided, status auto-updates on save
+                            (Active / Expired).</div>
+                    </div>
+
+                    <div class="w-48">
+                        <label class="block font-semibold text-[#0D0D0D] mb-1">Preview Badge</label>
+                        <div class="inline-block px-3 py-1 rounded-full text-sm font-medium" [ngClass]="{
+                  'bg-[#115930] text-white': offerForm.value.status === 'active',
+                  'bg-[#F2C438] text-[#0D0D0D]': offerForm.value.status === 'upcoming',
+                  'bg-red-500 text-white': offerForm.value.status === 'expired'
+                 }">
+                            {{ offerForm.value.status || 'N/A' }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- HTML: add this checkbox block inside the FORM (e.g. below Poster Upload & Status, before Buttons) -->
+            <div class="flex items-start gap-3">
+                <label class="inline-flex items-center gap-2">
+                    <input type="checkbox" formControlName="requestToAdmin" class="h-4 w-4" />
+                    <span class="text-sm text-[#0D0D0D]">Request Admin to add offer/event in public classifieds</span>
+                </label>
+            </div>
+            <!-- Buttons -->
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div class="text-sm text-[#0D0D0D]/70">Fields marked <span class="text-red-500">*</span> are mandatory.
+                </div>
+                <div class="flex gap-2 w-full sm:w-auto">
+                    <button type="button" (click)="resetForm()"
+                        class="w-full sm:w-auto px-4 py-2 rounded-lg border border-[#F2D479]">Reset</button>
+                    <button type="submit"
+                        class="w-full sm:w-auto px-6 py-2 bg-[#F2C438] text-[#0D0D0D] font-bold rounded-lg hover:bg-[#C7D943]">
+                        {{ editingIndex >= 0 ? 'Update Offer' : 'Save Offer' }}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- LIST -->
+    <div class="mt-6 grid grid-cols-1 gap-4">
+        <div *ngFor="let o of offers; let i = index"
+            class="bg-white rounded-xl p-4 md:p-6 shadow border border-[#F2D479]">
+            <div class="flex flex-col md:flex-row gap-4 md:items-start">
+                <div class="w-full md:w-48 flex-shrink-0">
+                    <div
+                        class="h-36 w-full rounded-lg overflow-hidden bg-[#F9F7ED] border border-[#F2D479] flex items-center justify-center">
+                        <img *ngIf="o.poster" [src]="o.poster" alt="poster" class="h-full w-full object-cover" />
+                        <div *ngIf="!o.poster" class="text-sm text-[#0D0D0D]/70 px-2">No poster</div>
+                    </div>
+                </div>
+
+                <div class="flex-1">
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="min-w-0">
+                            <h3 class="text-lg font-semibold text-[#0D0D0D] truncate">{{ o.title }}</h3>
+                            <div class="mt-1 text-sm text-[#0D0D0D]/70">
+                                <span class="inline-block mr-3">{{ o.type | titlecase }}</span>
+                                <span class="inline-block mr-3">{{ o.value }}</span>
+                                <span class="inline-block text-xs px-2 py-0.5 rounded bg-[#F2D479]">{{ o.status
+                                    }}</span>
+                                <span *ngIf="o.requestToAdmin"
+                                    class="inline-block ml-2 text-xs px-2 py-0.5 rounded bg-[#F2D479] text-[#0D0D0D]">
+                                    Requested for Public Visibility
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <button (click)="startEdit(i)"
+                                class="px-3 py-1 rounded-lg bg-[#115930] text-white text-sm">Edit</button>
+                            <button (click)="deleteOffer(i)"
+                                class="px-3 py-1 rounded-lg bg-red-500 text-white text-sm">Delete</button>
+                        </div>
+                    </div>
+
+                    <p class="mt-3 text-sm text-[#0D0D0D]/90">{{ o.description }}</p>
+
+                    <div class="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm text-[#0D0D0D]/80">
+                        <div><span class="font-medium">Valid:</span> {{ o.validFrom || 'N/A' }} — {{ o.validTo || 'N/A'
+                            }}</div>
+                        <div><span class="font-medium">Venue:</span> {{ o.venue || 'N/A' }}</div>
+                        <div><span class="font-medium">Conditions:</span> {{ o.conditions || 'N/A' }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="!offers.length" class="text-center py-8 text-sm text-[#0D0D0D]/70">No offers yet. Click "New Offer /
+            Event" to add one.</div>
+    </div>
+</div>
