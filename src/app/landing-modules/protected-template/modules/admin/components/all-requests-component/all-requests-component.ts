@@ -2,6 +2,7 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AdminApiService } from '../../services/admin-api';
 
 export type PendingItem = {
   id: string;
@@ -22,6 +23,21 @@ export type PendingItem = {
   templateUrl: './all-requests-component.html',
 })
 export class AllRequestsComponent {
+  constructor(private adminApiService:AdminApiService){
+
+  }
+  ngOnInit(){
+    this.adminApiService.getRequest().subscribe({
+      next: (response: any) => {
+        
+        console.log('Table Data', response);
+       
+      },
+      error: (error: any) => {
+        console.error('❌ Error adding property:', error);
+      },
+    });
+  }
   // --- categories shown in sidebar ---
   categories = [
     { key: 'all', label: 'All' },

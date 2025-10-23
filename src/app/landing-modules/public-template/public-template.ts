@@ -59,6 +59,7 @@ showMobileMenu: boolean = false;
   // Clear session storage
   if (window.sessionStorage) {
     window.sessionStorage.clear();
+    window.localStorage.clear();
   }
 
   // window.location.href = "https://eu-north-1m6dp7rfac.auth.eu-north-1.amazoncognito.com/logout?client_id=1e3316k9pmltncrvkgps2is19m&logout_uri=http://localhost:4200";

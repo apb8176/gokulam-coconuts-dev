@@ -1,29 +1,60 @@
 import { Injectable } from '@angular/core';
+import { CryptoHelper } from '../utils/crypto.helper';
 
-@Injectable({
-  providedIn: 'root'
-})
+export type Persona =
+  | 'property-owner'
+  | 'busines-owner'
+  | 'community-member'
+  | 'yoga-studio'
+  | 'scout'
+  | 'admin';
+
+export interface AppUser {
+  user_type: Persona;
+  isApproved: boolean | 'pending' | 'rejected';
+  rejectMessage?: string;
+}
+
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  private loggedIn = false;
-  private role: string = '';
+  private storageKey = 'user';
 
   constructor() {}
 
-  login(role: string) {
-    this.loggedIn = true;
-    this.role = role;
+  // Save encrypted user data to localStorage
+  saveUser(user: AppUser) {
+    const encrypted = CryptoHelper.encrypt(user);
+    localStorage.setItem(this.storageKey, encrypted);
   }
 
-  logout() {
-    this.loggedIn = false;
-    this.role = '';
+  // Get decrypted user data from localStorage
+  getUser(): AppUser | null {
+    const cipher = localStorage.getItem(this.storageKey);
+    if (!cipher) return null;
+
+    const decrypted = CryptoHelper.decrypt<AppUser>(cipher);
+    return decrypted;
   }
 
-  isLoggedIn(): boolean {
-    return this.loggedIn;
+  isSignedIn(): boolean {
+    return !!this.getUser();
   }
 
-  getUserRole(): string {
-    return this.role;
+  clearUser() {
+    localStorage.removeItem(this.storageKey);
+  }
+
+  // Persona root for redirect
+  getPersonaRoot(user: AppUser | null): string {
+    if (!user) return '/';
+    switch (user.user_type) {
+      case 'property-owner': return '/landing/property-owner';
+      case 'busines-owner': return '/landing/busines-owner';
+      case 'community-member': return '/landing/community-member';
+      case 'yoga-studio': return '/landing/yoga-studio';
+      case 'scout': return '/landing/scout';
+      case 'admin': return '/landing/admin';
+      default: return '/';
+    }
   }
 }

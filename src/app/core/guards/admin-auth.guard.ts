@@ -1,15 +1,19 @@
-import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { Injectable } from '@angular/core';
+import { CanActivate, Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
-export const AdminAuthGuard: CanActivateFn = (route, state) => {
-  const authService = inject(AuthService);
-  const router = inject(Router);
+@Injectable({ providedIn: 'root' })
+export class AdminAuthGuard implements CanActivate {
+  constructor(private auth: AuthService, private router: Router) {}
 
-  if (authService.isLoggedIn() && authService.getUserRole() === 'admin') {
+  canActivate(): boolean {
+    const user = this.auth.getUser();
+    if (!user || user.user_type !== 'admin' || user.approval !== true) {
+      // go to persona root or public
+      const redirect = user ? this.auth.getPersonaRoot(user) : '/';
+      this.router.navigateByUrl(redirect);
+      return false;
+    }
     return true;
-  } else {
-    router.navigate(['/']);
-    return false;
   }
-};
+}

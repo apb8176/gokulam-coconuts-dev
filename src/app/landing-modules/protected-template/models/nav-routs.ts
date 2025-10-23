@@ -1,6 +1,6 @@
 export const navRoutes = [    
     {   
-        userType: 'property-owner',
+        user_type: 'property-owner',
         navItems:[
             {
                 navItemLabel: 'Dashboard',
@@ -25,7 +25,7 @@ export const navRoutes = [
         ]
     },
       {   
-        userType: 'busines-owner',
+        user_type: 'busines-owner',
         navItems:[
             {
                 navItemLabel: 'Dashboard',
@@ -56,7 +56,7 @@ export const navRoutes = [
         ]
     },
     {   
-        userType: 'yoga-studio',
+        user_type: 'yoga-studio',
         navItems:[
             {
                 navItemLabel: 'Dashboard',
@@ -87,7 +87,7 @@ export const navRoutes = [
         ]
     },
     {   
-        userType: 'community-member',
+        user_type: 'community-member',
         navItems:[
             {
                 navItemLabel: 'Dashboard',
@@ -112,7 +112,7 @@ export const navRoutes = [
         ]
     },
     {   
-        userType: 'scout',
+        user_type: 'scout',
         navItems:[
             {
                 navItemLabel: 'Dashboard',
@@ -132,7 +132,7 @@ export const navRoutes = [
         ]
     },
      {   
-        userType: 'admin',
+        user_type: 'admin',
         navItems:[
             {
                 navItemLabel: 'Dashboard',

@@ -1,60 +1,229 @@
 <div class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black bg-opacity-60 backdrop-blur-sm">
-  <div class="relative bg-white p-6 sm:p-8 rounded-xl shadow-2xl max-w-full sm:max-w-md w-full transform transition-all duration-300 border-2 border-[#115930]">
-    
+  <div
+    class="relative bg-white p-6 sm:p-8 rounded-xl shadow-2xl max-w-full sm:max-w-md w-full transform transition-all duration-300 border-2 border-[#115930]"
+  >
     <!-- Close Button -->
-    <button (click)="closePopup()" class="absolute top-3 right-3 sm:top-4 sm:right-4 text-[#115930] hover:text-[#0D0D0D] transition-colors">
+    <button
+      (click)="closePopup()"
+      class="absolute top-3 right-3 sm:top-4 sm:right-4 text-[#115930] hover:text-[#0D0D0D] transition-colors"
+      type="button"
+      [disabled]="isAnyLoading()"
+    >
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
       </svg>
     </button>
 
-    <h2 class="text-2xl sm:text-3xl font-extrabold text-[#115930] mb-4 sm:mb-6 text-center pt-2 sm:pt-0">
-      Sign in
-      <br>
-      <span class="text-sm sm:text-base text-[#0D0D0D] font-normal">Access your account</span>
-    </h2>
+    <!-- ============================= -->
+    <!-- 🔐 SIGN-IN FORM -->
+    <!-- ============================= -->
+    <div *ngIf="!forgotPasswordMode">
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-[#115930] mb-4 sm:mb-6 text-center pt-2 sm:pt-0">
+        Sign in
+        <br />
+        <span class="text-sm sm:text-base text-[#0D0D0D] font-normal">Access your account</span>
+      </h2>
 
-    <form [formGroup]="signinForm" (ngSubmit)="onSubmit()">
-      <div class="mb-4">
-        <label for="username" class="block text-sm font-semibold text-[#0D0D0D] mb-1">Username or Email</label>
-        <input
-          id="username"
-          type="text"
-          formControlName="username"
-          placeholder="Enter username or email"
-          class="w-full px-4 py-2 border border-[#C7D943] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#115930] bg-white text-[#0D0D0D]"
-        />
-      </div>
+      <form [formGroup]="signinForm" (ngSubmit)="onSubmit()">
+        <div class="mb-4">
+          <label for="username" class="block text-sm font-semibold text-[#0D0D0D] mb-1">Username or Email</label>
+          <input
+            id="username"
+            type="text"
+            formControlName="username"
+            placeholder="Enter username or email"
+            class="w-full px-4 py-2 border border-[#C7D943] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#115930] bg-white text-[#0D0D0D]"
+            [disabled]="isLoadingSignIn || isAnyLoading()"
+          />
+        </div>
 
-      <div class="mb-4">
-        <label for="password" class="block text-sm font-semibold text-[#0D0D0D] mb-1">Password</label>
-        <input
-          id="password"
-          type="password"
-          formControlName="password"
-          placeholder="Enter password"
-          class="w-full px-4 py-2 border border-[#C7D943] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#115930] bg-white text-[#0D0D0D]"
-        />
-      </div>
+        <div class="mb-4 relative">
+          <label for="password" class="block text-sm font-semibold text-[#0D0D0D] mb-1">Password</label>
+          <input
+            id="password"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Enter password"
+            class="w-full px-4 py-2 border border-[#C7D943] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#115930] bg-white text-[#0D0D0D]"
+            [disabled]="isLoadingSignIn || isAnyLoading()"
+          />
+          <button
+            type="button"
+            (click)="togglePasswordVisibility()"
+            class="absolute right-2 top-8 text-sm text-[#115930]"
+            [disabled]="isLoadingSignIn || isAnyLoading()"
+            aria-label="toggle password visibility"
+          >
+            {{ showPassword ? 'Hide' : 'Show' }}
+          </button>
+        </div>
 
-      <div class="flex items-center justify-between mb-6">
-        <label class="flex items-center text-sm text-[#0D0D0D]">
-          <input type="checkbox" formControlName="rememberMe" class="mr-2 accent-[#115930]" /> Remember me
-        </label>
-        <a href="#" class="text-sm text-[#115930] hover:text-[#0D0D0D]">Forgot password?</a>
-      </div>
+        <div class="flex items-center justify-between mb-6">
+          <label class="flex items-center text-sm text-[#0D0D0D]">
+            <input type="checkbox" formControlName="rememberMe" class="mr-2 accent-[#115930]" [disabled]="isLoadingSignIn || isAnyLoading()" /> Remember me
+          </label>
+          <button
+            type="button"
+            class="text-sm text-[#115930] hover:text-[#0D0D0D] cursor-pointer bg-transparent p-0"
+            (click)="toggleForgotPassword()"
+            [disabled]="isAnyLoading() || toggleDisabled"
+          >
+            Forgot password?
+          </button>
+        </div>
 
-      <div *ngIf="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 text-sm" role="alert">
-        <strong class="font-bold">Error:</strong> <span class="ml-1">{{ errorMessage }}</span>
-      </div>
+        <div
+          *ngIf="errorMessage"
+          class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 text-sm"
+          role="alert"
+        >
+          <strong class="font-bold">Error:</strong> <span class="ml-1">{{ errorMessage }}</span>
+        </div>
 
-      <button
-        type="submit"
-        class="w-full bg-[#115930] text-[#F2D479] py-3 rounded-lg font-bold text-lg hover:bg-[#0D0D0D] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#C7D943]"
-        [disabled]="signinForm.invalid"
-      >
-        Sign In
-      </button>
-    </form>
+        <button
+          type="submit"
+          class="w-full bg-[#115930] text-[#F2D479] py-3 rounded-lg font-bold text-lg hover:bg-[#0D0D0D] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#C7D943] flex items-center justify-center gap-2"
+          [disabled]="signinForm.invalid || isLoadingSignIn || isAnyLoading()"
+        >
+          <svg *ngIf="isLoadingSignIn" class="animate-spin h-5 w-5" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+          </svg>
+          <span *ngIf="!isLoadingSignIn">Sign In</span>
+          <span *ngIf="isLoadingSignIn">Signing in...</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- ============================= -->
+    <!-- 🔄 FORGOT PASSWORD REQUEST -->
+    <!-- ============================= -->
+    <div *ngIf="forgotPasswordMode && !codeSent">
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-[#115930] mb-4 sm:mb-6 text-center">
+        Forgot Password
+        <br />
+        <span class="text-sm sm:text-base text-[#0D0D0D] font-normal">Enter your registered email</span>
+      </h2>
+
+      <form [formGroup]="forgotPasswordForm" (ngSubmit)="onForgotPasswordRequest()">
+        <div class="mb-4">
+          <label for="forgotEmail" class="block text-sm font-semibold text-[#0D0D0D] mb-1">Email</label>
+          <input
+            id="forgotEmail"
+            type="email"
+            formControlName="username"
+            placeholder="Enter your email"
+            class="w-full px-4 py-2 border border-[#C7D943] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#115930]"
+            [disabled]="isLoadingForgot || isAnyLoading()"
+          />
+        </div>
+
+        <div
+          *ngIf="errorMessage"
+          class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 text-sm"
+          role="alert"
+        >
+          <strong class="font-bold">Error:</strong> <span class="ml-1">{{ errorMessage }}</span>
+        </div>
+
+        <div
+          *ngIf="infoMessage"
+          class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4 text-sm"
+          role="alert"
+        >
+          {{ infoMessage }}
+        </div>
+
+        <button
+          type="submit"
+          class="w-full bg-[#115930] text-[#F2D479] py-3 rounded-lg font-bold text-lg hover:bg-[#0D0D0D] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#C7D943] flex items-center justify-center gap-2"
+          [disabled]="forgotPasswordForm.invalid || isLoadingForgot || isAnyLoading()"
+        >
+          <svg *ngIf="isLoadingForgot" class="animate-spin h-5 w-5" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+          </svg>
+          <span *ngIf="!isLoadingForgot">Send Code</span>
+          <span *ngIf="isLoadingForgot">Sending...</span>
+        </button>
+
+        <p class="text-center mt-4 text-sm text-[#115930]">
+          <button
+            type="button"
+            (click)="toggleForgotPassword()"
+            class="hover:text-[#0D0D0D] cursor-pointer bg-transparent p-0"
+            [disabled]="isAnyLoading() || toggleDisabled"
+          >
+            Back to Sign In
+          </button>
+        </p>
+      </form>
+    </div>
+
+    <!-- ============================= -->
+    <!-- 🔁 RESET PASSWORD CONFIRM -->
+    <!-- ============================= -->
+    <div *ngIf="forgotPasswordMode && codeSent">
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-[#115930] mb-4 sm:mb-6 text-center">
+        Reset Password
+        <br />
+        <span class="text-sm sm:text-base text-[#0D0D0D] font-normal">Enter the verification code & new password</span>
+      </h2>
+
+      <form [formGroup]="resetPasswordForm" (ngSubmit)="onConfirmNewPassword()">
+        <div class="mb-4">
+          <label for="code" class="block text-sm font-semibold text-[#0D0D0D] mb-1">Verification Code</label>
+          <input
+            id="code"
+            type="text"
+            formControlName="code"
+            placeholder="Enter the code sent to your email"
+            class="w-full px-4 py-2 border border-[#C7D943] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#115930]"
+            [disabled]="isLoadingConfirm || isAnyLoading()"
+          />
+        </div>
+
+        <div class="mb-4">
+          <label for="newPassword" class="block text-sm font-semibold text-[#0D0D0D] mb-1">New Password</label>
+          <input
+            id="newPassword"
+            type="password"
+            formControlName="newPassword"
+            placeholder="Enter your new password"
+            class="w-full px-4 py-2 border border-[#C7D943] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#115930]"
+            [disabled]="isLoadingConfirm || isAnyLoading()"
+          />
+        </div>
+
+        <div
+          *ngIf="errorMessage"
+          class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 text-sm"
+          role="alert"
+        >
+          <strong class="font-bold">Error:</strong> <span class="ml-1">{{ errorMessage }}</span>
+        </div>
+
+        <div
+          *ngIf="infoMessage"
+          class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4 text-sm"
+          role="alert"
+        >
+          {{ infoMessage }}
+        </div>
+
+        <button
+          type="submit"
+          class="w-full bg-[#115930] text-[#F2D479] py-3 rounded-lg font-bold text-lg hover:bg-[#0D0D0D] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#C7D943] flex items-center justify-center gap-2"
+          [disabled]="resetPasswordForm.invalid || isLoadingConfirm || isAnyLoading()"
+        >
+          <svg *ngIf="isLoadingConfirm" class="animate-spin h-5 w-5" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+          </svg>
+          <span *ngIf="!isLoadingConfirm">Confirm New Password</span>
+          <span *ngIf="isLoadingConfirm">Confirming...</span>
+        </button>
+      </form>
+    </div>
   </div>
 </div>

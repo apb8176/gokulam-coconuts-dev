@@ -114,13 +114,22 @@
         <span class="block sm:inline ml-1">{{ errorMessage }}</span>
       </div>
 
-      <button
-        type="submit"
-        class="w-full bg-[#115930] text-[#F2D479] py-3 rounded-lg font-bold text-lg hover:bg-[#0D0D0D] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#C7D943]"
-        [disabled]="signupForm.invalid"
-      >
-        Sign up
-      </button>
+      <div class="mt-4">
+    <button
+      type="submit"
+      class="px-4 py-2 rounded bg-primary text-white disabled:opacity-60"
+      [disabled]="loading"
+    >
+      <ng-container *ngIf="!loading">Sign up</ng-container>
+      <ng-container *ngIf="loading">
+        <!-- simple spinner -->
+        <svg class="inline-block w-4 h-4 animate-spin" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"></circle>
+        </svg>
+        Processing...
+      </ng-container>
+    </button>
+  </div>
     </form>
   </div>
 </div>

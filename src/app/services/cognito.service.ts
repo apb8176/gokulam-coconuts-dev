@@ -4,7 +4,9 @@ import {
   SignUpCommand,
   ConfirmSignUpCommand,
   InitiateAuthCommand,
-  ResendConfirmationCodeCommand
+  ResendConfirmationCodeCommand,
+  ForgotPasswordCommand,
+  ConfirmForgotPasswordCommand
 } from '@aws-sdk/client-cognito-identity-provider';
 
 @Injectable({
@@ -28,9 +30,9 @@ export class Cognito {
    * 🆕 Sign up user (with custom attributes)
    */
   async signUpUser(formData: any) {
-    const { email, password, firstName, lastName, role ,phoneNumber} = formData;
+    const { email, password, firstName, lastName, role, phoneNumber } = formData;
 
-    const params :any = {
+    const params: any = {
       ClientId: this.clientId,
       Username: email,
       Password: password,
@@ -78,7 +80,7 @@ export class Cognito {
    * 🔐 Sign in (login)
    */
   async signIn(username: string, password: string) {
-    const params : any = {
+    const params: any = {
       AuthFlow: 'USER_PASSWORD_AUTH',
       ClientId: this.clientId,
       AuthParameters: {
@@ -90,7 +92,6 @@ export class Cognito {
     const command = new InitiateAuthCommand(params);
     const response = await this.client.send(command);
 
-    // Extract ID token and call API (as in your reference script)
     const idToken = response?.AuthenticationResult?.IdToken;
 
     if (idToken) {
@@ -126,5 +127,33 @@ export class Cognito {
     }
 
     return await response.json();
+  }
+
+  /**
+   * 🔄 Forgot password (send reset code to email/phone)
+   */
+  async forgotPassword(username: string) {
+    const params = {
+      ClientId: this.clientId,
+      Username: username,
+    };
+
+    const command = new ForgotPasswordCommand(params);
+    return await this.client.send(command);
+  }
+
+  /**
+   * 🔁 Confirm forgot password (submit new password with code)
+   */
+  async confirmForgotPassword(username: string, code: string, newPassword: string) {
+    const params = {
+      ClientId: this.clientId,
+      Username: username,
+      ConfirmationCode: code,
+      Password: newPassword,
+    };
+
+    const command = new ConfirmForgotPasswordCommand(params);
+    return await this.client.send(command);
   }
 }
