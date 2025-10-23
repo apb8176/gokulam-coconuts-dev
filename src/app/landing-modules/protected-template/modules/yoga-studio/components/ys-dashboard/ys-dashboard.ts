@@ -15,14 +15,14 @@ export class YsDashboard {
   // BRAND
   brandForm!: FormGroup;
   brandEditOpen = false;
-  brand: any = {
-    logo: null,
-    name: 'Local Bakers & Co.',
-    tagline: 'Fresh breads & handcrafted cakes',
-    description: 'We bake fresh bread daily and offer custom cakes for events. Local supplier to cafés.',
-    postedOn: new Date().toLocaleDateString()
-  };
 
+brand :any= {
+  logo: null,
+  name: 'Gokulam Yoga Studio',
+  tagline: 'Find balance, strength, and peace within',
+  description: 'A serene yoga space in Mysore offering daily classes, weekend workshops, and wellness retreats guided by certified instructors. Reconnect with yourself and find your inner calm.',
+  postedOn: new Date().toLocaleDateString()
+};
   // OFFERS / EVENTS
   offers: any[] = [];
   // ADMIN RESPONSES
@@ -50,10 +50,31 @@ export class YsDashboard {
   }
 
   makeDummyData() {
-    this.offers = [
-      { id: 'o1', title: 'Monsoon Discount', type: 'offer', validFrom: '2025-09-01', validTo: '2025-09-30', venue: 'Store', description: '30% off on snacks', value: '30% off', poster: null },
-      { id: 'o2', title: 'Free Cake Tasting', type: 'event', validFrom: '2025-10-05', validTo: '2025-10-05', venue: 'Main outlet', description: 'Try our new cake flavours', value: 'Free tasting', poster: null }
-    ];
+   this.offers = [
+  { 
+    id: 'o1', 
+    title: 'Morning Bliss Offer', 
+    type: 'offer', 
+    validFrom: '2025-10-01', 
+    validTo: '2025-10-31', 
+    venue: 'Studio', 
+    description: 'Get 20% off on all morning yoga and meditation classes this October.', 
+    value: '20% off', 
+    poster: null 
+  },
+  { 
+    id: 'o2', 
+    title: 'Full Moon Meditation', 
+    type: 'event', 
+    validFrom: '2025-10-27', 
+    validTo: '2025-10-27', 
+    venue: 'Rooftop Garden, Gokulam Yoga Studio', 
+    description: 'Join our special full moon meditation session under the stars. Limited spots available — register early.', 
+    value: 'Free for members', 
+    poster: null 
+  }
+];
+
 
     this.adminResponses = [
       { id: 'a1', type: 'post_approved', comment: 'Your offer has been approved', date: '2025-09-11T10:00:00Z', relatedId: 'o1' },

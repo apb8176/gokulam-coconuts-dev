@@ -6,7 +6,8 @@ import {
   InitiateAuthCommand,
   ResendConfirmationCodeCommand,
   ForgotPasswordCommand,
-  ConfirmForgotPasswordCommand
+  ConfirmForgotPasswordCommand,
+  GlobalSignOutCommand
 } from '@aws-sdk/client-cognito-identity-provider';
 
 @Injectable({
@@ -155,5 +156,35 @@ export class Cognito {
 
     const command = new ConfirmForgotPasswordCommand(params);
     return await this.client.send(command);
+  }
+
+  // 🚪 LOGOUT (added)
+  async logout(accessToken?: string): Promise<void> {
+    try {
+      // 1️⃣ Attempt global sign-out (if we have accessToken)
+      if (accessToken) {
+        const command = new GlobalSignOutCommand({
+          AccessToken: accessToken,
+        });
+        await this.client.send(command);
+      }
+
+      // 2️⃣ Clear stored tokens from localStorage / sessionStorage
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('id_token');
+      localStorage.removeItem('refresh_token');
+      localStorage.removeItem('user');
+      sessionStorage.clear();
+
+      // 3️⃣ Optionally redirect to home/login
+      window.location.href = '/';
+      console.log('User logged out successfully.');
+    } catch (error) {
+      console.error('Error during logout:', error);
+      // Always clear local state even if Cognito call fails
+      localStorage.clear();
+      sessionStorage.clear();
+      window.location.href = '/home';
+    }
   }
 }

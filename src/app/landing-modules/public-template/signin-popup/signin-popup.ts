@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Cognito } from '../../../services/cognito.service';
 import { TokenManagerService } from '../../../services/token-manager';
 import { AuthService } from '../../../core/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signin-popup',
@@ -39,7 +40,8 @@ export class SigninPopup implements OnInit {
     private cognitoService: Cognito,
     private tokenManager: TokenManagerService,
     private authService: AuthService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router : Router
   ) {}
 
   ngOnInit(): void {
@@ -119,6 +121,52 @@ export class SigninPopup implements OnInit {
       }
 
       this.signin.emit(result);
+      // Determine redirect path by user type or role
+    const currentUser = this.authService.getUser() || result.apiResult?.item || {};
+    const role = currentUser.user_type || currentUser.role || currentUser.userRole || '';
+
+    // Map roles -> route segments (adjust keys as your backend returns them)
+    const roleToRoute: Record<string, string> = {
+       'admin': 'admin',
+      'property-owner': 'property-owner',
+      'property_owner': 'property-owner',
+      'propertyOwner': 'property-owner',
+      'busines-owner': 'busines-owner',
+      'business-owner': 'busines-owner',
+      'business_owner': 'busines-owner',
+      'community-member': 'community-member',
+      'community_member': 'community-member',
+      'communityMember': 'community-member',
+      'yoga-studio': 'yoga-studio',
+      'yoga_studio': 'yoga-studio',
+      'yogaStudio': 'yoga-studio',
+      'scout': 'scout',
+      'scouter': 'scout',
+     
+    };
+
+    // Normalize role key (lowercase, trim)
+    const normalizedRole = (role || '').toString().trim().toLowerCase();
+    let targetSegment = roleToRoute[normalizedRole];
+    console.log('Rote',targetSegment);
+    
+    // If not found, try to infer from user.roles array (if you have multi-roles)
+    if (!targetSegment && Array.isArray(currentUser.roles)) {
+      for (const r of currentUser.roles) {
+        const key = (r || '').toString().trim().toLowerCase();
+        if (roleToRoute[key]) {
+          targetSegment = roleToRoute[key];
+          break;
+        }
+      }
+    }
+
+    // fallback default
+    if (!targetSegment) targetSegment = 'property-owner';
+
+    // Navigate to protected area. Adjust '/protected' if your parent route differs
+    await this.router.navigate(['/landing', targetSegment]);
+
       this.closePopup();
     } catch (error: any) {
       this.isLoadingSignIn = false;

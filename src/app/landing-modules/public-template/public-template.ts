@@ -1,69 +1,89 @@
-import { Component, inject } from '@angular/core';
+// public-template.component.ts
+import { Component, inject, OnInit } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-public-template',
-  standalone:false,
   templateUrl: './public-template.html',
-  styleUrl: './public-template.scss'
-  
+  // keep styles in a separate scss file if you want; Tailwind handles most styling
+  styleUrls: ['./public-template.scss'],
+  standalone: false,
 })
-export class PublicTemplate {
-showConfirmUserForm:boolean = false;
-returnSignupData(event: any) {
-    console.log('---->',event);
-    this.showSignupPopup = false; 
-    this.showConfirmUserForm = true;
+export class PublicTemplate implements OnInit {
+  mobileMenuOpen = false;
+  showSignupPopup = false;
+  showLoginForm = false;
+  showConfirmUserForm = false;
 
-}
-returnConfirmData(event: any) {
-    console.log('---->',event);
-  
-    this.showConfirmUserForm = false; 
-
-}
-showMobileMenu: boolean = false;
   private readonly oidcSecurityService = inject(OidcSecurityService);
+  private readonly router = inject(Router);
 
   configuration$ = this.oidcSecurityService.getConfiguration();
-
   userData$ = this.oidcSecurityService.userData$;
 
   isAuthenticated = false;
-  showLoginForm: boolean = false;
 
   ngOnInit(): void {
+    // keep template mobile menu state tidy on route change
+    this.router.events.pipe(filter((e) => e instanceof NavigationEnd)).subscribe(() => {
+      this.mobileMenuOpen = false;
+    });
+
+    // subscribe auth state
     this.oidcSecurityService.isAuthenticated$.subscribe(
       ({ isAuthenticated }: { isAuthenticated: boolean }) => {
         this.isAuthenticated = isAuthenticated;
-
-        console.warn('authenticated: ', isAuthenticated);
+        // console.debug('authenticated: ', isAuthenticated);
       }
     );
   }
-   login(): void {
+
+  toggleMobileMenu() {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  closeMobileMenu() {
+    this.mobileMenuOpen = false;
+  }
+
+  // Trigger OIDC authorize flow
+  login(): void {
     this.oidcSecurityService.authorize();
   }
-    showSignupPopup: boolean = false;
 
-  handleSignup(event:any): void {
-    this.showSignupPopup = !this.showSignupPopup;
-   let formData = {}
-   console.log('Signup data received in parent:', event);
-    
+  // callback used by signup popup
+  returnSignupData(event: any) {
+    console.log('Signup returned to parent:', event);
+    this.showSignupPopup = false;
+    this.showConfirmUserForm = true;
   }
-  handleLogin(){
+
+  returnConfirmData(event: any) {
+    console.log('Confirm returned to parent:', event);
+    this.showConfirmUserForm = false;
+  }
+
+  // toggles signup popup when called from header button
+  handleSignup(event: any) {
+    // If event is emitted from a child popup keep logic; if called from header button it will be undefined
+    this.showSignupPopup = !this.showSignupPopup;
+    console.log('handleSignup called, payload:', event);
+  }
+
+  // toggles login popup
+  handleLogin() {
     this.showLoginForm = !this.showLoginForm;
   }
+
+  // logout: clear client storage and redirect to homepage (adjust as needed)
   logout(): void {
-  // Clear session storage
-  if (window.sessionStorage) {
-    window.sessionStorage.clear();
-    window.localStorage.clear();
+    if (window.sessionStorage) {
+      window.sessionStorage.clear();
+      window.localStorage.clear();
+    }
+    // If you have a federated logout URL use that. For now redirect to home:
+    window.location.href = '/';
   }
-
-  // window.location.href = "https://eu-north-1m6dp7rfac.auth.eu-north-1.amazoncognito.com/logout?client_id=1e3316k9pmltncrvkgps2is19m&logout_uri=http://localhost:4200";
-  window.location.href = "http://localhost:4200";
-
-}
 }

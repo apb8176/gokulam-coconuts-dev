@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CryptoHelper } from '../core/utils/crypto.helper';
+import { Cognito } from './cognito.service';
 
 export type Persona =
   | 'property-owner'
@@ -19,7 +20,7 @@ export interface AppUser {
 export class AuthService {
   private storageKey = 'user';
 
-  constructor() {}
+  constructor(private cognito: Cognito) {}
 
   // Save encrypted user data to localStorage
   saveUser(user: AppUser) {
@@ -45,6 +46,11 @@ export class AuthService {
   clearUser() {
     localStorage.removeItem(this.storageKey);
   }
+   async logout() {
+    const accessToken = localStorage.getItem('access_token');
+    await this.cognito.logout(accessToken || undefined);
+  }
+
 
   // Persona root for redirect
   getPersonaRoot(user: AppUser | null): string {

@@ -55,5 +55,13 @@ export class AdminApiService {
    
  
   }
+  postRespons(propertyData: any): Observable<any> {
+    const token = this.tokenManager.getIdToken();
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json',Authorization: `Bearer ${token}` });
+   let url = this.apiUrl + 'admin/approval';
+    
+    
+    return this.http.post(url, propertyData, { headers });
+  }
 
 }

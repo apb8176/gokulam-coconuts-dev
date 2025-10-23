@@ -14,22 +14,22 @@ structuredClone(arg0: any) {
 
 }
   // sample user JSON
-  user:any = {
-    firstName: 'Neeraj',
-    lastName: 'R',
-    phoneNumber: '+91 98765 43210',
-    whatsappNumber: '+91 98765 43210',
-    email: 'neeraj@example.com',
-    website: 'https://example.com',
-    dob: '1990-07-15',
-    gender: 'male', // 'male' | 'female' | 'other'
-    localAddress: '12 Palm Street, Mysore, Karnataka',
-    permanentAddress: '12 Palm Street, Mysore, Karnataka',
-    pinCode: '570001',
-    citizenship: 'Indian', // or 'Other'
-    citizenshipOther: '',
-    designation: 'Property Owner'
-  };
+user :any= {
+  firstName: 'Ananya',
+  lastName: 'Iyer',
+  phoneNumber: '+91 99458 32107',
+  whatsappNumber: '+91 99458 32107',
+  email: 'ananya@gokulamyoga.com',
+  website: 'https://gokulamyoga.com',
+  dob: '1988-05-22',
+  gender: 'female', // 'male' | 'female' | 'other'
+  localAddress: '45 Temple Street, Gokulam, Mysore, Karnataka',
+  permanentAddress: '45 Temple Street, Gokulam, Mysore, Karnataka',
+  pinCode: '570002',
+  citizenship: 'Indian',
+  citizenshipOther: '',
+  designation: 'Yoga Studio Owner & Instructor'
+};
 
   // copy to revert on cancel
 original:any;;

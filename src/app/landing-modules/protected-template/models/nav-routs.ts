@@ -101,12 +101,17 @@ export const navRoutes = [
             },
             {
                 navItemLabel: 'Services',
-                navItemRoute: 'bo-post-list',
+                navItemRoute: '/landing/community-member/section',
                 navItemIcon: 'pi pi-list'
             },
             {
                 navItemLabel: 'Benefits',
                 navItemRoute: 'bo-post-details',
+                navItemIcon: 'pi pi-info-circle'
+            },            
+            {
+                navItemLabel: 'Logout',
+                navItemRoute: 'busines-owner-post-details',
                 navItemIcon: 'pi pi-info-circle'
             }
         ]
@@ -128,6 +133,11 @@ export const navRoutes = [
                 navItemLabel: 'Benefits',
                 navItemRoute: 'bo-post-details',
                 navItemIcon: 'pi pi-info-circle'
+            },            
+            {
+                navItemLabel: 'Logout',
+                navItemRoute: 'busines-owner-post-details',
+                navItemIcon: 'pi pi-info-circle'
             }
         ]
     },
@@ -143,6 +153,12 @@ export const navRoutes = [
                 navItemLabel: 'Requests',
                 navItemRoute: '/landing/admin/requests',
                 navItemIcon: 'pi pi-home'
+            },
+            
+            {
+                navItemLabel: 'Logout',
+                navItemRoute: 'busines-owner-post-details',
+                navItemIcon: 'pi pi-info-circle'
             }
         ]
     }

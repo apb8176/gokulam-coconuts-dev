@@ -69,7 +69,7 @@ const routes: Routes = [
   {
     path: '',
     component: ProtectedTemplate,
-    canActivateChild: [RoleGuard],
+    // canActivateChild: [RoleGuard],
     children: [
       { path: '', redirectTo: 'property-owner', pathMatch: 'full' },
       {

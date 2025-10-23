@@ -18,4 +18,15 @@ export class ProtectedTemplate {
     console.log('selectedNavItem', this.selectedNavItem);
     
   }
+   toggleMobileMenu() {
+    this.showMobileMenu = !this.showMobileMenu;
+  }
+
+  closeMobileMenu() {
+    this.showMobileMenu = false;
+  }
+
+  trackByLabel(_: number, item: any) {
+    return item.navItemLabel;
+  }
 }

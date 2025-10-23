@@ -1,49 +1,105 @@
-<div class="flex flex-col min-h-screen">
-    <!-- Header -->
-  <header class="sticky z-50 bg-[#D4B04C] text-white top-0 px-8 py-2 flex justify-between items-center">
-    <!-- Logo -->
-    <div class="flex items-center space-x-2">
-      <div class="gap-4 flex items-center"><img width="60px" height="60px" src="'../../../../../assets/logo.png"><span class="font-semibold text-2xl">GOKULAM COCONUTS</span></div>
-    </div>
-    <!-- Nav -->
-    <nav class="space-x-8 hidden md:flex text-lg font-semibold text-slate-800 outline-none">
-            @for(item of selectedNavItem;track  item) {
-                <a [routerLink]="item.navItemRoute" class="hover:text-gray-300  outline-none" [routerLinkActive]="'text-white'">{{ item.navItemLabel }}</a>
+<!-- app.component.html -->
+<div class="flex flex-col min-h-screen bg-[#efead9]">
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-[#D4B04C] text-slate-900">
+    <div class="mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo + Brand -->
+        <a class="flex items-center gap-3" routerLink="/">
+          <img
+            src="assets/logo.png"
+            alt="Gokulam Coconuts logo"
+            class="w-10 h-10 sm:w-14 sm:h-14 object-contain rounded"
+            loading="lazy"
+          />
+          <span class="font-semibold text-lg sm:text-2xl text-white tracking-tight">
+            GOKULAM COCONUTS
+          </span>
+        </a>
 
-            }
-                
-            <!-- <a routerLink="/" class="hover:text-gray-300">Dashboard</a>
-            <a routerLink="/services" class="hover:text-gray-300">Account</a>
-            <a routerLink="/about" class="hover:text-gray-300">Posts</a>
-            <a routerLink="/login" class="hover:text-gray-300">Logout</a> -->
+        <!-- Desktop nav -->
+        <nav class="hidden md:flex md:items-center md:space-x-6" aria-label="Primary">
+          <a
+            *ngFor="let item of selectedNavItem; trackBy: trackByLabel"
+            [routerLink]="item.navItemRoute"
+            routerLinkActive="text-white"
+            [routerLinkActiveOptions]="{ exact: item.exact || false }"
+            class="text-slate-800 hover:text-white text-sm sm:text-base font-semibold px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-white/60"
+            >{{ item.navItemLabel }}</a
+          >
         </nav>
-        <!-- Mobile Menu -->
 
-        @if(showMobileMenu) {
-        <div class="md:hidden flex flex-col  text-white px-8 py-4 space-y-2">
-             @for(item of selectedNavItem;track  item) {
-                <a [routerLink]="item.navItemRoute" class="hover:text-gray-300  outline-none" [routerLinkActive]="'text-white'">{{ item.navItemLabel }}</a>
+        <!-- Actions: CTA / placeholder when needed -->
+        <div class="flex items-center space-x-3 md:hidden">
+          <!-- Example CTA (optional) -->
+          <!-- <a
+            routerLink="/contact"
+            class="hidden md:inline-block bg-white text-[#D4B04C] font-semibold px-4 py-1.5 rounded shadow-sm hover:brightness-95 focus:outline-none focus:ring-2 focus:ring-white/60"
+            >Contact</a
+          > -->
 
-            }
-            <!-- <a routerLink="/" class="hover:text-gray-300">Dashboard</a>
-            <a routerLink="/services" class="hover:text-gray-300">Account</a>
-            <a routerLink="/about" class="hover:text-gray-300">Posts</a>
-            <a routerLink="/login" class="hover:text-gray-300">Logout</a> -->
+          <!-- Mobile menu button -->
+          <button
+            (click)="toggleMobileMenu()"
+            aria-controls="mobile-menu"
+            [attr.aria-expanded]="showMobileMenu"
+            class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/60"
+            aria-label="Toggle navigation"
+          >
+            <svg *ngIf="!showMobileMenu" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+            <svg *ngIf="showMobileMenu" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
         </div>
-        }
-        <button class="md:hidden text-white" (click)="showMobileMenu = !showMobileMenu">
-            ☰
-        </button>
+      </div>
+    </div>
 
-    </header>
+    <!-- Mobile nav (collapsible) -->
+    <div
+      id="mobile-menu"
+      *ngIf="showMobileMenu"
+      class="md:hidden bg-[#D4B04C] border-t border-white/10"
+      role="menu"
+      aria-label="Mobile Primary"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex flex-col space-y-2">
+          <a
+            *ngFor="let item of selectedNavItem; trackBy: trackByLabel"
+            [routerLink]="item.navItemRoute"
+            (click)="closeMobileMenu()"
+            routerLinkActive="text-white"
+            class="block text-white/90 font-semibold px-3 py-2 rounded hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/60"
+            >{{ item.navItemLabel }}</a
+          >
+          <!-- Optional CTA on mobile -->
+          <!-- <a
+            routerLink="/contact"
+            (click)="closeMobileMenu()"
+            class="block text-[#D4B04C] bg-white font-semibold px-3 py-2 rounded text-center"
+            >Contact</a
+          > -->
+        </div>
+      </div>
+    </div>
+  </header>
 
-    <!-- Main -->
-    <main class="flex-grow bg-[#efead9]">
-        <router-outlet></router-outlet>
-    </main>
+  <!-- Main -->
+  <main class="flex-grow">
+    <div >
+      <router-outlet></router-outlet>
+    </div>
+  </main>
 
-    <!-- Footer -->
-    <footer class="bg-[#D4B04C] text-white text-center py-4">
-       © 2025 GOKULAM COCONUTS INTERNATIONAL BUSINESS COMMUNITY. All Rights Reserved.
-    </footer>
+  <!-- Footer -->
+  <footer class="bg-[#D4B04C] text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-sm">
+      © 2025 GOKULAM COCONUTS INTERNATIONAL BUSINESS COMMUNITY. All Rights Reserved.
+    </div>
+  </footer>
 </div>

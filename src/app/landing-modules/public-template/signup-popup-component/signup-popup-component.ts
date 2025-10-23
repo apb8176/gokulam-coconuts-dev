@@ -21,10 +21,9 @@ export class SignupPopupComponent implements OnInit {
   roles: any = [
     { key: 'property-owner', value: 'Property Owner' },
     { key: 'business-owner', value: 'Business Owner' },
-    { key: 'yoga-studio-owner', value: 'Yoga Studio Owner' },
+    { key: 'yoga-studio', value: 'Yoga Studio Owner' },
     { key: 'community-member', value: 'Community Member' },
-    { key: 'scouter', value: 'Scouter' },
-    { key: 'admin', value: 'Admin' }
+    { key: 'scouter', value: 'Scouter' }
   ];
 
   errorMessage: string = '';
@@ -66,7 +65,7 @@ export class SignupPopupComponent implements OnInit {
 
   private amountForRole(role: string): number /* paise */ {
     // Return amount in paise. ₹1 = 100 paise
-    const paidRoles = ['property-owner', 'business-owner', 'yoga-studio-owner'];
+    const paidRoles = ['property-owner', 'business-owner', 'yoga-studio'];
     if (paidRoles.includes(role)) return 100; // ₹1 -> 100 paise
     return 0; // free for others
   }

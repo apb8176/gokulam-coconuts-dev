@@ -70,22 +70,23 @@ export class YsDetails {
 
   loadDefaultsForPreview() {
     // optional initial sample; remove if not required
-    this.previewData = {
-      name: 'Local Bakers & Co.',
-      type: 'product',
-      tagline: 'Fresh breads & handcrafted cakes',
-      details: 'We bake fresh bread daily and offer custom cakes for events. We also supply to local cafes.',
-      address: '12 Market Road, Mysore, Karnataka',
-      googleMapUrl: '',
-      gstin: '29ABCDE1234F1Z5',
-      owner: 'Ravi Kumar',
-      phone: '+91 98765 43210',
-      email: 'contact@localbakers.com',
-      photos: [],
-      tags: ['Bakery', 'Cakes'],
-      amenitiesSelected: ['Parking'],
-      postedOn: this.postedOn
-    };
+this.previewData = {
+  name: 'Gokulam Yoga Studio',
+  type: 'service',
+  tagline: 'Find balance, strength, and peace within',
+  details: 'At Gokulam Yoga Studio, we offer daily yoga classes for all levels — from beginners to advanced practitioners. Our certified instructors guide you through traditional Hatha, Vinyasa, and Ashtanga yoga sessions in a calm, welcoming environment. We also host weekend meditation workshops and wellness retreats.',
+  address: '45 Temple Street, Gokulam, Mysore, Karnataka',
+  googleMapUrl: '',
+  gstin: '29YOGAS1234Z5',
+  owner: 'Ananya Iyer',
+  phone: '+91 99458 32107',
+  email: 'info@gokulamyoga.com',
+  photos: [],
+  tags: ['Yoga', 'Meditation', 'Wellness'],
+  amenitiesSelected: ['Parking', 'Changing Rooms', 'Yoga Mats Provided', 'Outdoor Space'],
+  postedOn: this.postedOn
+};
+
 
     // populate form from preview default (optional)
     this.businessForm.patchValue({

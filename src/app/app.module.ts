@@ -11,9 +11,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { TokenManagerService } from './services/token-manager';
 import { MatDialogModule } from '@angular/material/dialog';
 import { NotificationService } from './services/notification-service';
+import { AppDialogData } from './pages/app-dialog-data/app-dialog-data';
 @NgModule({
     imports: [
-    FormsModule, BrowserModule, ReactiveFormsModule,MatDialogModule,
+    FormsModule, BrowserModule, ReactiveFormsModule,MatDialogModule,FormsModule,
     PublicTemplateModule,ProtectedTemplateModule,  AuthModule.forRoot({
       config: {
         authority: 'https://cognito-idp.eu-north-1.amazonaws.com/eu-north-1_ddXPh6PWc',
@@ -24,10 +25,11 @@ import { NotificationService } from './services/notification-service';
       },
     }),
   ],
-  exports: [AuthModule,FormsModule,  ReactiveFormsModule ,MatDialogModule],
+  exports: [AuthModule,FormsModule, ReactiveFormsModule ,MatDialogModule],
   
  declarations: [
-    EntityDetails
+    EntityDetails,
+    AppDialogData
   ], 
   providers: [ NotificationService,{
       provide: HTTP_INTERCEPTORS,
