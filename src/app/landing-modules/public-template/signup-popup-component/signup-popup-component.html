@@ -117,17 +117,17 @@
       <div class="mt-4">
     <button
       type="submit"
-      class="px-4 py-2 rounded bg-primary text-white disabled:opacity-60"
+      class="px-4 py-2 rounded bg-[#115930] flex justify-end text-white disabled:opacity-60"
       [disabled]="loading"
     >
-      <ng-container *ngIf="!loading">Sign up</ng-container>
-      <ng-container *ngIf="loading">
+      <span *ngIf="!loading">Sign up</span>
+      <span *ngIf="loading">
         <!-- simple spinner -->
         <svg class="inline-block w-4 h-4 animate-spin" viewBox="0 0 24 24">
           <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"></circle>
         </svg>
         Processing...
-      </ng-container>
+      </span>
     </button>
   </div>
     </form>

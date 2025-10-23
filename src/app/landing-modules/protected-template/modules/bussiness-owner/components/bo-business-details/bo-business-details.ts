@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { BoApiService } from '../../services/bo-api-service';
 @Component({
   selector: 'app-bo-business-details',
   standalone: false,
@@ -8,6 +9,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   styleUrl: './bo-business-details.scss'
 })
 export class BoBusinessDetails {
+
 
   businessForm: FormGroup;
   isEditMode = true;
@@ -42,7 +44,7 @@ export class BoBusinessDetails {
     postedOn: this.postedOn
   };
 
-  constructor(private fb: FormBuilder, private sanitizer: DomSanitizer) {
+  constructor(private fb: FormBuilder, private sanitizer: DomSanitizer, private boApiService : BoApiService, private cdr: ChangeDetectorRef) {
     this.businessForm = this.fb.group({
       name: ['', [Validators.required]],
       type: ['', [Validators.required]],
@@ -62,6 +64,9 @@ export class BoBusinessDetails {
 
     // init previewData if you want some defaults
     this.loadDefaultsForPreview();
+  }
+  ngOnInit(){
+    this.getData();
   }
 
   get f():any {
@@ -178,10 +183,42 @@ export class BoBusinessDetails {
       amenitiesSelected: this.getSelectedAmenities(values),
       postedOn: this.postedOn
     };
-
+    this.boApiService.postBusinessDetails(this.previewData).subscribe({
+      next: (response) => {
+        console.log('✅ Property added successfully:', response);
+      },
+      error: (error) => {
+        console.error('❌ Error adding property:', error);
+      },
+    });
+  
     // Switch to preview
     this.isEditMode = false;
     this.isPreviewOnly = true;
+  }
+  getData(){
+      this.boApiService.getBusinessDetails().subscribe({
+      next: (response) => {
+        console.log('✅ Property added successfully:', response);
+        this.previewData = response.data;
+        this.businessForm.patchValue({
+      name: this.previewData.name,
+      type: this.previewData.type,
+      tagline: this.previewData.tagline,
+      details: this.previewData.details,
+      address: this.previewData.address,
+      gstin: this.previewData.gstin,
+      owner: this.previewData.owner,
+      phone: this.previewData.phone,
+      email: this.previewData.email
+    });
+    this.tags = [...this.previewData.tags];
+    this.cdr.detectChanges()
+      },
+      error: (error) => {
+        console.error('❌ Error adding property:', error);
+      },
+    });
   }
 
   getSelectedAmenities(values: any): string[] {
