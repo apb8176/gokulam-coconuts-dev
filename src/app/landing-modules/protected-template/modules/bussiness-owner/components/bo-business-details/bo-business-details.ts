@@ -6,13 +6,11 @@ import { BoApiService } from '../../services/bo-api-service';
   selector: 'app-bo-business-details',
   standalone: false,
   templateUrl: './bo-business-details.html',
-  styleUrl: './bo-business-details.scss'
+  styleUrl: './bo-business-details.scss',
 })
 export class BoBusinessDetails {
-
-
   businessForm: FormGroup;
-  isEditMode = true;
+  isEditMode = false;
   isPreviewOnly = false;
 
   // local previews
@@ -41,10 +39,16 @@ export class BoBusinessDetails {
     photos: [],
     tags: [],
     amenitiesSelected: [],
-    postedOn: this.postedOn
+    postedOn: this.postedOn,
   };
+  businessId: any = '';
 
-  constructor(private fb: FormBuilder, private sanitizer: DomSanitizer, private boApiService : BoApiService, private cdr: ChangeDetectorRef) {
+  constructor(
+    private fb: FormBuilder,
+    private sanitizer: DomSanitizer,
+    private boApiService: BoApiService,
+    private cdr: ChangeDetectorRef
+  ) {
     this.businessForm = this.fb.group({
       name: ['', [Validators.required]],
       type: ['', [Validators.required]],
@@ -59,37 +63,37 @@ export class BoBusinessDetails {
       amenities_parking: [false],
       amenities_wifi: [false],
       amenities_delivery: [false],
-      amenities_dinein: [false]
+      amenities_dinein: [false],
     });
 
     // init previewData if you want some defaults
     this.loadDefaultsForPreview();
   }
-  ngOnInit(){
+  ngOnInit() {
     this.getData();
   }
 
-  get f():any {
+  get f(): any {
     return this.businessForm.controls;
   }
 
   loadDefaultsForPreview() {
-    // optional initial sample; remove if not required
+  
     this.previewData = {
-      name: 'Local Bakers & Co.',
-      type: 'product',
-      tagline: 'Fresh breads & handcrafted cakes',
-      details: 'We bake fresh bread daily and offer custom cakes for events. We also supply to local cafes.',
-      address: '12 Market Road, Mysore, Karnataka',
+      name: '',
+      type: '',
+      tagline: '',
+      details:'',
+      address: '',
       googleMapUrl: '',
-      gstin: '29ABCDE1234F1Z5',
-      owner: 'Ravi Kumar',
-      phone: '+91 98765 43210',
-      email: 'contact@localbakers.com',
+      gstin: '',
+      owner: '',
+      phone: '',
+      email: '',
       photos: [],
-      tags: ['Bakery', 'Cakes'],
-      amenitiesSelected: ['Parking'],
-      postedOn: this.postedOn
+      tags: [],
+      amenitiesSelected: [],
+      postedOn: this.postedOn,
     };
 
     // populate form from preview default (optional)
@@ -102,7 +106,7 @@ export class BoBusinessDetails {
       gstin: this.previewData.gstin,
       owner: this.previewData.owner,
       phone: this.previewData.phone,
-      email: this.previewData.email
+      email: this.previewData.email,
     });
     this.tags = [...this.previewData.tags];
   }
@@ -167,7 +171,7 @@ export class BoBusinessDetails {
 
     const values = this.businessForm.value;
     // Build preview data
-    this.previewData = {
+    let inputData :any = {
       name: values.name,
       type: values.type,
       tagline: values.tagline,
@@ -181,39 +185,54 @@ export class BoBusinessDetails {
       photos: this.photosPreview,
       tags: this.tags,
       amenitiesSelected: this.getSelectedAmenities(values),
-      postedOn: this.postedOn
+      postedOn: this.postedOn,
     };
-    this.boApiService.postBusinessDetails(this.previewData).subscribe({
+    inputData['businessId'] = this.businessId;
+    if(this.previewData?.isComplete){
+        this.boApiService.putBusinessDetails(inputData).subscribe({
       next: (response) => {
-        console.log('✅ Property added successfully:', response);
+        this.getData();
       },
       error: (error) => {
         console.error('❌ Error adding property:', error);
       },
     });
+    }
+    else{
+  this.boApiService.postBusinessDetails(inputData).subscribe({
+      next: (response) => {
+          this.getData();
+      },
+      error: (error) => {
+        console.error('❌ Error adding property:', error);
+      },
+    });
+    }
   
+
     // Switch to preview
     this.isEditMode = false;
     this.isPreviewOnly = true;
   }
-  getData(){
-      this.boApiService.getBusinessDetails().subscribe({
+  getData() {
+    this.boApiService.getBusinessDetails().subscribe({
       next: (response) => {
         console.log('✅ Property added successfully:', response);
         this.previewData = response.data;
+        this.businessId = response.data.businessId
         this.businessForm.patchValue({
-      name: this.previewData.name,
-      type: this.previewData.type,
-      tagline: this.previewData.tagline,
-      details: this.previewData.details,
-      address: this.previewData.address,
-      gstin: this.previewData.gstin,
-      owner: this.previewData.owner,
-      phone: this.previewData.phone,
-      email: this.previewData.email
-    });
-    this.tags = [...this.previewData.tags];
-    this.cdr.detectChanges()
+          name: this.previewData.name,
+          type: this.previewData.type,
+          tagline: this.previewData.tagline,
+          details: this.previewData.details,
+          address: this.previewData.address,
+          gstin: this.previewData.gstin,
+          owner: this.previewData.owner,
+          phone: this.previewData.phone,
+          email: this.previewData.email,
+        });
+        this.tags = [...this.previewData.tags];
+        this.cdr.detectChanges();
       },
       error: (error) => {
         console.error('❌ Error adding property:', error);
@@ -242,7 +261,7 @@ export class BoBusinessDetails {
       gstin: this.previewData.gstin,
       owner: this.previewData.owner,
       phone: this.previewData.phone,
-      email: this.previewData.email
+      email: this.previewData.email,
     });
 
     // set amenities checkboxes
@@ -250,7 +269,7 @@ export class BoBusinessDetails {
       amenities_parking: this.previewData.amenitiesSelected.includes('Parking'),
       amenities_wifi: this.previewData.amenitiesSelected.includes('WiFi'),
       amenities_delivery: this.previewData.amenitiesSelected.includes('Home Delivery'),
-      amenities_dinein: this.previewData.amenitiesSelected.includes('Dine-in / On-site')
+      amenities_dinein: this.previewData.amenitiesSelected.includes('Dine-in / On-site'),
     });
 
     // previews
@@ -258,7 +277,7 @@ export class BoBusinessDetails {
     this.photosPreview = [...this.previewData.photos];
     this.videoPreview = this.videoPreview;
 
-    this.tags = [...this.previewData.tags || []];
+    this.tags = [...(this.previewData.tags || [])];
 
     this.isEditMode = true;
     this.isPreviewOnly = false;
@@ -281,4 +300,3 @@ export class BoBusinessDetails {
     return this.sanitizer.bypassSecurityTrustResourceUrl(embed);
   }
 }
-

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Cognito } from '../../../services/cognito.service';
 import { PaymentService } from '../../../services/payment.service';
 import { HttpClient } from '@angular/common/http';
+import { NotificationService } from '../../../services/notification-service';
 
 declare const Razorpay: any; // loader will put this on window
 
@@ -37,7 +38,8 @@ export class SignupPopupComponent implements OnInit {
     private fb: FormBuilder,
     private cognitoService: Cognito,
     private paymentService: PaymentService,
-    private http: HttpClient
+    private http: HttpClient,
+     private notify: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -95,13 +97,17 @@ export class SignupPopupComponent implements OnInit {
       this.errorMessage = `Please provide valid: ${invalidFields.join(', ')}.`;
       return;
     }
-
+ const formValue = { ...this.signupForm.value };
     this.loading = true;
     try {
-      // 1) Signup with Cognito (existing flow)
-      const signupResult: any = await this.cognitoService.signUpUser(this.signupForm.value);
+      if (formValue.phoneNumber) {
+      formValue.phoneNumber = formValue.phoneNumber.startsWith('+91')
+        ? formValue.phoneNumber
+        : `+91${formValue.phoneNumber}`;
+    }
+      const signupResult: any = await this.cognitoService.signUpUser(formValue);
       console.log('Cognito signup success:', signupResult);
-
+      
       // Optionally: call backend to create user record now (if your backend needs it)
       // const createUserResp = await this.http.post('/api/users/create', { ... }).toPromise();
 
@@ -165,6 +171,8 @@ export class SignupPopupComponent implements OnInit {
               console.log('Payment verified (backend):', verifyResp);
               // Close popup or show success
               this.closePopup();
+               
+              
             } catch (verifyErr: any) {
               console.error('Payment verification failed:', verifyErr);
               this.errorMessage = 'Payment succeeded but verification failed. Contact support.';

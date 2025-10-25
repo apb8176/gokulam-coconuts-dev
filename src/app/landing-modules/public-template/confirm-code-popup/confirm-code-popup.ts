@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Cognito } from '../../../services/cognito.service';
+import { NotificationService } from '../../../services/notification-service';
 
 @Component({
   selector: 'app-confirm-code-popup',
@@ -16,7 +17,8 @@ export class ConfirmCodePopup implements OnInit {
   confirmForm!: FormGroup;
   errorMessage: string = '';
 
-  constructor(private fb: FormBuilder, private cognitoService: Cognito) {}
+  constructor(private fb: FormBuilder, private cognitoService: Cognito,
+       private notify: NotificationService) {}
 
   ngOnInit(): void {
     this.confirmForm = this.fb.group({
@@ -50,6 +52,10 @@ export class ConfirmCodePopup implements OnInit {
         console.log('Account confirmed:', result);
         this.confirm.emit(result);
         this.closePopup();
+     
+        this.notify.showSuccess('Signup Successfull', 'Signin with your credentials');
+       
+       
       } catch (error: any) {
         console.error('Confirmation failed:', error);
         this.errorMessage = error.message || 'Confirmation failed. Please try again.';

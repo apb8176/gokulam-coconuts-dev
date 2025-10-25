@@ -6,11 +6,9 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   selector: 'app-bo-event-list',
   standalone: false,
   templateUrl: './bo-event-list.html',
-  styleUrl: './bo-event-list.scss'
+  styleUrl: './bo-event-list.scss',
 })
 export class BoEventList {
-
-
   offerForm: FormGroup;
   showForm = false;
   editingIndex: number = -1;
@@ -29,8 +27,8 @@ export class BoEventList {
       value: '30% Off',
       status: 'active',
       conditions: 'Min purchase ₹200. Not combinable with other coupons.',
-      poster: null
-    }
+      poster: null,
+    },
   ];
 
   constructor(private fb: FormBuilder) {
@@ -44,13 +42,11 @@ export class BoEventList {
       value: [''],
       status: ['active'],
       conditions: [''],
-  requestToAdmin: [false]   
+      requestToAdmin: [false],
     });
-
-    
   }
 
-  get f() :any {
+  get f(): any {
     return this.offerForm.controls;
   }
 
@@ -116,7 +112,7 @@ export class BoEventList {
       value: o.value,
       status: o.status,
       conditions: o.conditions,
-  requestToAdmin: !!o.requestToAdmin 
+      requestToAdmin: !!o.requestToAdmin,
     });
     this.posterPreview = o.poster || null;
     this.editingIndex = index;
@@ -141,11 +137,9 @@ export class BoEventList {
       value: '',
       status: 'active',
       conditions: '',
-  requestToAdmin: false              // <-- reset default
-});
-this.posterPreview = null;
-this.editingIndex = -1;
-
- 
+      requestToAdmin: false, // <-- reset default
+    });
+    this.posterPreview = null;
+    this.editingIndex = -1;
   }
 }

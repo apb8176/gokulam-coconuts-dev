@@ -18,6 +18,14 @@ export class BoApiService {
     
     return this.http.post(url, businessData, { headers });
   }
+  putBusinessDetails(businessData: any): Observable<any> {
+    const token = this.tokenManager.getIdToken();
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json',Authorization: `Bearer ${token}` });
+    let url = this.apiUrl + 'business/update';
+    
+    
+    return this.http.put(url, businessData, { headers });
+  }
    getBusinessDetails(): Observable<any> {
      const token = this.tokenManager.getIdToken();
     const headers = new HttpHeaders({ 'Content-Type': 'application/json',Authorization: `Bearer ${token}` });

@@ -309,12 +309,27 @@ export class AllRequestsComponent implements OnInit {
     //   // clear cache so UI updates properly
     //   this.filteredItemsCache = null;
     // }
-    let inp={
+    let inp:any={
       "sourceTable":si._approval_index.sourceTable,
       "approval":status,
-      "propertyId":si._approval_index.itemId,
       "comment":this.comment()
     };
+    switch(si._approval_index.sourceTable){
+      case 'PropertyDetails':
+       inp["propertyId"]=si._approval_index.itemId;
+       break;
+      case 'BusinessOwnerDetails':
+        inp["itemId"]=si._approval_index.itemId;
+        break;
+      case 'YogaStudioDetails':
+        inp["yogaStudioId"]=si._approval_index.itemId;
+        break;
+      case 'Users':
+        inp["userId"]=si._approval_index.itemId;
+        break;
+      }
+    
+
     this.adminApiService.postRespons(inp).subscribe({
       next: (response: any) => {
         console.log('Table Data', response);

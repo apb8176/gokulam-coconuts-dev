@@ -2,13 +2,14 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminDashboard } from './components/admin-dashboard/admin-dashboard';
 import { AllRequestsComponent } from './components/all-requests-component/all-requests-component';
+import { AllUserData } from './components/all-user-data/all-user-data';
 
 const routes: Routes = [
   {
     path:'',pathMatch:'full',redirectTo:'dashboard'
   },
   {
-    path:'dashboard',component:AdminDashboard
+    path:'dashboard',component:AllUserData
   },
   {
     path:'requests',component:AllRequestsComponent
