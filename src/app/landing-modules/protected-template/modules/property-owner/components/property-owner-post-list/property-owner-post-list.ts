@@ -28,7 +28,9 @@ export class PropertyOwnerPostList {
   }
   postList: any = [];
   goToDetails(_t8: any) {
-    this.uploadService.setSelectedItem(_t8);
+    
+    let sItem = this.response.filter((item: any) => item.propertyId === _t8.id)[0];
+    this.uploadService.setSelectedItem(sItem);
     this.router.navigateByUrl('/landing/property-owner/details');
   }
   getPropertyList() {
@@ -39,6 +41,7 @@ export class PropertyOwnerPostList {
           return {
             propertyName: item.propertyName,
             status: item.status,
+            id: item.propertyId,
             postedOn: item.createdAt,
             location: item.address,
             description: item.details,

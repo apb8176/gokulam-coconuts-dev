@@ -320,6 +320,53 @@
             </div>
 
           </ng-container>
+          <!-- ---------- Pagination controls (paste after the ng-container loop) ---------- -->
+<div class="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+  <div class="flex items-center gap-3 text-sm text-[#8b8b93]">
+    <div *ngIf="loading" class="text-xs">Loading...</div>
+    <div *ngIf="!loading">
+      Showing page {{ pageNumber }} of {{ totalPages }} • {{ items.length }} items
+    </div>
+  </div>
+
+  <div class="flex items-center gap-2">
+    <button (click)="goToPrevious()"
+            [disabled]="pageNumber <= 1 || loading"
+            class="px-3 py-1 rounded-md text-sm disabled:opacity-50"
+            style="border:1px solid #e6e6e6; background:white; color:#0b0b0c;">
+      ← Prev
+    </button>
+
+    <div class="text-sm px-2">Page</div>
+    <div class="flex items-center gap-1">
+      <input type="number" min="1" [max]="totalPages" [(ngModel)]="pageNumber"
+             (keydown.enter)="loadPage(pageNumber)"
+             class="w-16 px-2 py-1 border rounded-md text-sm" style="border-color:#e6e6e6;" />
+      <button (click)="loadPage(pageNumber)" class="px-3 py-1 rounded-md text-sm"
+              style="border:1px solid #0b7a4a; background:#0b7a4a; color:#fff;">
+        Go
+      </button>
+    </div>
+
+    <button (click)="goToNext()"
+            [disabled]="pageNumber >= totalPages || loading"
+            class="px-3 py-1 rounded-md text-sm disabled:opacity-50"
+            style="border:1px solid #e6e6e6; background:white; color:#0b0b0c;">
+      Next →
+    </button>
+
+    <!-- page-size selector -->
+    <div class="ml-3 flex items-center gap-2">
+      <label class="text-xs" style="color:#8b8b93;">Per page</label>
+      <select [(ngModel)]="pageSize" (change)="changePageSize(pageSize)"
+              class="px-2 py-1 rounded-md border text-sm" style="border-color:#e6e6e6;">
+        <option *ngFor="let s of pageSizeOptions" [value]="s">{{ s }}</option>
+      </select>
+    </div>
+  </div>
+</div>
+<!-- ---------- end pagination controls ---------- -->
+
         </div>
       </main>
     </div>

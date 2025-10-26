@@ -18,27 +18,28 @@ export class PropertyOwnerPostDetails {
   videos: any = [];
   constructor(private propertyService: PoApi, private uploadService: MultipartUpload) {}
 
-  @Input() propertySelected: any = {
-    propertyName: 'Luxury 2BHK Apartment',
-    address: '123 Palm Street, Mysore, Karnataka',
-    googleMapUrl: 'https://maps.google.com/?q=123+Palm+Street+Mysore',
-    contact: {
-      owner: 'John Doe',
-      phone: '+91 98765 43210',
-      email: 'john@example.com',
-    },
-    type: 'Apartment',
-    details: '2BHK, 1200 sqft, Semi-Furnished',
-    facilities: ['Lift', '24x7 Water', 'Security', 'Parking', 'Power Backup'],
-    price: '₹ 25,000 / month',
-    purpose: 'Rent',
-    photos: [],
-    video: 'assets/ovt.mp4',
-    buildingAge: '5 years',
-    status: 'Available',
-    conditions: 'No pets allowed. 3-month deposit.',
-    postedOn: '2025-09-25',
-  };
+  @Input() propertySelected: any ;
+  // = {
+  //   propertyName: 'Luxury 2BHK Apartment',
+  //   address: '123 Palm Street, Mysore, Karnataka',
+  //   googleMapUrl: 'https://maps.google.com/?q=123+Palm+Street+Mysore',
+  //   contact: {
+  //     owner: 'John Doe',
+  //     phone: '+91 98765 43210',
+  //     email: 'john@example.com',
+  //   },
+  //   type: 'Apartment',
+  //   details: '2BHK, 1200 sqft, Semi-Furnished',
+  //   facilities: ['Lift', '24x7 Water', 'Security', 'Parking', 'Power Backup'],
+  //   price: '₹ 25,000 / month',
+  //   purpose: 'Rent',
+  //   photos: [],
+  //   video: 'assets/ovt.mp4',
+  //   buildingAge: '5 years',
+  //   status: 'Available',
+  //   conditions: 'No pets allowed. 3-month deposit.',
+  //   postedOn: '2025-09-25',
+  // };
 
   // normalized property.photos as PhotoItem[]
   property: any = {
@@ -93,7 +94,10 @@ export class PropertyOwnerPostDetails {
   // when component initializes, if propertySelected.photos contains legacy string URLs,
   // convert them into PhotoItem with no file (preview-only) so they still display.
   ngOnInit() {
-    this.propertySelected =   this.uploadService.selectedItem; 
+    console.log('this.uploadService.selectedItem',this.uploadService.selectedItem());
+    
+    this.propertySelected =this.uploadService.selectedItem(); 
+    this.propertys = this.propertySelected;
     this.loadSelectedPropertyToForm();
     console.log(this.propertySelected);
     
@@ -237,7 +241,7 @@ export class PropertyOwnerPostDetails {
   // Build FormData and send to API. Each photo is appended with its key.
   submitForm() {
     // Combine all property details into a single object (not FormData)
-    const payload = {
+    let payload :any = {
       propertyName: this.property.propertyName || '',
       address: this.property.address || '',
       googleMapUrl: this.property.googleMapUrl || '',
@@ -251,12 +255,14 @@ export class PropertyOwnerPostDetails {
       purpose: this.property.purpose || '',
       buildingAge: this.property.buildingAge || '',
       status: this.property.status || '',
-      photos: this.property.photos[0],
-      videos: this.videos
+      photos: this.property.photos[0]
       // Uncomment if needed later
       // conditions: this.property.conditions || '',
       // postedOn: this.property.postedOn || ''
     };
+    if(this.property.videos && this.property.videos.length > 0){
+      payload['videos']= this.videos;
+    }
 
     console.log('Payload:', payload);
 

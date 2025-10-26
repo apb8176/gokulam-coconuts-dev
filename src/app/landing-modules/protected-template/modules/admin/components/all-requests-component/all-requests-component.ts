@@ -1,5 +1,5 @@
 // File: src/app/all-requests/all-requests.component.ts
-import { Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
 import { AdminApiService } from '../../services/admin-api';
 
 export type PendingItem = {
@@ -43,9 +43,18 @@ export type PendingItem = {
   templateUrl: './all-requests-component.html', // <- corrected file name
 })
 export class AllRequestsComponent implements OnInit {
-  constructor(private adminApiService: AdminApiService) {}
+  pageNumber = 1;
+  pageSize = 15;
+  totalPages = 1;
+  nextCursor: string | null = null;
+  loading = false;
+
+  // page size options for UI
+  pageSizeOptions = [5,10, 15, 25, 50];
+  constructor(private adminApiService: AdminApiService, private cdr : ChangeDetectorRef) {}
 
   ngOnInit() {
+    this.loadPage(1);
     this.adminApiService.getRequest().subscribe({
       next: (response: any) => {
         console.log('Table Data', response);
@@ -56,6 +65,8 @@ export class AllRequestsComponent implements OnInit {
          
           this.filteredItemsCache = null; // clear any cache
            const y = this.filteredItems;
+           this.loading= false;
+           this.cdr.detectChanges();
         }
       },
       error: (error: any) => {
@@ -64,26 +75,59 @@ export class AllRequestsComponent implements OnInit {
     });
   }
 
-  postResponse(data:any){
-    let inp={
-    "sourceTable":"PropertyDetails",
-    "approval":"approved",
-    "propertyId":"006c768a-95a0-47a8-a1f4-9fd42fd9f86d"
-    };
-    this.adminApiService.postRespons(inp).subscribe({
+  postResponse(data: any) {
+    // if your existing logic differs keep it but ensure you call loadPage on success
+    this.adminApiService.postRespons(data).subscribe({
       next: (response: any) => {
-        console.log('Table Data', response);
-        if (response && response.items && response.items.length) {
-          // normalize each incoming item to the shape template expects
-          this.items = response.items.map((it: any) => this.normalizeItem(it));
-          // if there are mock items earlier, we replace with API items
-         
-          this.filteredItemsCache = null; // clear any cache
-           const y = this.filteredItems;
-        }
+        console.log('Post response', response);
+        // reload current page to reflect changes
+        this.loadPage(this.pageNumber, this.nextCursor);
       },
       error: (error: any) => {
+        console.error('❌ Error posting response:', error);
+      }
+    });
+  }
+
+loadPage(page: number = 1, cursor: string | null = null) {
+    this.loading = true;
+    this.pageNumber = page;
+    // pass pagination and filter params to API - adapt keys if your AdminApiService expects different names
+    const params: any = {
+      page_number: this.pageNumber,
+      page_size: this.pageSize,
+      nextCursor: cursor,
+    };
+    if (cursor) params.cursor = cursor;
+    // if you want to send explicit filter params, include them:
+    if (this.selectedCategory) params.category = this.selectedCategory;
+    if (this.selectedUserType) params.userType = this.selectedUserType;
+
+    this.adminApiService.getRequest(params).subscribe({
+      next: (response: any) => {
+        // API response expected shape:
+        // { items: [...], next_cursor: string|null, page_number: number, page_size: number, total_pages: number }
+        this.loading = false;
+        if (response && Array.isArray(response.items)) {
+          this.items = response.items.map((it: any) => this.normalizeItem(it));
+        } else {
+          this.items = [];
+        }
+
+        // update pagination state defensively
+        this.nextCursor = response.next_cursor ?? null;
+        this.pageNumber = response.page_number ?? this.pageNumber;
+        this.pageSize = response.page_size ?? this.pageSize;
+        this.totalPages = response.total_pages ?? 1;
+
+        this.filteredItemsCache = null; // ensure UI re-evaluates
+        this.cdr.detectChanges();
+      },
+
+      error: (error: any) => {
+        this.loading = false;
         console.error('❌ Error fetching requests:', error);
+         this.cdr.detectChanges();
       },
     });
   }
@@ -109,12 +153,11 @@ export class AllRequestsComponent implements OnInit {
   private filteredItemsCache: any| null = null;
 
   applyFilters() {
-    // If admin clicked Apply — we use selectedCategory and selectedUserType
-    // Also set activeCategory signal for sidebar highlighting
     const cat = this.selectedCategory || 'all';
     this.activeCategory.set(cat as any);
-    // clear possible cache so getter recomputes
     this.filteredItemsCache = null;
+    // reset to first page when filters change
+    this.loadPage(1, null);
   }
 
   // --- signals for UI state ---
@@ -298,54 +341,58 @@ export class AllRequestsComponent implements OnInit {
     const status =
       this.responseType() === 'accept' ? 'approved' : this.responseType() === 'reject' ? 'rejected' : 'custom';
 
-    // update the item in local list (mutate)
-    
-    // if (idx > -1) {
-    //   this.items[idx] = {
-    //     ...this.items[idx],
-    //     adminStatus: status as PendingItem['adminStatus'],
-    //     adminComment: this.comment() ?? null,
-    //   };
-    //   // clear cache so UI updates properly
-    //   this.filteredItemsCache = null;
-    // }
-    let inp:any={
-      "sourceTable":si._approval_index.sourceTable,
-      "approval":status,
-      "comment":this.comment()
+    let inp: any = {
+      sourceTable: si._approval_index.sourceTable,
+      approval: status,
+      itemId : si._approval_index.itemId,
+      userId : si.userId,
+      comment: this.comment()
     };
-    switch(si._approval_index.sourceTable){
-      case 'PropertyDetails':
-       inp["propertyId"]=si._approval_index.itemId;
-       break;
-      case 'BusinessOwnerDetails':
-        inp["itemId"]=si._approval_index.itemId;
-        break;
-      case 'YogaStudioDetails':
-        inp["yogaStudioId"]=si._approval_index.itemId;
-        break;
-      case 'Users':
-        inp["userId"]=si._approval_index.itemId;
-        break;
-      }
-    
+
+    // switch (si._approval_index.sourceTable) {
+    //   case 'PropertyDetails':
+    //     inp['propertyId'] = si._approval_index.itemId;
+    //     inp['userId'] = si._approval_index.propertyUserId;
+    //     break;
+    //   case 'BusinessOwnerDetails':
+    //     inp['itemId'] = si._approval_index.itemId;
+    //      inp['userId'] = si._approval_index.bussinessUserId;
+    //     break;
+    //   case 'YogaStudioDetails':
+    //     inp['yogaStudioId'] = si._approval_index.itemId;
+    //      inp['userId'] = si._approval_index.studioUserId;
+    //     break;
+    //   case 'Users':
+    //     inp['userId'] = si._approval_index.itemId;
+    //     break;
+    // }
 
     this.adminApiService.postRespons(inp).subscribe({
       next: (response: any) => {
-        console.log('Table Data', response);
-       
-         this.closeModal();
+        // close modal and refresh current page
+        this.closeModal();
+        this.loadPage(this.pageNumber, this.nextCursor);
       },
       error: (error: any) => {
-         this.closeModal();
-        console.error('❌ Error fetching requests:', error);
+        this.closeModal();
+        console.error('❌ Error posting response:', error);
       },
     });
+  }
+  goToPrevious() {
+    if (this.pageNumber > 1) this.loadPage(this.pageNumber - 1);
+  }
 
-    // TODO: persist to backend. If your AdminApiService exposes an endpoint to update approval,
-    // call it here, e.g.:
-    // this.adminApiService.respondToRequest({ id: si.id, status, comment: this.comment() }).subscribe(...)
+  goToNext() {
+    if (this.pageNumber < this.totalPages) {
+      // if cursor-based, pass nextCursor; otherwise page number is enough
+      this.loadPage(this.pageNumber + 1, this.nextCursor);
+    }
+  }
 
-   
+  changePageSize(size: number) {
+    this.pageSize = size;
+    this.cdr.detectChanges();
+    this.loadPage(1); // reset to first page when size changes
   }
 }

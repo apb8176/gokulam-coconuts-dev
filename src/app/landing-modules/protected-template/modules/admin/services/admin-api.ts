@@ -1,8 +1,15 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TokenManagerService } from '../../../../../services/token-manager';
-
+interface RequestParams {
+  page_number?: number;
+  page_size?: number;
+  cursor?: string | null;
+  category?: string;
+  userType?: string;
+  // add other query keys you may need
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -45,16 +52,29 @@ export class AdminApiService {
     
     return this.http.put(url, profileData, { headers });
   }
-  getRequest(){
-      const token = this.tokenManager.getIdToken();
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json',Authorization: `Bearer ${token}` });
-  
-   
-    let url = this.apiUrl + 'admin/approval';
-    return this.http.get(url, { headers });
-   
- 
+
+
+getRequest(params?: RequestParams): Observable<any> {
+  const token = this.tokenManager.getIdToken();
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  });
+
+  let httpParams = new HttpParams();
+
+  if (params) {
+    if (params.page_number != null) httpParams = httpParams.set('page_number', String(params.page_number));
+    if (params.page_size != null) httpParams = httpParams.set('page_size', String(params.page_size));
+    if (params.cursor != null) httpParams = httpParams.set('cursor', String(params.cursor));
+    if (params.category) httpParams = httpParams.set('category', params.category);
+    if (params.userType) httpParams = httpParams.set('userType', params.userType);
+    // add other params similarly
   }
+
+  const url = `${this.apiUrl}admin/approval`;
+  return this.http.get(url, { headers, params: httpParams });
+}
   postRespons(propertyData: any): Observable<any> {
     const token = this.tokenManager.getIdToken();
     const headers = new HttpHeaders({ 'Content-Type': 'application/json',Authorization: `Bearer ${token}` });

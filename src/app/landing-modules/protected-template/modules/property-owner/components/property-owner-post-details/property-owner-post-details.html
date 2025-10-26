@@ -72,17 +72,17 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div>
         <label class="block font-semibold text-[#0D0D0D]">Owner</label>
-        <input [(ngModel)]="property.contact.owner" name="owner"
+        <input [(ngModel)]="property.ownerName" name="owner"
           class="w-full p-2 border border-[#F2D479] rounded-lg">
       </div>
       <div>
         <label class="block font-semibold text-[#0D0D0D]">Phone</label>
-        <input [(ngModel)]="property.contact.phone" name="phone"
+        <input [(ngModel)]="property.phone" name="phone"
           class="w-full p-2 border border-[#F2D479] rounded-lg">
       </div>
       <div>
         <label class="block font-semibold text-[#0D0D0D]">Email</label>
-        <input [(ngModel)]="property.contact.email" name="email"
+        <input [(ngModel)]="property.email" name="email"
           class="w-full p-2 border border-[#F2D479] rounded-lg">
       </div>
     </div>
@@ -206,6 +206,7 @@
 
   <ng-template #previewTemplate>
     <div class="max-w-7xl mx-auto px-4 md:px-8">
+      <span class="text-xl font-bold text-[#0D0D0D] tw-mb-4" *ngIf="propertySelected">{{ propertySelected?.propertyName }}</span>
   <!-- Title -->
 
 
@@ -222,9 +223,9 @@
 
     <div class="bg-[#F2D479] rounded-xl p-4 shadow">
       <h2 class="text-xl font-semibold text-[#0D0D0D] mb-2">Contact</h2>
-      <p><span class="font-medium">Owner:</span> {{ propertySelected.contact.owner }}</p>
-      <p><span class="font-medium">Phone:</span> {{ propertySelected.contact.phone }}</p>
-      <p><span class="font-medium">Email:</span> {{ propertySelected.contact.email }}</p>
+      <p><span class="font-medium">Owner:</span> {{ propertySelected.ownerName }}</p>
+      <p><span class="font-medium">Phone:</span> {{ propertySelected.phone?propertySelected?.phone:'N/A' }}</p>
+      <p><span class="font-medium">Email:</span> {{ propertySelected.email? propertySelected.email:'N/A'}}</p>
     </div>
   </div>
 

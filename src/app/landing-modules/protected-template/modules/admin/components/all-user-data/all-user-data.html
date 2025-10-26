@@ -109,9 +109,9 @@
             type="text"
             [(ngModel)]="searchRightText"
             placeholder="Search posted items or interests..."
-            class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#115930]"
+            class="flex-1 p-2 border border-[#C7D943] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#115930]"
           />
-          <button *ngIf="getRightList().length" (click)="searchRightText='';" class="px-3 py-2 rounded border">Clear</button>
+          <button *ngIf="getRightList().length" (click)="searchRightText='';" class="px-3 py-2 rounded border border-[#C7D943]">Clear</button>
         </div>
 
         <!-- ===== TABLES (visible md+) ===== -->
@@ -143,8 +143,8 @@
                       <ng-template #hiddenBadge><span class="text-red-700 font-semibold">Hidden</span></ng-template>
                     </td>
                     <td class="p-3">
-                      <button (click)="toggleVisibility(it)" class="mr-2 px-2 py-1 rounded border text-sm">Toggle</button>
-                      <button (click)="toggleActionShow(it)" class="px-2 py-1 rounded border text-sm">Action</button>
+                      <button (click)="toggleVisibility(it)" class="mr-2 px-2 py-1 rounded border border-[#C7D943] text-sm">Toggle</button>
+                      <button (click)="toggleActionShow(it)" class="px-2 py-1 rounded border border-[#C7D943] text-sm">Action</button>
                     </td>
                   </tr>
                 </tbody>
@@ -175,8 +175,8 @@
                       <span *ngIf="!it.visible" class="text-red-600">Hidden</span>
                     </td>
                     <td class="p-3">
-                      <button (click)="toggleVisibility(it)" class="mr-2 px-2 py-1 rounded border">Toggle</button>
-                      <button (click)="toggleActionShow(it)" class="px-2 py-1 rounded border">Action</button>
+                      <button (click)="toggleVisibility(it)" class="mr-2 px-2 py-1 rounded border border-[#C7D943]">Toggle</button>
+                      <button (click)="toggleActionShow(it)" class="px-2 py-1 rounded border border-[#C7D943]">Action</button>
                     </td>
                   </tr>
                 </tbody>
@@ -204,7 +204,7 @@
                     <td class="p-3">{{ it.postedOn }}</td>
                     <td class="p-3">{{ it.visible ? 'Visible' : 'Hidden' }}</td>
                     <td class="p-3">
-                      <button (click)="toggleVisibility(it)" class="mr-2 px-2 py-1 rounded border">Toggle</button>
+                      <button (click)="toggleVisibility(it)" class="mr-2 px-2 py-1 rounded border border-[#C7D943]">Toggle</button>
                     </td>
                   </tr>
                 </tbody>
@@ -232,8 +232,8 @@
                     <td class="p-3">{{ it.phone }}</td>
                     <td class="p-3">{{ it.visible ? 'Visible' : 'Hidden' }}</td>
                     <td class="p-3">
-                      <button (click)="toggleVisibility(it)" class="mr-2 px-2 py-1 rounded border">Toggle</button>
-                      <button (click)="sendMessageToUser(it)" class="px-2 py-1 rounded border">Message</button>
+                      <button (click)="toggleVisibility(it)" class="mr-2 px-2 py-1 rounded border border-[#C7D943]">Toggle</button>
+                      <button (click)="sendMessageToUser(it)" class="px-2 py-1 rounded border border-[#C7D943]">Message</button>
                     </td>
                   </tr>
                 </tbody>

@@ -135,7 +135,7 @@ export class MultipartUpload {
 
   // ✅ Getter for readonly access in components
   get selectedItem() {
-    return this._selectedItem.asReadonly();
+    return this._selectedItem;
   }
 
   // ✅ Method to update the selected item
