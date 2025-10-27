@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { PoApi } from '../../services/po-api';
 import { MultipartUpload } from '../../services/multipart-upload';
 
@@ -16,7 +16,9 @@ type PhotoItem = {
 })
 export class PropertyOwnerPostDetails {
   videos: any = [];
-  constructor(private propertyService: PoApi, private uploadService: MultipartUpload) {}
+  constructor(private propertyService: PoApi, 
+    private uploadService: MultipartUpload,
+    private cdr : ChangeDetectorRef) {}
 
   @Input() propertySelected: any ;
   // = {
@@ -188,21 +190,32 @@ export class PropertyOwnerPostDetails {
   }
 
   // Photo handling: multiple selection allowed
-  onPhotoSelected(event: Event) {
-    const files = (event.target as HTMLInputElement).files;
-    if (!files || files.length === 0) return;
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files.item(i);
-      if (file) {
-        this.property.photos.push(file); // push only the File object (binary)
-      }
-    }
+ onPhotoSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
 
-    // reset input so same file can be re-selected later
-    (event.target as HTMLInputElement).value = '';
+    Array.from(input.files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.property.photos.push(e.target.result); // Base64 preview
+        this.cdr.detectChanges(); // ensure immediate UI update
+      };
+      reader.readAsDataURL(file);
+    });
+
+    input.value = ''; // reset input
   }
 
+  removePhoto(index: number): void {
+    this.property.photos.splice(index, 1);
+  }
+
+  onImageError(index: number): void {
+    // fallback if image fails to load (e.g., expired S3 URL)
+    console.warn('Image failed to load:', this.property.photos[index]);
+    this.property.photos.splice(index, 1);
+  }
   // onVideoSelected(event: Event) {
   //   const file = (event.target as HTMLInputElement).files?.[0] ?? null;
   //   if (!file) return;
@@ -219,13 +232,7 @@ export class PropertyOwnerPostDetails {
   }
 
   // remove a photo from the list (and revoke object URL)
-  removePhoto(index: number) {
-    const p = this.property.photos[index];
-    if (p?.previewUrl && p.file) {
-      URL.revokeObjectURL(p.previewUrl);
-    }
-    this.property.photos.splice(index, 1);
-  }
+
 
   // Video handling (store File and preview)
 
@@ -255,14 +262,12 @@ export class PropertyOwnerPostDetails {
       purpose: this.property.purpose || '',
       buildingAge: this.property.buildingAge || '',
       status: this.property.status || '',
-      photos: this.property.photos[0]
+      photos: this.property.photos
       // Uncomment if needed later
       // conditions: this.property.conditions || '',
       // postedOn: this.property.postedOn || ''
     };
-    if(this.property.videos && this.property.videos.length > 0){
-      payload['videos']= this.videos;
-    }
+     this.videos?payload['videos']= this.videos :null;
 
     console.log('Payload:', payload);
 

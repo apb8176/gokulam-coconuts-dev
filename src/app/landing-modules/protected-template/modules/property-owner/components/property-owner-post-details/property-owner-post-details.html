@@ -156,15 +156,46 @@
     </div>
 
     <!-- Photos -->
-    <div>
-      <label class="block font-semibold text-[#0D0D0D]">Photos</label>
-      <input type="file" (change)="onPhotoSelected($event)" multiple accept="image/*"
-        class="block w-full mt-1 text-sm">
-      <div class="grid grid-cols-2 gap-4 mt-2">
-        <img *ngFor="let photo of property.photos" [src]="photo"
-          class="rounded-lg shadow object-cover h-28 w-full">
-      </div>
+   <div>
+  <label class="block font-semibold text-[#0D0D0D]">Photos</label>
+
+  <input
+    type="file"
+    (change)="onPhotoSelected($event)"
+    multiple
+    accept="image/*"
+    class="block w-full mt-1 text-sm"
+  />
+
+  <!-- Photo preview section -->
+  <div
+    *ngIf="property.photos?.length"
+    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-3"
+  >
+    <div
+      *ngFor="let photo of property.photos; let i = index"
+      class="relative group"
+    >
+      <img
+        [src]="photo"
+        alt="Uploaded photo preview"
+        class="rounded-lg shadow object-cover h-28 w-full"
+        (error)="onImageError(i)" 
+      />
+
+      <button
+        type="button"
+        (click)="removePhoto(i)"
+        class="absolute top-1 right-1 bg-black/60 text-white text-xs rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
+        title="Remove photo"
+      >
+        ✕
+      </button>
     </div>
+  </div>
+</div>
+
+
 
     <!-- Video -->
     <div>
