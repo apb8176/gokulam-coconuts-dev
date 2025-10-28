@@ -1,5 +1,5 @@
 // public-template.component.ts
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { filter } from 'rxjs/operators';
@@ -22,8 +22,10 @@ export class PublicTemplate implements OnInit {
 
   configuration$ = this.oidcSecurityService.getConfiguration();
   userData$ = this.oidcSecurityService.userData$;
-
+  constructor(private cdr:ChangeDetectorRef){}
   isAuthenticated = false;
+showBillingPopup: boolean = false;
+  userData: any;
 
   ngOnInit(): void {
     // keep template mobile menu state tidy on route change
@@ -55,6 +57,7 @@ export class PublicTemplate implements OnInit {
 
   // callback used by signup popup
   returnSignupData(event: any) {
+    this.userData = event.input;
     console.log('Signup returned to parent:', event);
     this.showSignupPopup = false;
     this.showConfirmUserForm = true;
@@ -63,6 +66,8 @@ export class PublicTemplate implements OnInit {
   returnConfirmData(event: any) {
     console.log('Confirm returned to parent:', event);
     this.showConfirmUserForm = false;
+    this.showBillingPopup = true;
+    this.cdr.detectChanges(); 
   }
 
   // toggles signup popup when called from header button

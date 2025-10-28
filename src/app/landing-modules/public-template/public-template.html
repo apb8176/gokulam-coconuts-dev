@@ -110,8 +110,12 @@
 
       <app-signin-popup *ngIf="showLoginForm" [isVisible]="showLoginForm" (close)="showLoginForm = false" (signup)="handleSignup($event)"></app-signin-popup>
 
-      <app-confirm-code-popup *ngIf="showConfirmUserForm" [isVisible]="showConfirmUserForm" (close)="showConfirmUserForm = false" (signup)="returnConfirmData($event)"></app-confirm-code-popup>
-
+      <app-confirm-code-popup *ngIf="showConfirmUserForm" [isVisible]="showConfirmUserForm" [data]="this.userData" (close)="showConfirmUserForm = false" (confirm)="returnConfirmData($event)"></app-confirm-code-popup>
+        <app-billing-popup
+        [data]="userData"
+      *ngIf="showBillingPopup"
+      [isVisible]="showBillingPopup"
+    ></app-billing-popup>
       <router-outlet></router-outlet>
     </div>
   </main>

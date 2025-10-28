@@ -8,12 +8,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmCodePopup } from './confirm-code-popup/confirm-code-popup';
 import { SigninPopup } from './signin-popup/signin-popup';
 import { PublicTemplate } from './public-template';
+import { BillingPopupComponent } from './billing-popup-component/billing-popup-component';
 
 
 @NgModule({
   declarations: [
     PublicTemplate,
-    HomeComponent,SignupPopupComponent, ConfirmCodePopup, SigninPopup
+    HomeComponent,SignupPopupComponent, ConfirmCodePopup, SigninPopup, BillingPopupComponent
   ],
   imports: [
     CommonModule,FormsModule,  ReactiveFormsModule,

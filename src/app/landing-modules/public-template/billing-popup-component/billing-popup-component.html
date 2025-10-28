@@ -1,0 +1,149 @@
+<!-- Backdrop -->
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center bg-[#0D0D0D]/60 backdrop-blur-sm"
+  *ngIf="isVisible"
+>
+  <!-- Popup Card -->
+  <div
+    class="relative w-full max-w-md mx-4 bg-white rounded-2xl shadow-2xl p-6 sm:p-8 overflow-y-auto max-h-[90vh]"
+  >
+    <!-- Close Button -->
+    <button
+      (click)="close()"
+      class="absolute top-3 right-3 text-[#115930] hover:text-[#F2C438] transition"
+    >
+      ✕
+    </button>
+
+    <!-- Header -->
+    <h2
+      class="text-2xl font-bold text-center text-[#115930] border-b-2 border-[#C7D943] pb-2 mb-6"
+    >
+      Billing Details
+    </h2>
+
+    <!-- Form -->
+    <form [formGroup]="billingForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      <!-- Name -->
+      <div>
+        <label class="block text-sm font-semibold text-[#0D0D0D] mb-1">Full Name</label>
+        <input
+          type="text"
+          formControlName="name"
+          class="w-full px-4 py-2 border border-[#dfdfdf] rounded-lg focus:ring-2 focus:ring-[#C7D943] focus:outline-none"
+          placeholder="Enter your full name"
+        />
+        <p
+          *ngIf="billingForm.get('name')?.invalid && billingForm.get('name')?.touched"
+          class="text-red-500 text-xs mt-1"
+        >
+          Name is required
+        </p>
+      </div>
+
+      <!-- Phone -->
+      <div>
+        <label class="block text-sm font-semibold text-[#0D0D0D] mb-1">Phone</label>
+        <input
+          type="tel"
+          maxlength="10"
+          formControlName="phone"
+          class="w-full px-4 py-2 border border-[#dfdfdf] rounded-lg focus:ring-2 focus:ring-[#C7D943] focus:outline-none"
+          placeholder="Enter your phone number"
+        />
+        <p
+          *ngIf="billingForm.get('phone')?.invalid && billingForm.get('phone')?.touched"
+          class="text-red-500 text-xs mt-1"
+        >
+          Valid phone is required
+        </p>
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label class="block text-sm font-semibold text-[#0D0D0D] mb-1">Email</label>
+        <input
+          type="email"
+          formControlName="email"
+          class="w-full px-4 py-2 border border-[#dfdfdf] rounded-lg focus:ring-2 focus:ring-[#C7D943] focus:outline-none"
+          placeholder="Enter your email"
+        />
+        <p
+          *ngIf="billingForm.get('email')?.invalid && billingForm.get('email')?.touched"
+          class="text-red-500 text-xs mt-1"
+        >
+          Valid email is required
+        </p>
+      </div>
+
+      <!-- Address -->
+      <div>
+        <label class="block text-sm font-semibold text-[#0D0D0D] mb-1">Address</label>
+        <textarea
+          formControlName="address"
+          rows="2"
+          class="w-full px-4 py-2 border border-[#dfdfdf] rounded-lg focus:ring-2 focus:ring-[#C7D943] focus:outline-none"
+          placeholder="Enter billing address"
+        ></textarea>
+        <p
+          *ngIf="billingForm.get('address')?.invalid && billingForm.get('address')?.touched"
+          class="text-red-500 text-xs mt-1"
+        >
+          Address is required
+        </p>
+      </div>
+
+      <!-- GSTIN -->
+      <div>
+        <label class="block text-sm font-semibold text-[#0D0D0D] mb-1">GSTIN (Optional)</label>
+        <input
+          type="text"
+          formControlName="gstin"
+          class="w-full px-4 py-2 border border-[#dfdfdf] rounded-lg focus:ring-2 focus:ring-[#C7D943] focus:outline-none"
+          placeholder="Enter GSTIN (if applicable)"
+        />
+      </div>
+
+      <!-- CIN -->
+      <div>
+        <label class="block text-sm font-semibold text-[#0D0D0D] mb-1">CIN (Optional)</label>
+        <input
+          type="text"
+          formControlName="cin"
+          class="w-full px-4 py-2 border border-[#dfdfdf] rounded-lg focus:ring-2 focus:ring-[#C7D943] focus:outline-none"
+          placeholder="Enter CIN (if applicable)"
+        />
+      </div>
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        [disabled]="billingForm.invalid || loading"
+        class="w-full py-3 rounded-xl font-semibold text-[#0D0D0D] bg-[#F2C438] hover:bg-[#C7D943] transition flex items-center justify-center"
+      >
+        <span *ngIf="!loading">Proceed to Payment</span>
+        <svg
+          *ngIf="loading"
+          class="animate-spin h-5 w-5 text-[#0D0D0D]"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8v8H4z"
+          ></path>
+        </svg>
+      </button>
+    </form>
+  </div>
+</div>
