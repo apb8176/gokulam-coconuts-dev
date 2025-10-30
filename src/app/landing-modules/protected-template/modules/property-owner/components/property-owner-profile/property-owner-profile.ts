@@ -107,9 +107,9 @@ original:any;;
   }
 }
   putProfile() {
-    this.deleteSensitiveFields();
+   // this.deleteSensitiveFields();
     setTimeout(() => {
-      this.propertyService.putProfile(this.inputData).subscribe({
+      this.propertyService.putProfile(this.user).subscribe({
       next: (response: any) => {
         this.response = response.profile;
         this.user = this.response;

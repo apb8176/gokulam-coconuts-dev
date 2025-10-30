@@ -12,13 +12,14 @@ import { TokenManagerService } from './services/token-manager';
 import { MatDialogModule } from '@angular/material/dialog';
 import { NotificationService } from './services/notification-service';
 import { AppDialogData } from './pages/app-dialog-data/app-dialog-data';
+import { environment } from '../environments/environment';
 @NgModule({
     imports: [
     FormsModule, BrowserModule, ReactiveFormsModule,MatDialogModule,FormsModule,
     PublicTemplateModule,ProtectedTemplateModule,  AuthModule.forRoot({
       config: {
         authority: 'https://cognito-idp.eu-north-1.amazonaws.com/eu-north-1_ddXPh6PWc',
-        redirectUrl: 'http://localhost:4200',
+        redirectUrl: environment.redirectUrl,
         clientId: '4amhtskq1d81v936gr5qu2102d',
         scope: 'email openid phone',
         responseType: 'code'

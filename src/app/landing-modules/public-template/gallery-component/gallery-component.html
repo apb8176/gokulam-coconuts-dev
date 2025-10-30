@@ -1,0 +1,40 @@
+<section class="w-full flex flex-col items-center py-8 px-4">
+  <!-- Title -->
+  <h1 class="text-2xl sm:text-3xl mb-8 font-semibold text-[#115930] text-center">
+    {{ title }}
+  </h1>
+
+  <!-- Masonry container -->
+  <div
+    class="w-full max-w-[1400px] mx-auto [column-fill:_balance] sm:[column-count:2] md:[column-count:3] lg:[column-count:4] xl:[column-count:5] [column-gap:1.5rem]"
+  >
+    <!-- Masonry item -->
+    <div
+      *ngFor="let it of items; let i = index"
+      class="mb-6 inline-block w-full break-inside-avoid rounded-lg border-2 border-[#0D0D0D] bg-white overflow-hidden shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+    >
+      <!-- Image: colored on mobile, grayscale on md+ hover -->
+      <img
+        [src]="it.src"
+        [alt]="it.alt || 'dog image'"
+        loading="lazy"
+        class="w-full h-auto rounded-t-md transition-all duration-300 
+               md:filter md:grayscale md:hover:grayscale-0"
+      />
+
+      <p class="text-center text-sm italic py-3 px-2 text-[#0D0D0D]">
+        {{ it.caption }}
+      </p>
+      <div class="h-2 bg-[#F2D479]"></div>
+    </div>
+  </div>
+
+  <!-- Color legend -->
+  <div class="mt-8 flex flex-wrap justify-center gap-3">
+    <span class="w-8 h-8 rounded-sm bg-[#115930]" title="Dark Green"></span>
+    <span class="w-8 h-8 rounded-sm bg-[#C7D943]" title="Lime Green"></span>
+    <span class="w-8 h-8 rounded-sm bg-[#F2C438]" title="Golden Yellow"></span>
+    <span class="w-8 h-8 rounded-sm bg-[#F2D479]" title="Light Yellow"></span>
+    <span class="w-8 h-8 rounded-sm bg-[#0D0D0D]" title="Black"></span>
+  </div>
+</section>

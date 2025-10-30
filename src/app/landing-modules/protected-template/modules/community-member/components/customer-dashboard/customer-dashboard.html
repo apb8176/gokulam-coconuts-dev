@@ -7,7 +7,7 @@
       <h1 class="text-2xl sm:text-3xl font-semibold text-slate-900">Community Member Dashboard</h1>
       <p class="mt-1 text-sm text-slate-500">Latest posts and recommendations across services.</p>
     </div>
-    <div class="flex flex-wrap justify-end gap-3">
+    <!-- <div class="flex flex-wrap justify-end gap-3">
       <button
         class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300">
         Create Post
@@ -16,7 +16,7 @@
         class="inline-flex items-center gap-2 px-4 py-2 border border-slate-200 rounded-lg bg-white hover:bg-slate-50">
         Filter
       </button>
-    </div>
+    </div> -->
   </div>
 
   <!-- Main Grid -->
@@ -26,7 +26,7 @@
     <section class="bg-white rounded-2xl shadow-sm p-5 flex flex-col col-span-1 lg:col-span-2">
       <div class="flex items-start justify-between mb-4">
         <h2 class="text-lg font-medium text-slate-800">Real Estate</h2>
-        <button (click)="onShowMore('real-estate')" class="text-indigo-600 text-sm hover:underline">Show more</button>
+        <button (click)="onShowMore('real-estate')" class="text-[#115930] text-sm hover:underline">Show more</button>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -45,7 +45,7 @@
                 <span class="text-xs font-medium"
                   [ngClass]="{
                     'text-emerald-600': item.status === 'responded',
-                    'text-indigo-600': item.status === 'new',
+                    'text-[#115930]': item.status === 'new',
                     'text-slate-500': item.status === 'viewed'
                   }">{{ item.status | titlecase }}</span>
               </div>
@@ -62,7 +62,7 @@
       <section class="bg-white rounded-2xl shadow-sm p-5 flex flex-col w-full">
         <div class="flex items-start justify-between mb-4">
           <h2 class="text-lg font-medium text-slate-800">Yoga Studio</h2>
-          <button (click)="onShowMore('yoga')" class="text-indigo-600 text-sm hover:underline">Show more</button>
+          <button (click)="onShowMore('yoga')" class="text-[#115930] text-sm hover:underline">Show more</button>
         </div>
 
         <div class="grid grid-cols-1 gap-3">
@@ -85,7 +85,7 @@
       <section class="bg-white rounded-2xl shadow-sm p-5 flex flex-col w-full">
         <div class="flex items-start justify-between mb-4">
           <h2 class="text-lg font-medium text-slate-800">Business</h2>
-          <button (click)="onShowMore('business')" class="text-indigo-600 text-sm hover:underline">Show more</button>
+          <button (click)="onShowMore('business')" class="text-[#115930] text-sm hover:underline">Show more</button>
         </div>
 
         <div class="grid grid-cols-1 gap-3">
@@ -109,7 +109,7 @@
     <section class="bg-white rounded-2xl shadow-sm p-5 flex flex-col col-span-1 lg:col-span-2">
       <div class="flex items-start justify-between mb-4">
         <h2 class="text-lg font-medium text-slate-800">Latest Posts</h2>
-        <button (click)="onShowMore('posts')" class="text-indigo-600 text-sm hover:underline">Show more</button>
+        <button (click)="onShowMore('posts')" class="text-[#115930] text-sm hover:underline">Show more</button>
       </div>
 
       <div class="grid grid-cols-1 gap-3">
@@ -145,7 +145,7 @@
     <section class="bg-white rounded-2xl shadow-sm p-5 flex flex-col col-span-1 lg:col-span-2">
       <div class="flex items-start justify-between mb-4">
         <h2 class="text-lg font-medium text-slate-800">Other Classifieds</h2>
-        <button (click)="onShowMore('other')" class="text-indigo-600 text-sm hover:underline">Show more</button>
+        <button (click)="onShowMore('other')" class="text-[#115930] text-sm hover:underline">Show more</button>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">

@@ -1,0 +1,206 @@
+<!-- Container -->
+<div class="p-4 md:p-8 max-w-7xl mx-auto">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+    <div>
+      <h1 class="text-2xl md:text-3xl font-semibold text-gray-800">Community Classifieds</h1>
+      <p class="text-sm md:text-base text-gray-600 mt-1">Post, edit or preview classifieds — responsive for mobile & desktop.</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <button (click)="openCreate()"
+        class="inline-flex items-center gap-2 px-4 py-2 rounded-lg shadow-sm bg-[#115930] hover:bg-[#c9a23f] text-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#C7D943]">
+        + New Classified
+      </button>
+    </div>
+  </div>
+
+  <!-- List -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    <ng-container *ngFor="let c of classifieds">
+      <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 flex flex-col">
+        <!-- image -->
+        <div class="h-40 md:h-44 w-full bg-gray-50 flex items-center justify-center overflow-hidden">
+          <img *ngIf="c.imageDataUrl" [src]="c.imageDataUrl" alt="{{c.title}}" class="object-cover w-full h-full"/>
+          <div *ngIf="!c.imageDataUrl" class="text-sm text-gray-400 px-4 py-6 text-center">
+            No photo — {{ c.type }}
+          </div>
+        </div>
+
+        <div class="p-4 flex-1 flex flex-col">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h2 class="text-lg font-semibold text-gray-800 leading-tight">{{ c.title }}</h2>
+              <p class="text-xs text-gray-500 mt-1">{{ c.type }} • {{ c.status }}</p>
+            </div>
+            <div class="text-right text-xs text-gray-400">
+              <div class="whitespace-nowrap">Posted: {{ c.createdAt | date:'mediumDate' }}</div>
+            </div>
+          </div>
+
+          <p class="text-sm text-gray-600 mt-3 line-clamp-3">{{ c.description }}</p>
+
+          <div class="mt-4 flex items-center justify-between gap-2">
+            <div class="text-sm text-gray-500">
+              <div>{{ c.location }}</div>
+              <div class="mt-1">Contact: {{ c.contactName }} • <span class="font-medium text-gray-800">{{ c.contactNumber }}</span></div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button (click)="openPreview(c)"
+                class="px-3 py-1 rounded-md text-sm border border-gray-200 hover:bg-gray-50">Preview</button>
+              <button (click)="openEdit(c)"
+                class="px-3 py-1 rounded-md text-sm bg-[#C7D943] text-white hover:brightness-95">Edit</button>
+              <button (click)="deleteItem(c.id)"
+                class="px-3 py-1 rounded-md text-sm text-red-600 border border-red-100 hover:bg-red-50">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="classifieds.length === 0" class="mt-8 text-center text-gray-600">
+    No classifieds yet. Click <span class="font-medium">New Classified</span> to add one.
+  </div>
+</div>
+
+<!-- Modal -->
+<div *ngIf="modalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+  <!-- backdrop -->
+  <div class="absolute inset-0 bg-black/40" (click)="closeModal()" aria-hidden="true"></div>
+
+  <!-- modal content -->
+  <div class="relative z-10 w-full max-w-3xl bg-white rounded-2xl shadow-2xl overflow-auto max-h-[90vh]">
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+      <div>
+        <h3 class="text-lg font-semibold text-gray-800">
+          {{ modalMode === 'create' ? 'New Classified' : (modalMode === 'edit' ? 'Edit Classified' : 'Preview Classified') }}
+        </h3>
+        <p class="text-sm text-gray-500 mt-0.5">
+          {{ modalMode === 'preview' ? 'Preview only' : 'Fill the details and save' }}
+        </p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button (click)="closeModal()" class="text-gray-500 hover:text-gray-700 px-3 py-2">
+          ✕
+        </button>
+      </div>
+    </div>
+
+    <!-- body -->
+    <form class="p-6 space-y-4" [formGroup]="form" (ngSubmit)="submit()">
+      <!-- Title + Type -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Title <span class="text-red-500">*</span></label>
+          <input formControlName="title" type="text" placeholder="e.g. Plumber needed, Tuition available"
+            [readonly]="modalMode === 'preview'"
+            class="w-full px-3 py-2 rounded-md border border-gray-200 focus:ring-2 focus:ring-[#C7D943] focus:border-transparent" />
+          <div *ngIf="f.title.touched && f.title.invalid" class="text-xs text-red-500 mt-1">
+            Title is required (max 100 chars).
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Type <span class="text-red-500">*</span></label>
+          <select formControlName="type" [disabled]="modalMode === 'preview'"
+            class="w-full px-3 py-2 rounded-md border border-gray-200 focus:ring-2 focus:ring-[#C7D943] focus:border-transparent">
+            <option value="" disabled>Select a type</option>
+            <option *ngFor="let t of types" [value]="t">{{ t }}</option>
+          </select>
+          <div *ngIf="f.type.touched && f.type.invalid" class="text-xs text-red-500 mt-1">Select a type.</div>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Description <span class="text-red-500">*</span></label>
+        <textarea formControlName="description" [readonly]="modalMode === 'preview'"
+          rows="4"
+          placeholder="Describe the requirement or offer..."
+          class="w-full px-3 py-2 rounded-md border border-gray-200 focus:ring-2 focus:ring-[#C7D943] focus:border-transparent"></textarea>
+        <div *ngIf="f.description.touched && f.description.invalid" class="text-xs text-red-500 mt-1">Description is required.</div>
+      </div>
+
+      <!-- Image upload + dates -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Photo / Poster (optional)</label>
+
+          <label
+            class="flex items-center justify-center h-28 border-2 border-dashed border-gray-200 rounded-lg cursor-pointer hover:border-gray-300">
+            <input type="file" accept="image/*" (change)="onFileChange($event)" [disabled]="modalMode === 'preview'" class="hidden" />
+            <div class="text-center text-sm text-gray-500">
+              <div *ngIf="!imagePreview">Click to upload</div>
+              <img *ngIf="imagePreview" [src]="imagePreview" alt="preview" class="h-28 object-contain" />
+            </div>
+          </label>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Valid from</label>
+          <input formControlName="validFrom" type="date" [readonly]="modalMode === 'preview'"
+            class="w-full px-3 py-2 rounded-md border border-gray-200 focus:ring-2 focus:ring-[#C7D943] focus:border-transparent" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Valid to</label>
+          <input formControlName="validTo" type="date" [readonly]="modalMode === 'preview'"
+            class="w-full px-3 py-2 rounded-md border border-gray-200 focus:ring-2 focus:ring-[#C7D943] focus:border-transparent" />
+        </div>
+      </div>
+
+      <!-- Status + Location -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+          <select formControlName="status" [disabled]="modalMode === 'preview'"
+            class="w-full px-3 py-2 rounded-md border border-gray-200 focus:ring-2 focus:ring-[#C7D943] focus:border-transparent">
+            <option *ngFor="let s of statuses" [value]="s">{{ s }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Location / Address</label>
+          <input formControlName="location" [readonly]="modalMode === 'preview'" type="text"
+            class="w-full px-3 py-2 rounded-md border border-gray-200 focus:ring-2 focus:ring-[#C7D943] focus:border-transparent" />
+          <div *ngIf="f.location.touched && f.location.invalid" class="text-xs text-red-500 mt-1">Location is required.</div>
+        </div>
+      </div>
+
+      <!-- Contact fields -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Contact Name</label>
+          <input formControlName="contactName" [readonly]="modalMode === 'preview'" type="text"
+            class="w-full px-3 py-2 rounded-md border border-gray-200 focus:ring-2 focus:ring-[#C7D943] focus:border-transparent" />
+          <div *ngIf="f.contactName.touched && f.contactName.invalid" class="text-xs text-red-500 mt-1">Contact name required.</div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Contact Number</label>
+          <input formControlName="contactNumber" [readonly]="modalMode === 'preview'" type="tel"
+            placeholder="+91 98765 43210"
+            class="w-full px-3 py-2 rounded-md border border-gray-200 focus:ring-2 focus:ring-[#C7D943] focus:border-transparent" />
+          <div *ngIf="f.contactNumber.touched && f.contactNumber.invalid" class="text-xs text-red-500 mt-1">Provide valid phone number.</div>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex items-center justify-end gap-3 pt-2 border-t border-gray-100 mt-2">
+        <button type="button" (click)="closeModal()" class="px-4 py-2 rounded-md border border-gray-200 text-sm">Cancel</button>
+
+        <ng-container *ngIf="modalMode === 'preview'">
+          <button type="button" (click)="form.enable(); modalMode='edit'" class="px-4 py-2 rounded-md border text-sm">Edit</button>
+          <button type="submit" class="px-4 py-2 rounded-md bg-[#D4B04C] text-white text-sm">Close</button>
+        </ng-container>
+
+        <ng-container *ngIf="modalMode !== 'preview'">
+          <button type="submit" class="px-4 py-2 rounded-md bg-[#D4B04C] text-white text-sm">
+            {{ modalMode === 'create' ? 'Post Classified' : 'Save Changes' }}
+          </button>
+        </ng-container>
+      </div>
+    </form>
+  </div>
+</div>

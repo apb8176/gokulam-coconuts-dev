@@ -6,13 +6,15 @@ import { CustomerDashboard } from './components/customer-dashboard/customer-dash
 import { ItemList } from './components/item-list/item-list';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MemeberProfile } from './components/member-profile/member-profile';
+import { ClassifiedsComponent } from './components/classifieds-component/classifieds-component';
 
 
 @NgModule({
   declarations: [
     MemeberProfile,
     CustomerDashboard,
-          ItemList
+          ItemList,
+          ClassifiedsComponent
   ],
   imports: [
     CommonModule,FormsModule,ReactiveFormsModule,

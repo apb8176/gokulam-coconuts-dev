@@ -66,7 +66,10 @@ showBillingPopup: boolean = false;
   returnConfirmData(event: any) {
     console.log('Confirm returned to parent:', event);
     this.showConfirmUserForm = false;
-    this.showBillingPopup = true;
+     if(this.userData.user_type === 'business-owner'||this.userData.user_type === 'property-owner'||this.userData.user_type === 'yoga-studio'){
+      this.showBillingPopup = true;
+    }
+    
     this.cdr.detectChanges(); 
   }
 

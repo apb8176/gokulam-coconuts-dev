@@ -1,5 +1,4 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
-import { postList } from '../../../../models/sampleData';
 import { Router } from '@angular/router';
 import { PoApi } from '../../services/po-api';
 import { MultipartUpload } from '../../services/multipart-upload';
@@ -12,6 +11,8 @@ import { MultipartUpload } from '../../services/multipart-upload';
 })
 export class PropertyOwnerPostList {
   response: any;
+  postList: any = [];
+  isLoading = false; // 🟢 Loader state
 
   constructor(
     private router: Router,
@@ -19,6 +20,7 @@ export class PropertyOwnerPostList {
     private cdr: ChangeDetectorRef,
     private uploadService: MultipartUpload
   ) {}
+
   ngOnInit() {
     this.getPropertyList();
   }
@@ -26,34 +28,35 @@ export class PropertyOwnerPostList {
   navigateToForm() {
     this.router.navigateByUrl('landing/property-owner/details');
   }
-  postList: any = [];
-  goToDetails(_t8: any) {
-    
-    let sItem = this.response.filter((item: any) => item.propertyId === _t8.id)[0];
+
+  goToDetails(item: any) {
+    const sItem = this.response.find((x: any) => x.propertyId === item.id);
     this.uploadService.setSelectedItem(sItem);
     this.router.navigateByUrl('/landing/property-owner/details');
   }
+
   getPropertyList() {
+    this.isLoading = true; // 🟡 Start loading
     this.propertyService.getPropertyList().subscribe({
       next: (response: any) => {
         this.response = response.items;
-        this.postList = response.items.map((item: any) => {
-          return {
-            propertyName: item.propertyName,
-            status: item.status,
-            id: item.propertyId,
-            postedOn: item.createdAt,
-            location: item.address,
-            description: item.details,
-            action: 'View',
-          };
-        });
-        console.log('Table Data', this.postList);
+        this.postList = response.items.map((item: any) => ({
+          propertyName: item.propertyName,
+          status: item.status,
+          id: item.propertyId,
+          postedOn: item.createdAt,
+          location: item.address,
+          description: item.details,
+          action: 'View',
+        }));
+        
+        this.isLoading = false; // 🟢 Stop loading
         this.cdr.detectChanges();
-        console.log('✅ Property added successfully:', this.postList);
       },
       error: (error: any) => {
-        console.error('❌ Error adding property:', error);
+        console.error('❌ Error fetching properties:', error);
+        this.isLoading = false;
+        this.cdr.detectChanges(); // 🔴 Stop loading on error
       },
     });
   }

@@ -38,6 +38,8 @@ export class PoApi {
   }
 
   putProfile(profileData: any): Observable<any> {
+const { name, ...rest } = profileData;
+profileData = rest;
     const token = this.tokenManager.getIdToken();
     const headers = new HttpHeaders({ 'Content-Type': 'application/json',Authorization: `Bearer ${token}` });
     let url = this.apiUrl + 'profile';

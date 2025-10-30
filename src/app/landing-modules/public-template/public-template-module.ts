@@ -9,12 +9,12 @@ import { ConfirmCodePopup } from './confirm-code-popup/confirm-code-popup';
 import { SigninPopup } from './signin-popup/signin-popup';
 import { PublicTemplate } from './public-template';
 import { BillingPopupComponent } from './billing-popup-component/billing-popup-component';
-
+import { GalleryComponent } from './gallery-component/gallery-component';
 
 @NgModule({
   declarations: [
     PublicTemplate,
-    HomeComponent,SignupPopupComponent, ConfirmCodePopup, SigninPopup, BillingPopupComponent
+    HomeComponent,SignupPopupComponent, ConfirmCodePopup, SigninPopup, BillingPopupComponent, GalleryComponent
   ],
   imports: [
     CommonModule,FormsModule,  ReactiveFormsModule,

@@ -96,7 +96,7 @@ export const navRoutes = [
             },
             {
                 navItemLabel: 'Profile',
-                navItemRoute: 'bo-profile',
+                navItemRoute: '/landing/community-member/profile',
                 navItemIcon: 'pi pi-user'
             },
             {
@@ -107,6 +107,11 @@ export const navRoutes = [
             {
                 navItemLabel: 'Benefits',
                 navItemRoute: 'bo-post-details',
+                navItemIcon: 'pi pi-info-circle'
+            }, 
+            {
+                navItemLabel: 'Classifieds',
+                navItemRoute: '/landing/community-member/classifieds',
                 navItemIcon: 'pi pi-info-circle'
             },            
             {

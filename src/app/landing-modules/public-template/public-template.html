@@ -6,38 +6,40 @@
       <div class="flex items-center justify-between h-16">
         <!-- Logo / Brand -->
         <a routerLink="/" class="flex items-center gap-3">
-          <img
-            src="assets/logo.png"
-            alt="Gokulam Coconuts logo"
-            class="w-10 h-10 sm:w-14 sm:h-14 object-contain rounded"
-            loading="lazy"
-          />
+          <img src="assets/logo.png" alt="Gokulam Coconuts logo"
+            class="w-10 h-10 sm:w-14 sm:h-14 object-contain rounded" loading="lazy" />
           <span class="font-semibold text-lg sm:text-2xl text-white tracking-tight">GOKULAM COCONUTS</span>
         </a>
 
         <!-- Desktop nav -->
         <nav class="hidden md:flex md:items-center md:space-x-6" aria-label="Primary">
           <a routerLink="/" routerLinkActive="text-white" [routerLinkActiveOptions]="{ exact: true }"
-             class="text-slate-900 hover:text-white font-semibold px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-white/60">
+            class="text-slate-900 hover:text-white font-semibold px-2 py-1 rounded focus:outline-none ">
             Home
           </a>
           <a routerLink="/services" routerLinkActive="text-white"
-             class="text-slate-900 hover:text-white font-semibold px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-white/60">
+            class="text-slate-900 hover:text-white font-semibold px-2 py-1 rounded focus:outline-none ">
             Services
           </a>
           <a routerLink="/about" routerLinkActive="text-white"
-             class="text-slate-900 hover:text-white font-semibold px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-white/60">
+            class="text-slate-900 hover:text-white font-semibold px-2 py-1 rounded focus:outline-none ">
             About Us
           </a>
-
+          <a routerLink="/gallery" routerLinkActive="text-white"
+            class="text-slate-900 hover:text-white font-semibold px-2 py-1 rounded focus:outline-none ">
+            Gallery
+          </a>
           <!-- Auth actions -->
-          <button (click)="handleLogin()" class="text-slate-900 hover:text-white font-semibold px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-white/60">
+          <button (click)="handleLogin()"
+            class="text-slate-900 hover:text-white font-semibold px-2 py-1 rounded focus:outline-none ">
             Login
           </button>
-          <button (click)="handleSignup($event)" class="text-slate-900 hover:text-white font-semibold px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-white/60">
+          <button (click)="handleSignup($event)"
+            class="text-slate-900 hover:text-white font-semibold px-2 py-1 rounded focus:outline-none ">
             Register
           </button>
-          <button (click)="logout()" class="text-slate-900 hover:text-white font-semibold px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-white/60">
+          <button (click)="logout()"
+            class="text-slate-900 hover:text-white font-semibold px-2 py-1 rounded focus:outline-none ">
             Logout
           </button>
         </nav>
@@ -45,25 +47,19 @@
         <!-- Right actions & mobile toggle -->
         <div class="flex items-center gap-3 md:hidden">
           <!-- Example CTA on desktop -->
-          <!-- <a routerLink="/contact" class="hidden md:inline-block bg-white text-[#D4B04C] font-semibold px-4 py-1.5 rounded shadow-sm hover:brightness-95 focus:outline-none focus:ring-2 focus:ring-white/60">
+          <!-- <a routerLink="/contact" class="hidden md:inline-block bg-white text-[#D4B04C] font-semibold px-4 py-1.5 rounded shadow-sm hover:brightness-95 focus:outline-none ">
             Contact
           </a> -->
 
           <!-- Mobile menu button -->
-          <button
-            (click)="toggleMobileMenu()"
-            aria-controls="mobile-menu"
-            [attr.aria-expanded]="mobileMenuOpen"
-            class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/60"
-            aria-label="Toggle navigation"
-          >
+          <button (click)="toggleMobileMenu()" aria-controls="mobile-menu" [attr.aria-expanded]="mobileMenuOpen"
+            class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-white/10 focus:outline-none "
+            aria-label="Toggle navigation">
             <svg *ngIf="!mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M4 6h16M4 12h16M4 18h16"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
             </svg>
             <svg *ngIf="mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
           </button>
         </div>
@@ -71,23 +67,26 @@
     </div>
 
     <!-- Mobile nav -->
-    <div
-      id="mobile-menu"
-      *ngIf="mobileMenuOpen"
-      class="md:hidden bg-[#2f3e30] text-white border-t border-white/10"
-      role="menu"
-      aria-label="Mobile Primary"
-    >
-      <div >
+    <div id="mobile-menu" *ngIf="mobileMenuOpen" class="md:hidden fut text-white border-t border-white/10"
+      role="menu" aria-label="Mobile Primary">
+      <div>
         <div class="flex flex-col space-y-2">
           <a routerLink="/" (click)="closeMobileMenu()" class="block px-3 py-2 rounded hover:bg-white/10">Home</a>
-          <a routerLink="/services" (click)="closeMobileMenu()" class="block px-3 py-2 rounded hover:bg-white/10">Services</a>
-          <a routerLink="/about" (click)="closeMobileMenu()" class="block px-3 py-2 rounded hover:bg-white/10">About Us</a>
+          <a routerLink="/services" (click)="closeMobileMenu()"
+            class="block px-3 py-2 rounded hover:bg-white/10">Services</a>
+          <a routerLink="/about" (click)="closeMobileMenu()" class="block px-3 py-2 rounded hover:bg-white/10">About
+            Us</a>
 
-          <button (click)="handleLogin(); closeMobileMenu()" class="text-left block px-3 py-2 rounded hover:bg-white/10">Login</button>
-          <button (click)="handleSignup($event); closeMobileMenu()" class="text-left block px-3 py-2 rounded hover:bg-white/10">Register</button>
+          <a routerLink="/gallery" routerLinkActive="text-white" class="block px-3 py-2 rounded hover:bg-white/10">
+            Gallery
+          </a>
+          <button (click)="handleLogin(); closeMobileMenu()"
+            class="text-left block px-3 py-2 rounded hover:bg-white/10">Login</button>
+          <button (click)="handleSignup($event); closeMobileMenu()"
+            class="text-left block px-3 py-2 rounded hover:bg-white/10">Register</button>
 
-          <button (click)="logout(); closeMobileMenu()" class="text-left block px-3 py-2 rounded hover:bg-white/10">Logout</button>
+          <button (click)="logout(); closeMobileMenu()"
+            class="text-left block px-3 py-2 rounded hover:bg-white/10">Logout</button>
         </div>
       </div>
     </div>
@@ -106,22 +105,21 @@
       </section>
 
       <!-- Signup / Login / Confirm popups (inputs / outputs preserved) -->
-      <app-signup-popup [isVisible]="showSignupPopup" (close)="showSignupPopup = false" (signup)="returnSignupData($event)"></app-signup-popup>
+      <app-signup-popup [isVisible]="showSignupPopup" (close)="showSignupPopup = false"
+        (signup)="returnSignupData($event)"></app-signup-popup>
 
-      <app-signin-popup *ngIf="showLoginForm" [isVisible]="showLoginForm" (close)="showLoginForm = false" (signup)="handleSignup($event)"></app-signin-popup>
+      <app-signin-popup *ngIf="showLoginForm" [isVisible]="showLoginForm" (close)="showLoginForm = false"
+        (signup)="handleSignup($event)"></app-signin-popup>
 
-      <app-confirm-code-popup *ngIf="showConfirmUserForm" [isVisible]="showConfirmUserForm" [data]="this.userData" (close)="showConfirmUserForm = false" (confirm)="returnConfirmData($event)"></app-confirm-code-popup>
-        <app-billing-popup
-        [data]="userData"
-      *ngIf="showBillingPopup"
-      [isVisible]="showBillingPopup"
-    ></app-billing-popup>
+      <app-confirm-code-popup *ngIf="showConfirmUserForm" [isVisible]="showConfirmUserForm" [data]="this.userData"
+        (close)="showConfirmUserForm = false" (confirm)="returnConfirmData($event)"></app-confirm-code-popup>
+      <app-billing-popup [data]="userData" *ngIf="showBillingPopup" [isVisible]="showBillingPopup"></app-billing-popup>
       <router-outlet></router-outlet>
     </div>
   </main>
 
   <!-- Footer -->
-  <footer class="bg-[#0D0D0D] text-white">
+  <footer class="fut text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-sm">
       © 2025 GOKULAM COCONUTS INTERNATIONAL BUSINESS COMMUNITY. All Rights Reserved.
     </div>
