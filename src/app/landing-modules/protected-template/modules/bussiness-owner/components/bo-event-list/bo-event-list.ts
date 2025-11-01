@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { BoApiService } from '../../services/bo-api-service';
 
 @Component({
   selector: 'app-bo-event-list',
@@ -30,8 +31,16 @@ export class BoEventList {
       poster: null,
     },
   ];
+  posterFile: any;
+  isNew: boolean = true;
+  isLoading: any = false;
+  selectedOffer: any;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private boService: BoApiService,
+    private cdr: ChangeDetectorRef
+  ) {
     this.offerForm = this.fb.group({
       title: ['', Validators.required],
       type: ['', Validators.required],
@@ -45,7 +54,27 @@ export class BoEventList {
       requestToAdmin: [false],
     });
   }
-
+  ngOnInit() {
+    this.getEventDetails();
+  }
+  getEventDetails() {
+    this.isLoading = true;
+    this.boService.getEventDetails().subscribe({
+      next: (res) => {
+        console.log('Event saved successfully', res);
+        if (res.items) {
+          this.offers = res.items;
+            this.isLoading = false;
+          this.cdr.detectChanges();
+        }
+      },
+      error: (err) => {
+        console.error('Error saving event', err);
+         this.isLoading = false;
+          this.cdr.detectChanges();
+      },
+    });
+  }
   get f(): any {
     return this.offerForm.controls;
   }
@@ -54,6 +83,7 @@ export class BoEventList {
     this.resetForm();
     this.showForm = true;
     this.editingIndex = -1;
+    this.isNew = true;
   }
 
   toggleListView() {
@@ -61,9 +91,12 @@ export class BoEventList {
   }
 
   onPosterSelected(event: any) {
-    const file = event.target.files?.[0];
-    if (!file) return;
+    const file = event.target.files[0];
+    if (file) {
+      this.offerForm.patchValue({ photo: file });
+    }
     this.posterPreview = URL.createObjectURL(file);
+    this.posterFile = file;
   }
 
   saveOffer() {
@@ -79,28 +112,68 @@ export class BoEventList {
       const today = new Date();
       const from = new Date(val.validFrom);
       const to = new Date(val.validTo);
+
       if (today < from) val.status = 'upcoming';
       else if (today > to) val.status = 'expired';
       else val.status = 'active';
     }
 
-    val.poster = this.posterPreview;
+    // 🧩 Convert to FormData
+    const formData = new FormData();
+    Object.entries(val).forEach(([key, value]) => {
+      if (value !== null && value !== undefined) {
+        formData.append(key, value as any);
+      }
+    });
 
-    if (this.editingIndex >= 0) {
-      // update existing
-      this.offers[this.editingIndex] = { ...this.offers[this.editingIndex], ...val };
-    } else {
-      // push new
-      this.offers.unshift(val);
+    if (this.posterFile) {
+      formData.append('photo', this.posterFile);
+    } else if (this.posterPreview) {
+      // in case you store image URL instead of file
+      formData.append('photo', this.posterPreview);
     }
 
-    // after save, reset form and show list
-    this.resetForm();
-    this.showForm = false;
-    this.editingIndex = -1;
+    // 🔥 Post using FormData
+    if (this.isNew) {
+      this.boService.postEvent(formData).subscribe({
+        next: (res) => {
+          console.log('Event saved successfully', res);
+          this.resetForm();
+          this.showForm = false;
+          this.editingIndex = -1;
+          this.getEventDetails();
+        },
+        error: (err) => {
+          console.error('Error saving event', err);
+        },
+      });
+    } else {
+      this.selectedOffer && formData.append('eventId', this.selectedOffer.eventId);
+      this.boService.putEvent(formData).subscribe({
+        next: (res) => {
+          console.log('Event saved successfully', res);
+          this.resetForm();
+          this.showForm = false;
+          this.editingIndex = -1;
+          this.getEventDetails();
+        },
+        error: (err) => {
+          console.error('Error saving event', err);
+        },
+      });
+    }
+
+    // Update local list
+    if (this.editingIndex >= 0) {
+      this.offers[this.editingIndex] = { ...this.offers[this.editingIndex], ...val };
+    } else {
+      this.offers.unshift(val);
+    }
   }
 
   startEdit(index: number) {
+    this.selectedOffer = this.offers[index];
+    this.isNew = false;
     const o = this.offers[index];
     this.offerForm.patchValue({
       title: o.title,

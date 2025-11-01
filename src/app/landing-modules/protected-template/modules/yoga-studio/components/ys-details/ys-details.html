@@ -16,16 +16,17 @@
             (click)="toggleEdit()"
             class="w-full sm:w-auto px-4 py-2 rounded-lg font-medium text-white bg-[#115930] hover:bg-[#0D0D0D] transition"
             >
-            {{ isEditMode ? 'Close Form' : 'Edit / Add Studio' }}
+            {{ isEditMode ? 'Close Form' : 'Edit / Add Studio Details' }}
           </button>
+          
 
-          <button
+          <!-- <button
             (click)="togglePreviewOnly()"
             [ngClass]="isPreviewOnly
               ? 'w-full sm:w-auto px-4 py-2 rounded-lg font-medium border border-[#F2D479] bg-white text-[#0D0D0D]'
               : 'w-full sm:w-auto px-4 py-2 rounded-lg font-medium text-white bg-[#F2C438] hover:bg-[#C7D943]'">
             {{ isPreviewOnly ? 'Back to Edit' : 'Preview Only' }}
-          </button>
+          </button> -->
         </div>
       </div>
     </div>
@@ -190,9 +191,21 @@
   </form>
 
   <!-- PREVIEW -->
-  <div *ngIf="!isEditMode || isPreviewOnly" class="mt-6 ">
-    <div class="bg-white rounded-xl p-4 md:p-6 shadow border border-[#F2D479]">
-      <div class="flex flex-col md:flex-row gap-4">
+<section class="py-10 relative" *ngIf="isLoading" >
+  <!-- Loader -->
+  <div *ngIf="isLoading" class="my-auto inset-0 flex items-center justify-center bg-transparent backdrop-blur-sm z-50 h-full">
+    <div class="flex flex-col items-center space-y-4">
+      <div class="w-12 h-12 border-4 border-[#F2D479] border-t-[#115930] rounded-full animate-spin"></div>
+      <p class="text-[#115930] font-medium">Loading Data...</p>
+    </div>
+  </div>
+</section>
+
+  <div *ngIf="!isLoading && (!isEditMode || isPreviewOnly)" class="mt-6 ">
+   
+    <div class="bg-white rounded-xl p-4 md:p-6 shadow border border-[#F2D479]" >
+       @if(previewData.name){
+           <div class="flex flex-col md:flex-row gap-4">
         <div class="w-full md:w-1/4 flex items-start">
           <div class="h-28 w-28 rounded-lg border border-[#F2D479] overflow-hidden bg-[#F9F7ED] flex items-center justify-center">
             <img *ngIf="logoPreview" [src]="logoPreview" alt="logo" class="h-full w-full object-cover">
@@ -201,10 +214,10 @@
         </div>
 
         <div class="flex-1">
-          <h1 class="text-2xl font-bold text-[#0D0D0D]">{{ previewData.name || 'Studio Name' }}</h1>
+          <h1 class="text-2xl font-bold text-[#0D0D0D]">{{ previewData.name || 'Business Name' }}</h1>
           <div class="flex items-center gap-3 mt-1">
             <span class="text-sm text-[#0D0D0D]/70">{{ previewData.type | titlecase }}</span>
-            <span *ngIf="previewData.registrationId" class="px-2 py-0.5 text-xs bg-[#F2D479] rounded">{{ previewData.registrationId }}</span>
+            <span *ngIf="previewData.gstin" class="px-2 py-0.5 text-xs bg-[#F2D479] rounded">{{ previewData.gstin }}</span>
             <div class="ml-auto text-sm text-[#0D0D0D]/70">Posted: {{ previewData.postedOn }}</div>
           </div>
 
@@ -219,7 +232,7 @@
 
             <div class="bg-white rounded-xl p-3 border border-[#F2D479]">
               <h3 class="text-sm font-semibold text-[#0D0D0D]">Contact</h3>
-              <p class="text-sm mt-1"><span class="font-medium">Lead:</span> {{ previewData.owner }}</p>
+              <p class="text-sm mt-1"><span class="font-medium">Owner:</span> {{ previewData.owner }}</p>
               <p class="text-sm"><span class="font-medium">Phone:</span> {{ previewData.phone }}</p>
               <p class="text-sm"><span class="font-medium">Email:</span> {{ previewData.email }}</p>
             </div>
@@ -239,7 +252,7 @@
           <!-- Photos & Video -->
           <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h3 class="text-lg font-semibold text-[#0D0D0D] mb-2">Gallery</h3>
+              <h3 class="text-lg font-semibold text-[#0D0D0D] mb-2">Photos</h3>
               <div class="grid grid-cols-2 gap-3">
                 <img *ngFor="let p of previewData.photos" [src]="p" class="rounded-lg object-cover h-36 w-full" />
                 <div *ngIf="!previewData.photos.length" class="text-sm text-[#0D0D0D]/70">No photos uploaded</div>
@@ -247,7 +260,7 @@
             </div>
 
             <div>
-              <h3 class="text-lg font-semibold text-[#0D0D0D] mb-2">Video Class / Tour</h3>
+              <h3 class="text-lg font-semibold text-[#0D0D0D] mb-2">Video Tour</h3>
               <video *ngIf="videoPreview" controls class="w-full rounded-lg shadow">
                 <source [src]="videoPreview" type="video/mp4">
               </video>
@@ -264,10 +277,23 @@
           </div>
         </div>
       </div>
+       }
+       @else{
+          <div class="text-center text-[#0D0D0D]/70 py-10">
+            <div class="text-lg text-zinc-600 flex items-center justify-center gap-2 mx-auto">
+              <div>
+                <svg  width="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#6d6c64" stroke="#6d6c64"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="none" stroke="#6d6c64" stroke-linejoin="round" stroke-width="2" d="M12,3 L22,21 L2,21 L12,3 Z M12,9 L12,15 M12,16 L12,18"></path> </g></svg>
+              </div>
+              <div>
+                No Yoga Studio details available.
+              </div>
+            </div>
+            <p class="mt-2 text-[#a18122]">Please use the "Edit / Add Studio Details" button to add your studio information.</p>
+          </div>
+       }
+     
 
-      <div class="flex justify-end mt-4">
-        <button (click)="editFromPreview()" class="px-4 py-2 rounded-lg bg-[#115930] text-white">Edit</button>
-      </div>
+     
     </div>
   </div>
 </div>

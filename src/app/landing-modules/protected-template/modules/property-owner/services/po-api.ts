@@ -47,5 +47,6 @@ profileData = rest;
     
     return this.http.put(url, profileData, { headers });
   }
+  
 
 }

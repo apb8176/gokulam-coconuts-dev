@@ -41,5 +41,13 @@ export class CmApiService {
     
     return this.http.post(url, data, { headers });
   }
+  getProperties(): Observable<any> {
+     const token = this.tokenManager.getIdToken();
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json',Authorization: `Bearer ${token}` });
+  
+   
+    let url = this.apiUrl + 'property/fetch-all-property';
+    return this.http.get(url, { headers });
+  }
 
 }

@@ -42,6 +42,7 @@ export class BoBusinessDetails {
     postedOn: this.postedOn,
   };
   businessId: any = '';
+  isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -108,7 +109,7 @@ export class BoBusinessDetails {
       phone: this.previewData.phone,
       email: this.previewData.email,
     });
-    this.tags = [...this.previewData.tags];
+        if(this.previewData.tags){this.tags = [...this.previewData.tags]};
   }
 
   toggleEdit() {
@@ -215,9 +216,11 @@ export class BoBusinessDetails {
     this.isPreviewOnly = true;
   }
   getData() {
+    this.isLoading = true;
     this.boApiService.getBusinessDetails().subscribe({
       next: (response) => {
         console.log('✅ Property added successfully:', response);
+        this.isLoading = false;
         this.previewData = response.data;
         this.businessId = response.data.businessId
         this.businessForm.patchValue({
@@ -231,10 +234,12 @@ export class BoBusinessDetails {
           phone: this.previewData.phone,
           email: this.previewData.email,
         });
-        this.tags = [...this.previewData.tags];
+            if(this.previewData.tags){this.tags = [...this.previewData.tags]};
         this.cdr.detectChanges();
       },
       error: (error) => {
+        this.isLoading = false;
+         this.cdr.detectChanges();
         console.error('❌ Error adding property:', error);
       },
     });

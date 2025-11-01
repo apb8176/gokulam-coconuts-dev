@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { YogaApiService } from '../../services/yoga-api-service';
 
 @Component({
   selector: 'app-ys-details',
@@ -9,8 +10,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   styleUrl: './ys-details.scss'
 })
 export class YsDetails {
-  businessForm: FormGroup;
-  isEditMode = true;
+ businessForm: FormGroup;
+  isEditMode = false;
   isPreviewOnly = false;
 
   // local previews
@@ -39,10 +40,17 @@ export class YsDetails {
     photos: [],
     tags: [],
     amenitiesSelected: [],
-    postedOn: this.postedOn
+    postedOn: this.postedOn,
   };
+  businessId: any = '';
+  isLoading: boolean = false;
 
-  constructor(private fb: FormBuilder, private sanitizer: DomSanitizer) {
+  constructor(
+    private fb: FormBuilder,
+    private sanitizer: DomSanitizer,
+    private boApiService: YogaApiService,
+    private cdr: ChangeDetectorRef
+  ) {
     this.businessForm = this.fb.group({
       name: ['', [Validators.required]],
       type: ['', [Validators.required]],
@@ -57,36 +65,38 @@ export class YsDetails {
       amenities_parking: [false],
       amenities_wifi: [false],
       amenities_delivery: [false],
-      amenities_dinein: [false]
+      amenities_dinein: [false],
     });
 
     // init previewData if you want some defaults
     this.loadDefaultsForPreview();
   }
+  ngOnInit() {
+    this.getData();
+  }
 
-  get f():any {
+  get f(): any {
     return this.businessForm.controls;
   }
 
   loadDefaultsForPreview() {
-    // optional initial sample; remove if not required
-this.previewData = {
-  name: 'Gokulam Yoga Studio',
-  type: 'service',
-  tagline: 'Find balance, strength, and peace within',
-  details: 'At Gokulam Yoga Studio, we offer daily yoga classes for all levels — from beginners to advanced practitioners. Our certified instructors guide you through traditional Hatha, Vinyasa, and Ashtanga yoga sessions in a calm, welcoming environment. We also host weekend meditation workshops and wellness retreats.',
-  address: '45 Temple Street, Gokulam, Mysore, Karnataka',
-  googleMapUrl: '',
-  gstin: '29YOGAS1234Z5',
-  owner: 'Ananya Iyer',
-  phone: '+91 99458 32107',
-  email: 'info@gokulamyoga.com',
-  photos: [],
-  tags: ['Yoga', 'Meditation', 'Wellness'],
-  amenitiesSelected: ['Parking', 'Changing Rooms', 'Yoga Mats Provided', 'Outdoor Space'],
-  postedOn: this.postedOn
-};
-
+  
+    this.previewData = {
+      name: '',
+      type: '',
+      tagline: '',
+      details:'',
+      address: '',
+      googleMapUrl: '',
+      gstin: '',
+      owner: '',
+      phone: '',
+      email: '',
+      photos: [],
+      tags: [],
+      amenitiesSelected: [],
+      postedOn: this.postedOn,
+    };
 
     // populate form from preview default (optional)
     this.businessForm.patchValue({
@@ -98,9 +108,9 @@ this.previewData = {
       gstin: this.previewData.gstin,
       owner: this.previewData.owner,
       phone: this.previewData.phone,
-      email: this.previewData.email
+      email: this.previewData.email,
     });
-    this.tags = [...this.previewData.tags];
+    if(this.previewData.tags){this.tags = [...this.previewData.tags]};
   }
 
   toggleEdit() {
@@ -163,7 +173,7 @@ this.previewData = {
 
     const values = this.businessForm.value;
     // Build preview data
-    this.previewData = {
+    let inputData :any = {
       name: values.name,
       type: values.type,
       tagline: values.tagline,
@@ -177,12 +187,63 @@ this.previewData = {
       photos: this.photosPreview,
       tags: this.tags,
       amenitiesSelected: this.getSelectedAmenities(values),
-      postedOn: this.postedOn
+      postedOn: this.postedOn,
     };
+    inputData['businessId'] = this.businessId;
+    if(this.previewData?.isComplete){
+        this.boApiService.putYogaStudioDetails(inputData).subscribe({
+      next: (response: any) => {
+        this.getData();
+      },
+      error: (error: any) => {
+        console.error('❌ Error adding property:', error);
+      },
+    });
+    }
+    else{
+  this.boApiService.postYogaStudioDetails(inputData).subscribe({
+      next: (response: any) => {
+          this.getData();
+      },
+      error: (error: any) => {
+        console.error('❌ Error adding property:', error);
+      },
+    });
+    }
+  
 
     // Switch to preview
     this.isEditMode = false;
     this.isPreviewOnly = true;
+  }
+  getData() {
+    this.isLoading = true;
+    this.boApiService.getYogaStudioDetails().subscribe({
+      next: (response: { data: { studioId: any; }; }) => {
+        console.log('✅ Property added successfully:', response);
+        this.isLoading = false;
+        this.previewData = response.data;
+        this.businessId = response.data.studioId
+        this.businessForm.patchValue({
+          name: this.previewData.name,
+          type: this.previewData.type,
+          tagline: this.previewData.tagline,
+          details: this.previewData.details,
+          address: this.previewData.address,
+          gstin: this.previewData.gstin,
+          owner: this.previewData.owner,
+          phone: this.previewData.phone,
+          email: this.previewData.email,
+        });
+        if(this.previewData.tags){this.tags = [...this.previewData.tags]};
+        this.cdr.detectChanges();
+      },
+      error: (error: any) => {
+        this.isLoading = false;
+         this.cdr.detectChanges();
+        console.error('❌ Error adding property:', error);
+      },
+    });
   }
 
   getSelectedAmenities(values: any): string[] {
@@ -206,7 +267,7 @@ this.previewData = {
       gstin: this.previewData.gstin,
       owner: this.previewData.owner,
       phone: this.previewData.phone,
-      email: this.previewData.email
+      email: this.previewData.email,
     });
 
     // set amenities checkboxes
@@ -214,7 +275,7 @@ this.previewData = {
       amenities_parking: this.previewData.amenitiesSelected.includes('Parking'),
       amenities_wifi: this.previewData.amenitiesSelected.includes('WiFi'),
       amenities_delivery: this.previewData.amenitiesSelected.includes('Home Delivery'),
-      amenities_dinein: this.previewData.amenitiesSelected.includes('Dine-in / On-site')
+      amenities_dinein: this.previewData.amenitiesSelected.includes('Dine-in / On-site'),
     });
 
     // previews
@@ -222,7 +283,7 @@ this.previewData = {
     this.photosPreview = [...this.previewData.photos];
     this.videoPreview = this.videoPreview;
 
-    this.tags = [...this.previewData.tags || []];
+    this.tags = [...(this.previewData.tags || [])];
 
     this.isEditMode = true;
     this.isPreviewOnly = false;

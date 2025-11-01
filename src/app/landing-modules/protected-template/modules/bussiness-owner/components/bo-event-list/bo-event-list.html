@@ -9,13 +9,13 @@
 
             <div class="w-full md:w-auto">
                 <div class="flex gap-3 flex-col sm:flex-row">
-                    <button (click)="openCreate()"
+                    <button (click)="openCreate()" *ngIf="!showForm"
                         class="w-full sm:w-auto px-4 py-2 rounded-lg font-medium text-white bg-[#115930] hover:bg-[#0D0D0D]">
                         + New Offer / Event
                     </button>
-                    <button (click)="toggleListView()"
+                    <button (click)="toggleListView() " *ngIf="showForm"
                         class="w-full sm:w-auto px-4 py-2 rounded-lg font-medium border border-[#F2D479] bg-white text-[#0D0D0D]">
-                        {{ showForm ? 'Close Form' : 'View Offers' }}
+                        {{ 'Cancel' }}
                     </button>
                 </div>
             </div>
@@ -153,7 +153,7 @@
                         class="w-full sm:w-auto px-4 py-2 rounded-lg border border-[#F2D479]">Reset</button>
                     <button type="submit"
                         class="w-full sm:w-auto px-6 py-2 bg-[#F2C438] text-[#0D0D0D] font-bold rounded-lg hover:bg-[#C7D943]">
-                        {{ editingIndex >= 0 ? 'Update Offer' : 'Save Offer' }}
+                        {{ editingIndex >= 0 ? 'Update' : 'Save' }}
                     </button>
                 </div>
             </div>
@@ -161,7 +161,17 @@
     </div>
 
     <!-- LIST -->
-    <div class="mt-6 grid grid-cols-1 gap-4">
+     <section class="py-10 relative" *ngIf="isLoading" >
+  <!-- Loader -->
+  <div *ngIf="isLoading" class="my-auto inset-0 flex items-center justify-center bg-transparent backdrop-blur-sm z-50 h-full">
+    <div class="flex flex-col items-center space-y-4">
+      <div class="w-12 h-12 border-4 border-[#F2D479] border-t-[#115930] rounded-full animate-spin"></div>
+      <p class="text-[#115930] font-medium">Loading Data...</p>
+    </div>
+  </div>
+</section>
+
+    <div class="mt-6 grid grid-cols-1 gap-4" *ngIf="!showForm && !isLoading">
         <div *ngFor="let o of offers; let i = index"
             class="bg-white rounded-xl p-4 md:p-6 shadow border border-[#F2D479]">
             <div class="flex flex-col md:flex-row gap-4 md:items-start">
