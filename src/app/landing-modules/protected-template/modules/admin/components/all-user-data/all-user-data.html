@@ -241,8 +241,8 @@
             </div>
           </div>
 
-          <!-- Other Classifieds interests table -->
-          <div *ngIf="activeSection === 'Other Classifieds' && getRightList().length" class="mb-4">
+          <!-- Classifieds interests table -->
+          <div *ngIf="activeSection === 'Classifieds' && getRightList().length" class="mb-4">
             <div class="overflow-x-auto">
               <table class="min-w-full text-left text-sm whitespace-nowrap">
                 <thead>
@@ -290,8 +290,8 @@
 
         <!-- ===== CARDS (visible on small screens only) ===== -->
         <div class="block md:hidden">
-          <!-- Other Classifieds: mobile cards for interests -->
-          <div *ngIf="activeSection === 'Other Classifieds'">
+          <!-- Classifieds: mobile cards for interests -->
+          <div *ngIf="activeSection === 'Classifieds'">
             <div *ngFor="let it of getRightList()" class="p-4 rounded-lg shadow border mb-3">
               <div class="flex justify-between items-start">
                 <div>
@@ -326,7 +326,7 @@
           </div>
 
           <!-- Other sections mobile cards: events/offers/posts/requests/connected properties -->
-          <div *ngIf="activeSection !== 'Other Classifieds'">
+          <div *ngIf="activeSection !== 'Classifieds'">
             <div *ngFor="let it of getRightList()" class="p-4 rounded-lg shadow border mb-3">
               <div class="flex justify-between items-start">
                 <div>

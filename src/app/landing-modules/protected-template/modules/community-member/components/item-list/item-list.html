@@ -4,7 +4,7 @@
     <div class="flex w-full max-w-7xl">
       <button
         *ngFor="let section of sections"
-        (click)="activeSection = section; selectedItem = null"
+        (click)="changeTap(section)"
         class="flex-1 py-3 text-sm md:text-base font-semibold transition duration-200 text-center"
         [ngClass]="{
           'bg-[#F2C438] text-[#0D0D0D] shadow-inner': activeSection === section,
@@ -20,7 +20,7 @@
   <div class="flex flex-col md:flex-row flex-1 overflow-hidden ">
     <!-- Left: Cards List -->
      @if(loading){
-       <section class="py-10 relative">
+       <section class="w-full md:w-1/3 bg-white p-4 overflow-y-auto border-r border-gray-200 ">
     <!-- Loader -->
     <div
       class="my-auto inset-0 flex items-center justify-center bg-transparent backdrop-blur-sm z-50 h-full">

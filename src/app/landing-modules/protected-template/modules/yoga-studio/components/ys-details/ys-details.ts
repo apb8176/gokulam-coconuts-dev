@@ -42,7 +42,7 @@ export class YsDetails {
     amenitiesSelected: [],
     postedOn: this.postedOn,
   };
-  businessId: any = '';
+  studioId: any = '';
   isLoading: boolean = false;
 
   constructor(
@@ -189,7 +189,7 @@ export class YsDetails {
       amenitiesSelected: this.getSelectedAmenities(values),
       postedOn: this.postedOn,
     };
-    inputData['businessId'] = this.businessId;
+    inputData['studioId'] = this.studioId;
     if(this.previewData?.isComplete){
         this.boApiService.putYogaStudioDetails(inputData).subscribe({
       next: (response: any) => {
@@ -223,7 +223,7 @@ export class YsDetails {
         console.log('✅ Property added successfully:', response);
         this.isLoading = false;
         this.previewData = response.data;
-        this.businessId = response.data.studioId
+        this.studioId = response.data.studioId
         this.businessForm.patchValue({
           name: this.previewData.name,
           type: this.previewData.type,

@@ -49,5 +49,27 @@ export class CmApiService {
     let url = this.apiUrl + 'property/fetch-all-property';
     return this.http.get(url, { headers });
   }
+  getStudio(): Observable<any> {
+     const token = this.tokenManager.getIdToken();
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json',Authorization: `Bearer ${token}` });
+  
+   
+    let url = this.apiUrl + 'yoga/fetch-all-studio';
+    return this.http.get(url, { headers });
+  }
+  getBussiness(): Observable<any> {
+     const token = this.tokenManager.getIdToken();
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json',Authorization: `Bearer ${token}` });
+  
+   
+    let url = this.apiUrl + 'business/fetch-all-business';
+    return this.http.get(url, { headers });
+  }
+  getClassifieds(): Observable<any> {
+     const token = this.tokenManager.getIdToken();
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json',Authorization: `Bearer ${token}` }); 
+    let url = this.apiUrl + 'community-member/fetch-all-classifieds';
+    return this.http.get(url, { headers });
+  }
 
 }

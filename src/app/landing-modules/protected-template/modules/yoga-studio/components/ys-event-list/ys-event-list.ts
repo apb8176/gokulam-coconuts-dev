@@ -62,7 +62,7 @@ export class YsEventList {
      this.isLoading = true;
      this.boService.getEventDetails().subscribe({
        next: (res: { items: any[]; }) => {
-         console.log('Event saved successfully', res);
+        // console.log('Event saved successfully', res);
          if (res.items) {
            this.offers = res.items;
              this.isLoading = false;
