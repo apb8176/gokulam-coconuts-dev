@@ -206,7 +206,7 @@ loadPage(page: number = 1, cursor: string | null = null) {
     item.businessId = raw.businessId || raw.businessOwnerId || null;
     item.yogaStudioId = raw.yogaStudioId || null;
     item.ownerName = raw.ownerName || raw.userName || raw.owner || null;
-
+    item.communityUserId = raw.communityUserId || null;
     // approval/status
     item.adminStatus = raw.adminStatus || raw.approval || raw._approval_index?.approval || null;
     item.adminComment = raw.adminComment || raw._approval_index?.adminComment || null;

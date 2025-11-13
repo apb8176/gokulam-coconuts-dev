@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CmApiService } from '../../services/cm-api-service';
 
@@ -11,7 +11,7 @@ export interface Classified {
   description: string;
   imageDataUrl?: string | null;
   validFrom?: string | null; // ISO date string
-  validTo?: string | null;   // ISO date string
+  validTo?: string | null; // ISO date string
   status: ClassifiedStatus;
   location: string;
   contactName: string;
@@ -34,29 +34,27 @@ export class ClassifiedsComponent implements OnInit {
 
   // example types - extend as needed
   types = [
-      'Vacancy', 
-      'Enquiry',
-      'Service Offered',
-      'Service Required',
-      'Item for Sale/Rent', 
-      'Item Wanted',
-      'Event Announcement',
-      'Adoption',
-      'Lost and Found',
-      'Volunteer Opportunity',
-      'Community Notice',
-      'Others' 
+    'Vacancy',
+    'Enquiry',
+    'Service Offered',
+    'Service Required',
+    'Item for Sale/Rent',
+    'Item Wanted',
+    'Event Announcement',
+    'Adoption',
+    'Lost and Found',
+    'Volunteer Opportunity',
+    'Community Notice',
+    'Others',
   ];
 
   statuses: ClassifiedStatus[] = ['Active', 'Inactive', 'Expired'];
-  constructor(
-    private fb: FormBuilder,
-    private cmApi: CmApiService
-  ) {}
+  constructor(private fb: FormBuilder, private cmApi: CmApiService, private cdr : ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.initForm();
     this.seedDemoData();
+    this.getClassifieds()
   }
 
   private initForm() {
@@ -83,7 +81,8 @@ export class ClassifiedsComponent implements OnInit {
         id: this.makeId(),
         title: 'Plumber needed urgently',
         type: 'Plumber needed',
-        description: 'Experienced plumber required in Sector 17. Prefer someone with experience in overhead tanks.',
+        description:
+          'Experienced plumber required in Sector 17. Prefer someone with experience in overhead tanks.',
         imageDataUrl: null,
         validFrom: this.toDateISO(new Date()),
         validTo: this.toDateISO(this.addDays(new Date(), 10)),
@@ -217,23 +216,32 @@ export class ClassifiedsComponent implements OnInit {
 
     if (this.modalMode === 'create') {
       this.classifieds = [entry, ...this.classifieds];
+
+      this.cmApi.postClassifieds(entry).subscribe({
+        next: (response) => {
+          console.log('✅ Property added successfully:', response);
+          this.closeModal();
+        },
+        error: (error) => {
+          console.error('❌ Error adding property:', error);
+        },
+      });
     } else if (this.modalMode === 'edit' && this.editingId) {
       this.classifieds = this.classifieds.map((c) => (c.id === this.editingId ? entry : c));
+
+      this.cmApi.putClassifieds(entry).subscribe({
+        next: (response) => {
+          console.log('✅ Property added successfully:', response);
+          this.closeModal();
+        },
+        error: (error) => {
+          console.error('❌ Error adding property:', error);
+        },
+      });
     }
     // this.cmApi.putClassifieds(this.classifieds).subscribe({
     //   next: (res) => {
-    //     console.log('Classifieds saved successfully', res); 
-    this.cmApi.postClassifieds(entry).subscribe({
-      next: (response) => {
-        console.log('✅ Property added successfully:', response);
-        this.closeModal();
-      },
-      error: (error) => {
-        console.error('❌ Error adding property:', error);
-      },
-    });
-  
-    
+    //     console.log('Classifieds saved successfully', res);
   }
 
   deleteItem(id: string) {
@@ -243,11 +251,27 @@ export class ClassifiedsComponent implements OnInit {
 
   // small helpers
   makeId(length = 8) {
-    return Math.random().toString(36).slice(2, 2 + length);
+    return Math.random()
+      .toString(36)
+      .slice(2, 2 + length);
   }
 
   // convenience getters for template
-  get f():any {
+  get f(): any {
     return this.form.controls;
+  }
+
+  getClassifieds(){
+     this.cmApi.getClasiifieds().subscribe({
+        next: (response) => {
+          this.classifieds = response.items;
+          this.cdr.detectChanges();
+          console.log('✅ Property added successfully:', response);
+          this.closeModal();
+        },
+        error: (error) => {
+          console.error('❌ Error adding property:', error);
+        },
+      });
   }
 }

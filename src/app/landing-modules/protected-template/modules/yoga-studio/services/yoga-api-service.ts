@@ -92,4 +92,6 @@ export class YogaApiService {
     let url = this.apiUrl + 'yoga/event-details';
     return this.http.get(url, { headers });
   }
+
+
 }

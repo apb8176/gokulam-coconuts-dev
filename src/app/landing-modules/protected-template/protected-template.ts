@@ -13,12 +13,13 @@ export class ProtectedTemplate {
   navItems: any = navRoutes;
   selectedNavItem: any = [];
   constructor(private router : Router) {}
+  
   ngOnInit() {
     this.selectedNavItem = this.navItems.find((item: any) => this.router.url.includes(item.user_type))['navItems'];
-    console.log('selectedNavItem', this.selectedNavItem);
-    
+    console.log('selectedNavItem', this.selectedNavItem);    
   }
-   toggleMobileMenu() {
+
+  toggleMobileMenu() {
     this.showMobileMenu = !this.showMobileMenu;
   }
 

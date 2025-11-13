@@ -19,6 +19,15 @@ export class CmApiService {
     let url = this.apiUrl + 'profile';
     return this.http.get(url, { headers });
   }
+  
+  getClasiifieds(): Observable<any> {
+     const token = this.tokenManager.getIdToken();
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json',Authorization: `Bearer ${token}` });
+  
+   
+    let url = this.apiUrl + 'community-member/event-details';
+    return this.http.get(url, { headers });
+  }
 
   putClassifieds(data: any): Observable<any> {
 
@@ -70,6 +79,39 @@ export class CmApiService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json',Authorization: `Bearer ${token}` }); 
     let url = this.apiUrl + 'community-member/fetch-all-classifieds';
     return this.http.get(url, { headers });
+  }
+    getBussinessEvents(id: any): Observable<any> {
+    const token = this.tokenManager.getIdToken();
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
+    let url = `${this.apiUrl}business/fetch-all-business-events?businessUserId=${id}`;
+    return this.http.get(url, { headers });
+  }
+
+  getYogaEvents(id: any): Observable<any> {
+    const token = this.tokenManager.getIdToken();
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
+
+    // ✅ Send businessId as query parameter
+    const url = `${this.apiUrl}yoga/fetch-all-yoga-events?studioUserId=${id}`;
+
+    return this.http.get(url, { headers });
+  }
+
+  postInterest(data: any): Observable<any> {
+
+
+    const token = this.tokenManager.getIdToken();
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json',Authorization: `Bearer ${token}` });
+    let url = this.apiUrl + 'community-member/interest';
+    
+    
+    return this.http.post(url, data, { headers });
   }
 
 }
