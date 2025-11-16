@@ -126,6 +126,16 @@ export class AdminApiService {
     let url = this.apiUrl + 'business/fetch-all-business';
     return this.http.get(url, { headers });
   }
+  getMembers(): Observable<any> {
+    const token = this.tokenManager.getIdToken();
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
+
+    let url = this.apiUrl + 'admin/fetch-all-members';
+    return this.http.get(url, { headers });
+  }
   getClassifieds(): Observable<any> {
     const token = this.tokenManager.getIdToken();
     const headers = new HttpHeaders({
@@ -144,7 +154,15 @@ export class AdminApiService {
     let url = `${this.apiUrl}business/fetch-all-business-events?businessUserId=${id}`;
     return this.http.get(url, { headers });
   }
-
+  getMemberEvents(id: any): Observable<any> {
+    const token = this.tokenManager.getIdToken();
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
+    let url = `${this.apiUrl}admin/classifieds?communityUserId=${id}`;
+    return this.http.get(url, { headers });
+  }
   getYogaEvents(id: any): Observable<any> {
     const token = this.tokenManager.getIdToken();
     const headers = new HttpHeaders({

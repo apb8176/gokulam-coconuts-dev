@@ -124,7 +124,7 @@ export class AllUserData {
         : arr;
     }
     if (this.activeSection === 'Community Members') {
-      const arr = this.selectedItem.requests || [];
+      const arr = this.selectedItem.events || [];
       return q
         ? arr.filter(
             (it: any) =>
@@ -159,6 +159,8 @@ export class AllUserData {
   selectItem(item: any) {
     this.selectedItem = item;
     this.searchRightText = '';
+    console.log(item);
+    
     this.getEventData();
   }
 
@@ -338,7 +340,9 @@ export class AllUserData {
     const apiCall1 = this.adminApiService.getBussiness();
     const apiCall2 = this.adminApiService.getStudio();
     const apiCall3 = this.adminApiService.getClassifieds();
-    return forkJoin([apiCall1, apiCall2, apiCall3]);
+    const apiCall4 = this.adminApiService.getMembers();
+
+    return forkJoin([apiCall1, apiCall2, apiCall3, apiCall4]);
   }
   getCombineAPIData() {
     this.getAllData().subscribe(
@@ -346,6 +350,7 @@ export class AllUserData {
         const studioList = results[1];
         const bussinessList = results[0];
         const classifiedList = results[2];
+        const memeberList = results[3];
         console.log('Studio List:', studioList);
         console.log('Bussiness List:', bussinessList);
         this.data['Businesses'] = [];
@@ -375,6 +380,17 @@ export class AllUserData {
             details: property.description,
           });
         });
+        this.data['Community Members'] = [];
+        console.log('memeberList',memeberList);
+        
+        memeberList.items.forEach((property: any) => {
+          this.data['Community Members'].push({
+            id: property.communityUserId,
+            title: property.firstName ? property.firstName+ ' '+property.lastName : 'No Name',
+            shortDesc: property.phone ? property.phone : '',
+            details: property.email,
+          });
+        });
         this.cdr.detectChanges();
         // You can now use studioList and bussinessList as needed
       },
@@ -383,6 +399,8 @@ export class AllUserData {
   }
 
   getEventData() {
+    console.log(this.activeSection);
+    
     switch (this.activeSection) {
       case 'Yoga Studio': {
         this.adminApiService.getYogaEvents(this.selectedItem.id).subscribe((response: { items: any[] }) => {
@@ -404,9 +422,31 @@ export class AllUserData {
             }
             this.cdr.detectChanges();
           });
+          break;
         }
-        break;
-    }
+
+      case 'Community Members':
+        {
+          this.adminApiService.getMemberEvents(this.selectedItem.id).subscribe((response: { items: any[] }) => {
+            const memberClass = response.items;
+            console.log(response.items);
+            
+            if (memberClass.length) {
+              this.selectedItem.events = memberClass || [];
+              this.selectedItem.events = this.selectedItem.events.map((item:any)=>{
+
+                return { ...item, "details":item.description,"postedOn":new Date(item.createdAt).toLocaleString() };
+
+              })
+              console.log(this.selectedItem.events);
+              
+            }
+            this.cdr.detectChanges();
+          });
+          break;
+        }
+        
+      }
   }
 
   getProperties() {

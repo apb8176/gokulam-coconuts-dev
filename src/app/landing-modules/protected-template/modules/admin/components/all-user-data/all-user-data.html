@@ -148,7 +148,7 @@
                     <th class="p-3">Property</th>
                     <th class="p-3">Details</th>
                     <th class="p-3">Posted On</th>
-                    <th class="p-3">Visibility</th>
+                    <!-- <th class="p-3">Visibility</th> -->
                     <th class="p-3">Actions</th>
                   </tr>
                 </thead>
@@ -157,10 +157,10 @@
                     <td class="p-3 font-semibold">{{ it.title || it.propertyName }}</td>
                     <td class="p-3 text-sm">{{ it.details || it.type }}</td>
                     <td class="p-3 text-sm">{{ it.postedOn }}</td>
-                    <td class="p-3">
+                    <!-- <td class="p-3">
                       <span *ngIf="it.visible" class="text-green-700">Visible</span>
                       <span *ngIf="!it.visible" class="text-red-600">Hidden</span>
-                    </td>
+                    </td> -->
                     <td class="p-3">
                       <button (click)="showInterestList(it)"
                         class="mr-2 px-2 py-1 rounded border border-[#C7D943]">Interests</button>
