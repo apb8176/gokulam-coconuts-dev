@@ -1,7 +1,8 @@
-import { ChangeDetectorRef, Component, HostListener } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { forkJoin, Observable } from 'rxjs';
 import { AdminApiService } from '../../services/admin-api';
+import { InterestListComponent } from '../interest-list.component/interest-list.component';
 
 @Component({
   selector: 'app-all-user-data',
@@ -10,6 +11,7 @@ import { AdminApiService } from '../../services/admin-api';
   styleUrls: ['./all-user-data.scss'],
 })
 export class AllUserData {
+
   sections = [
     'Real Estate',
     'Yoga Studio',
@@ -37,115 +39,11 @@ export class AllUserData {
 
   // sample postedOn value
   postedOn = new Date().toISOString();
+ @ViewChild(InterestListComponent) interestModal!: InterestListComponent;
+
 
   // sample data (same as before, trimmed for brevity)
   data: any = {};
-  // // {
-  //   'Real Estate': [
-  //     {
-  //       id: 1,
-  //       propertyName: 'Test 2BHK Apartment',
-  //       address: '100 Demo Lane, Mysore, Karnataka',
-  //       owner: 'Test Owner',
-  //       phone: '90000 00000',
-  //       email: 'test@example.com',
-  //       details: '2BHK, 1200 sqft, Furnished',
-  //       postedOn: this.postedOn,
-  //       enabled: true,
-  //       posts: [
-  //         { id: 'p1', title: '2BHK Furnished', visible: true, postedOn: this.postedOn },
-  //         { id: 'p2', title: '3BHK Unfurnished', visible: false, postedOn: this.postedOn }
-  //       ]
-  //     }
-  //   ],
-  //   'Yoga Studio': [
-  //     {
-  //       id: 2,
-  //       name: 'Morning Flow',
-  //       tagline: 'Start your day with energy',
-  //       details: 'A refreshing vinyasa flow.',
-  //       address: 'Bogadi',
-  //       owner: 'Priya Sharma',
-  //       phone: '+91 98765 11111',
-  //       email: 'priya@yoga.example',
-  //       postedOn: this.postedOn,
-  //       enabled: true,
-  //       events: [
-  //         { id: 'e1', title: 'Sunrise Vinyasa', venue: 'Main Hall', validFrom: '2025-11-01', validTo: '2025-11-01', visible: true }
-  //       ]
-  //     }
-  //   ],
-  //   'Businesses': [
-  //     {
-  //       id: 3,
-  //       name: 'Local Bakers & Co.',
-  //       tagline: 'Fresh breads & handcrafted cakes',
-  //       details: 'We bake fresh bread daily.',
-  //       address: '12 Market Road, Mysore, Karnataka',
-  //       owner: 'Ravi Kumar',
-  //       phone: '+91 98765 43210',
-  //       email: 'contact@localbakers.com',
-  //       postedOn: this.postedOn,
-  //       enabled: true,
-  //       offers: [
-  //         { id: 'o1', title: 'Festive Discount', venue: 'Shop', validFrom: '2025-10-10', validTo: '2025-10-31', visible: true }
-  //       ]
-  //     }
-  //   ],
-  //   'Community Members': [
-  //     {
-  //       id: 4,
-  //       name: 'Asha Rao',
-  //       phone: '+91 90000 11111',
-  //       email: 'asha@example.com',
-  //       address: 'Gokulam',
-  //       enabled: true,
-  //       requests: [
-  //         { id: 'r1', title: 'Looking for part-time tutoring job', details: 'Math tutor needed', visible: true, postedOn: this.postedOn }
-  //       ]
-  //     }
-  //   ],
-  //   'Scouters': [
-  //     {
-  //       id: 5,
-  //       name: 'Scouter Ravi',
-  //       phone: '+91 90000 22222',
-  //       email: 'scouter@example.com',
-  //       address: 'Vijayanagar',
-  //       enabled: true,
-  //       connectedProperties: [
-  //         { id: 'sc1', propertyName: '1BHK Cozy', owner: 'Landlord A', phone: '90000 33333', visible: true, postedOn: this.postedOn }
-  //       ]
-  //     }
-  //   ],
-  //   'Classifieds': [
-  //     {
-  //       id: 6,
-  //       title: 'Used Car Sale',
-  //       location: '2019 model sedan',
-  //       details: 'Well-maintained, single-owner car.',
-  //       enabled: true,
-  //       interests: [
-  //         { id: 'i1', name: 'Ramesh', phone: '+91 90001 11111', email: 'ramesh@example.com', message: 'Is the car still available? Can I test drive this weekend?', responded: false, response: '', createdOn: this.postedOn },
-  //         { id: 'i2', name: 'Sangeeta', phone: '+91 90002 22222', email: 'sangeeta@example.com', message: 'Any accident history?', responded: true, response: 'Seller: No accidents', createdOn: this.postedOn }
-  //       ]
-  //     },
-  //     {
-  //       id: 7,
-  //       title: 'Home Tutor',
-  //       location: 'Math & Science',
-  //       details: 'Experienced tutor for grades 8–12.',
-  //       enabled: true,
-  //       interests: [
-  //         { id: 'i3', name: 'Vikram', phone: '+91 90003 33333', email: 'vikram@example.com', message: 'Can you tutor for 10th boards?', responded: false, response: '', createdOn: this.postedOn }
-  //       ]
-  //     }
-  //   ]
-  // // };
-
-  // -------------------------
-  // Left / Right helpers
-  // -------------------------
   getFilteredItems() {
     const items = this.data[this.activeSection] || [];
     if (!this.searchText) return items;
@@ -165,6 +63,30 @@ export class AllUserData {
         .map((v: any) => String(v).toLowerCase());
       return values.some((v: string) => v.includes(q));
     });
+  }
+
+  showInterestList(_t105: any) {
+    console.log(_t105);
+     
+     this.adminApiService.getInterestList(_t105.eventId).subscribe({
+      next: (response: { items: any[] }) => {
+        console.log('✅ Property added successfully:', response);
+
+    this.interestModal.open(response);
+      
+      
+        this.cdr.detectChanges();
+      },
+      error: (error: any) => {
+      
+        console.error('❌ Error adding property:', error);
+        this.cdr.detectChanges();
+      },
+      complete: () => {
+        this.cdr.detectChanges();
+      },
+    });
+     //https://civ0w2cemc.execute-api.eu-north-1.amazonaws.com/dev/admin/interested-list?classifiedId=c4dea4a6-48de-4e6b-850d-3afc47ca1eeb
   }
 
   getRightList() {

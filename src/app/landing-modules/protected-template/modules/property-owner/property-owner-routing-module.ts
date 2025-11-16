@@ -4,6 +4,7 @@ import { PropertyOwnerDashboard } from './components/property-owner-dashboard/pr
 import { PropertyOwnerPostDetails } from './components/property-owner-post-details/property-owner-post-details';
 import { PropertyOwnerPostList } from './components/property-owner-post-list/property-owner-post-list';
 import { PropertyOwnerProfile } from './components/property-owner-profile/property-owner-profile';
+import { NotificationsComponent } from '../../common-components/notifications.component/notifications.component';
 
 const routes: Routes = [
   {
@@ -27,7 +28,10 @@ const routes: Routes = [
       {
       path:'profile',
       component: PropertyOwnerProfile, // Assuming BoPostList handles details as well
-    }
+    },
+      {
+        path:'notifications',component:NotificationsComponent
+      }
 ];
 
 

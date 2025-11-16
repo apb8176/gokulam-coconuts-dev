@@ -4,6 +4,7 @@ import { BoDashboard } from './components/bo-dashboard/bo-dashboard';
 import { BoProfile } from './components/bo-profile/bo-profile';
 import { BoBusinessDetails } from './components/bo-business-details/bo-business-details';
 import { BoEventList } from './components/bo-event-list/bo-event-list';
+import { NotificationsComponent } from '../../common-components/notifications.component/notifications.component';
 
 const routes: Routes = [
   {
@@ -26,7 +27,10 @@ const routes: Routes = [
   {
     path:'events',
     component:BoEventList
-  }
+  },
+    {
+      path:'notifications',component:NotificationsComponent
+    }
 ];
 
 @NgModule({

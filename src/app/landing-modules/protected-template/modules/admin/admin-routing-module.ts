@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminDashboard } from './components/admin-dashboard/admin-dashboard';
 import { AllRequestsComponent } from './components/all-requests-component/all-requests-component';
 import { AllUserData } from './components/all-user-data/all-user-data';
+import { NotificationsComponent } from '../../common-components/notifications.component/notifications.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,9 @@ const routes: Routes = [
   },
   {
     path:'requests',component:AllRequestsComponent
+  },
+  {
+    path:'notifications',component:NotificationsComponent
   }
 ];
 

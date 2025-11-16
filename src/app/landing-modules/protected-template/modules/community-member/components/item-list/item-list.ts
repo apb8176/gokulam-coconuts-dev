@@ -12,8 +12,7 @@ import { AuthService } from '../../../../../../core/services/auth.service';
   styleUrl: './item-list.scss',
 })
 export class ItemList {
-
-  sections = ['Real Estate', 'Yoga Studio', 'Bussiness', 'Classifieds'];
+  sections = ['Real Estate', 'Yoga Studio', 'Business', 'Classifieds'];
   activeSection = this.sections[0];
   searchText = '';
   selectedItem: any = null;
@@ -31,12 +30,16 @@ export class ItemList {
   modalContext: { action?: string; target?: any; parent?: any } = {};
   currentSubItem: any;
   currentUser: any;
+  studioList: any;
+  bussinessList: any;
+  classifiedList: any;
+  propertyList: any;
 
   constructor(
     private fb: FormBuilder,
     private cmApi: CmApiService,
-    private cdr: ChangeDetectorRef,    
-    private authService: AuthService,
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService
   ) {}
   data: any = {
     'Real Estate': [
@@ -81,7 +84,7 @@ export class ItemList {
         details: 'Exciting seasonal discounts on select items for a limited time.',
       },
     ],
-    'Classifieds': [
+    Classifieds: [
       {
         id: 7,
         title: 'Used Car Sale',
@@ -103,17 +106,13 @@ export class ItemList {
     ],
   };
   ngOnInit() {
-    this.currentUser = this.authService.getUser()
-   
-    
+    this.currentUser = this.authService.getUser();
+
     this.getProperties();
     this.getCombineAPIData();
-    
   }
 
-
-
-    changeTap(section: string) {
+  changeTap(section: string) {
     this.activeSection = section;
     this.selectedItem = null;
   }
@@ -127,22 +126,22 @@ export class ItemList {
   getCombineAPIData() {
     this.getAllData().subscribe(
       (results) => {
-        const studioList = results[1];
-        const bussinessList = results[0];
-        const classifiedList = results[2];
-        console.log('Studio List:', studioList);
-        console.log('Bussiness List:', bussinessList);
-        this.data['Bussiness'] = [];
-        bussinessList.items.forEach((property: any) => {
-          this.data['Bussiness'].push({
-            id: property.bussinessUserId,
+        this.studioList = results[1];
+        this.bussinessList = results[0];
+        this.classifiedList = results[2];
+        console.log('Studio List:', this.studioList);
+        console.log('Bussiness List:', this.bussinessList);
+        this.data['Business'] = [];
+        this.bussinessList.items.forEach((property: any) => {
+          this.data['Business'].push({
+            id: property.businessUserId,
             title: property.name ? property.name : 'No Name',
             shortDesc: property.tagline ? property.tagline : '',
             details: property.details,
           });
         });
         this.data['Yoga Studio'] = [];
-        studioList.items.forEach((property: any) => {
+        this.studioList.items.forEach((property: any) => {
           this.data['Yoga Studio'].push({
             id: property.studioUserId,
             title: property.name ? property.name : 'No Name',
@@ -151,7 +150,7 @@ export class ItemList {
           });
         });
         this.data['Classifieds'] = [];
-        classifiedList.items.forEach((property: any) => {
+        this.classifiedList.items.forEach((property: any) => {
           this.data['Classifieds'].push({
             id: property.classifiedId,
             title: property.title ? property.title : 'No Name',
@@ -184,6 +183,8 @@ export class ItemList {
   }
   selectItem(item: any) {
     this.selectedItem = item;
+    console.log('this.selectedItem', this.selectedItem);
+
     this.searchRightText = '';
     this.getEventData();
   }
@@ -202,8 +203,6 @@ export class ItemList {
     this.modalVisible = true;
   }
 
-
-
   closeModal() {
     this.modalVisible = false;
     this.modalMode = null;
@@ -212,9 +211,8 @@ export class ItemList {
   }
   toggleActionShow(item: any) {
     item.actionHidden = !item.actionHidden;
-    this.sendMessageToUser(this.selectedItem,item)
+    this.sendMessageToUser(this.selectedItem, item);
     console.log(item);
-    
   }
   // Called when confirm dialog OK clicked
   confirmOk() {
@@ -253,8 +251,45 @@ export class ItemList {
       // For demo, store message on the target as `lastAdminMessage`
       target.lastAdminMessage = payload;
       // TODO: call messaging API
+      let data = {
+        userId: '',
+        sourceTable: '',
+        idAttr: '',
+        interest: true,
+        enquires: '',
+        ownerUserId: '',
+      };
+      data.enquires = this.modalInput;
       console.log(this.selectedItem);
-      this.postInterest();
+      if (this.selectedItem.events && this.selectedItem.events[0].studioUserId) {
+        data.sourceTable = 'YogaEventDetails';
+        data.userId = this.selectedItem.events[0].eventId;
+        (data.idAttr = 'eventId'), (data.ownerUserId = this.selectedItem.events[0].studioUserId);
+      } else if (this.selectedItem.events && this.selectedItem.events[0].propertyUserId) {
+        data.sourceTable = 'PropertyDetails';
+        data.userId = this.selectedItem.events[0].propertyId;
+        (data.idAttr = 'propertyId'),
+          (data.ownerUserId = this.selectedItem.events[0].propertyUserId);
+      } else if (this.selectedItem.events && this.selectedItem.events[0].businessUserId) {
+        data.sourceTable = 'BusinessEventDetails';
+        data.userId = this.selectedItem.events[0].eventId;
+        (data.idAttr = 'eventId'),
+          (data.ownerUserId = this.selectedItem.events[0].businessUserId);
+      } else if (this.selectedItem.events && this.selectedItem.events[0].communityUserId) {
+        data.sourceTable = 'MemberClassifieds';
+        data.userId = this.selectedItem.events[0].classifiedId;
+        (data.idAttr = 'classifiedId'),
+          (data.ownerUserId = this.selectedItem.events[0].communityUserId);
+      } else {        
+        let item = this.classifiedList.items.filter(
+          (item: any) => item.classifiedId == this.selectedItem.id
+        )[0];
+        data.sourceTable = 'MemberClassifieds';
+        data.userId = item.classifiedId;
+        (data.idAttr = 'classifiedId'), (data.ownerUserId = item.communityUserId);
+      }
+
+      this.postInterest(data);
       return;
     }
 
@@ -271,7 +306,6 @@ export class ItemList {
   }
 
   getEventData() {
-    
     switch (this.activeSection) {
       case 'Yoga Studio': {
         this.cmApi.getYogaEvents(this.selectedItem.id).subscribe((response: { items: any[] }) => {
@@ -284,19 +318,22 @@ export class ItemList {
         break;
       }
 
-      case 'Businesses':
+      case 'Business':
         {
-          this.cmApi.getBussinessEvents(this.selectedItem.id).subscribe((response: { items: any[] }) => {
-            const business = response.items;
-            if (business.length) {
-              this.selectedItem.events = business || [];
-            }
-            this.cdr.detectChanges();
-          });
+          this.cmApi
+            .getBussinessEvents(this.selectedItem.id)
+            .subscribe((response: { items: any[] }) => {
+              const business = response.items;
+              if (business.length) {
+                this.selectedItem['events'] = business || [];
+              }
+              console.log(business);
+              
+              this.cdr.detectChanges();
+            });
         }
         break;
-
-  }
+    }
   }
   // toggleEnable(item: any) {
   //   const will = item.enabled ? 'Disable' : 'Enable';
@@ -313,7 +350,7 @@ export class ItemList {
     this.modalContext = { action, target, parent: this.selectedItem };
     this.modalVisible = true;
   }
-  sendMessageToUser(item: any,subItem?:any) {
+  sendMessageToUser(item: any, subItem?: any) {
     this.currentSubItem = subItem;
     const defaultMsg = `Hello ${item.owner || item.name || item.title || ''},\n\n`;
     this.openMessageModal('Send message', defaultMsg, item, 'sendMessage');
@@ -327,7 +364,7 @@ export class ItemList {
     if (!this.selectedItem) return '';
     if (this.activeSection === 'Real Estate')
       return this.selectedItem.propertyName || this.selectedItem.title || 'Property';
-    if (this.activeSection === 'Yoga Studio' || this.activeSection === 'Businesses')
+    if (this.activeSection === 'Yoga Studio' || this.activeSection === 'Business')
       return this.selectedItem.name || this.selectedItem.title || 'Details';
     if (this.activeSection === 'Community Members' || this.activeSection === 'Scouters')
       return this.selectedItem.name || this.selectedItem.title || 'Member';
@@ -348,8 +385,10 @@ export class ItemList {
           )
         : arr;
     }
-    if (this.activeSection === 'Businesses') {
-      const arr = this.selectedItem.offers || [];
+    if (this.activeSection === 'Business') {
+    
+      
+      const arr = this.selectedItem.events || [];
       return q
         ? arr.filter(
             (it: any) =>
@@ -419,7 +458,7 @@ export class ItemList {
     this.cmApi.getProperties().subscribe({
       next: (response) => {
         console.log('✅ Property added successfully:', response);
-
+        this.propertyList = response.items;
         this.data['Real Estate'] = [];
         response.items.forEach((property: any) => {
           this.data['Real Estate'].push({
@@ -452,18 +491,21 @@ export class ItemList {
     this.isMobileView = window.innerWidth < 768;
   }
 
-  postInterest(){
+  postInterest(data: any) {
     console.log(this.selectedItem);
-    
-    let data = {
-      "classifiedId": this.selectedItem.id,
-      "userId":this.currentUser.cognitoSub,
-      "communityUserId": "002c499c-7091-704a-fa7b-a10a067b690f",
-      "interest": true,
-      "sourceTable":'yoga_event',
-      "enquires": this.modalInput
-    }
-      this.cmApi.postInterest(data).subscribe({
+
+    // let data = {
+    //   "classifiedId": this.selectedItem.id,
+    //   "userId":this.currentUser.cognitoSub,
+    //   "communityUserId": "002c499c-7091-704a-fa7b-a10a067b690f",
+    //   "interest": true,
+    //   "sourceTable":'yoga_event',
+    //   "enquires": this.modalInput
+    // }{
+
+    // }
+
+    this.cmApi.postInterest(data).subscribe({
       next: (response) => {
         console.log('✅ Property added successfully:', response);
         this.closeModal();

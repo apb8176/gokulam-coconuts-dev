@@ -155,4 +155,18 @@ export class AdminApiService {
 
     return this.http.get(url, { headers });
   }
+  
+  getInterestList(id: any): Observable<any> {
+    const token = this.tokenManager.getIdToken();
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
+
+    // ✅ Send businessId as query parameter
+    const url = `${this.apiUrl}admin/interested-list?classifiedId=${id}`;
+
+    return this.http.get(url, { headers });
+  }
+
 }

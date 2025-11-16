@@ -89,7 +89,10 @@ export class TokenManagerService {
   /** Check if the token is expired and refresh if needed */
   async checkToken(): Promise<void> {
     try {
-      const expiresAt = parseInt(localStorage.getItem('token_expires_at') || '0', 10);
+      
+      
+      const expiresAt = parseInt(localStorage.getItem('token_expires_at') || '0', 30);
+      console.log('console.log(expiresAt);',expiresAt);
       const now = Date.now();
       const shouldRefresh = !expiresAt || now > expiresAt - 60_000; // refresh 1 min early
       if (shouldRefresh) {

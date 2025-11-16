@@ -4,6 +4,7 @@ import { CustomerDashboard } from './components/customer-dashboard/customer-dash
 import { ItemList } from './components/item-list/item-list';
 import { ClassifiedsComponent } from './components/classifieds-component/classifieds-component';
 import { PropertyOwnerProfile } from '../property-owner/components/property-owner-profile/property-owner-profile';
+import { NotificationsComponent } from '../../common-components/notifications.component/notifications.component';
 
 const routes: Routes = [
     {
@@ -27,7 +28,10 @@ const routes: Routes = [
     {
       path: 'profile',
       component: PropertyOwnerProfile
-    }
+    },
+      {
+        path:'notifications',component:NotificationsComponent
+      }
   ]
 
 @NgModule({

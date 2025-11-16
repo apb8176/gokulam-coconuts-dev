@@ -65,6 +65,8 @@ original:any;;
 
   // save single field (just closes edit mode; in real app call API)
   saveField(field: string) {
+    console.log(field);
+    
     // Ideally call API here to persist single-field change
     this.edit[field] = false;
     this.original = structuredClone(this.user);

@@ -16,7 +16,12 @@ export const navRoutes = [
                 navItemLabel: 'Post List',
                 navItemRoute: '/landing/property-owner/listing',
                 navItemIcon: 'pi pi-list'
-            },
+            },          
+            {
+                navItemLabel: 'Notifications',
+                navItemRoute: '/landing/property-owner/notifications',
+                navItemIcon: 'pi pi-home'
+            },             
             {
                 navItemLabel: 'Logout',
                 navItemRoute: 'bo-post-details',
@@ -46,7 +51,12 @@ export const navRoutes = [
                 navItemLabel: 'Offers/Events',
                 navItemRoute: '/landing/busines-owner/events',
                 navItemIcon: 'pi pi-list'
-            },
+            },          
+            {
+                navItemLabel: 'Notifications',
+                navItemRoute: '/landing/busines-owner/notifications',
+                navItemIcon: 'pi pi-home'
+            }, 
             
             {
                 navItemLabel: 'Logout',
@@ -77,7 +87,12 @@ export const navRoutes = [
                 navItemLabel: 'Offers/Events',
                 navItemRoute: '/landing/yoga-studio/events',
                 navItemIcon: 'pi pi-list'
-            },
+            },            
+            {
+                navItemLabel: 'Notifications',
+                navItemRoute: '/landing/yoga-studio/notifications',
+                navItemIcon: 'pi pi-home'
+            }, 
             
             {
                 navItemLabel: 'Logout',
@@ -115,6 +130,11 @@ export const navRoutes = [
                 navItemIcon: 'pi pi-info-circle'
             },            
             {
+                navItemLabel: 'Notifications',
+                navItemRoute: '/landing/community-member/notifications',
+                navItemIcon: 'pi pi-home'
+            },    
+            {
                 navItemLabel: 'Logout',
                 navItemRoute: 'busines-owner-post-details',
                 navItemIcon: 'pi pi-info-circle'
@@ -138,7 +158,12 @@ export const navRoutes = [
                 navItemLabel: 'Benefits',
                 navItemRoute: 'bo-post-details',
                 navItemIcon: 'pi pi-info-circle'
-            },            
+            },              
+            {
+                navItemLabel: 'Notifications',
+                navItemRoute: '/landing/scout/notifications',
+                navItemIcon: 'pi pi-home'
+            },     
             {
                 navItemLabel: 'Logout',
                 navItemRoute: 'busines-owner-post-details',
@@ -159,7 +184,11 @@ export const navRoutes = [
                 navItemRoute: '/landing/admin/requests',
                 navItemIcon: 'pi pi-home'
             },
-            
+              {
+                navItemLabel: 'Notifications',
+                navItemRoute: '/landing/admin/notifications',
+                navItemIcon: 'pi pi-home'
+            },
             {
                 navItemLabel: 'Logout',
                 navItemRoute: 'busines-owner-post-details',

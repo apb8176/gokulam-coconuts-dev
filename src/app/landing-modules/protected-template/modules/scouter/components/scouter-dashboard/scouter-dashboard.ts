@@ -1,4 +1,5 @@
 import { Component, signal } from '@angular/core';
+import { ScouterRestapiService } from '../../services/scouter-restapi.service';
 
 @Component({
   selector: 'app-scouter-dashboard',
@@ -7,6 +8,7 @@ import { Component, signal } from '@angular/core';
   styleUrl: './scouter-dashboard.scss',
 })
 export class ScouterDashboard {
+  constructor(private apiService: ScouterRestapiService){}
   landlords = signal<any[]>([
     // sample data to show structure — replace with API data
     {
@@ -75,7 +77,7 @@ filteredLandlords() {
   }
 
   addLandlord() {
-    const payload = { ...this.newLandlord, added: new Date() };
+    let payload = { ...this.newLandlord, added: new Date() };
     this.landlords.set([...this.landlords(), payload]);
 
     // record activity
@@ -90,9 +92,23 @@ filteredLandlords() {
     ]);
 
     // reset + close
+    payload = {
+        "landlordName":this.newLandlord.name,
+        "phone":this.newLandlord.phone,
+        "city":this.newLandlord.city,
+        "property":this.newLandlord.property
+    }
     this.resetNew();
     this.showAdd = false;
-
+    this.apiService.postClassified(payload).subscribe({
+      next: (response) => {
+        console.log('✅ Property added successfully:', response);
+      },
+      error: (error) => {
+        console.error('❌ Error adding property:', error);
+      },
+    });
+  
     // In a real app: call backend API to register the landlord to GCIBN group and persist
   }
 

@@ -45,3 +45,42 @@ export const postList=[
     "action": "View"
   }
 ]
+
+
+export const notif = [
+  {
+    "id": "n001",
+    "title": "Welcome to Gokulam Coconuts!",
+    "message": "Your account has been successfully created. Explore your dashboard and settings.",
+    "receivedAt": "2025-01-10T09:25:30Z",
+    "read": false
+  },
+  {
+    "id": "n002",
+    "title": "New Yoga Event Scheduled",
+    "message": "A new morning yoga session has been added. Tap to check the details.",
+    "receivedAt": "2025-01-10T11:10:05Z",
+    "read": false
+  },
+  {
+    "id": "n003",
+    "title": "Booking Confirmed",
+    "message": "Your coconut farm visit is confirmed for 14 Jan, 10:00 AM.",
+    "receivedAt": "2025-01-09T15:45:00Z",
+    "read": true
+  },
+  {
+    "id": "n004",
+    "title": "Payment Successful",
+    "message": "We received your payment of ₹499. Your invoice is now available.",
+    "receivedAt": "2025-01-08T18:20:40Z",
+    "read": true
+  },
+  {
+    "id": "n005",
+    "title": "Offer Alert!",
+    "message": "Get 10% off on all farm-fresh tender coconuts. Limited time offer.",
+    "receivedAt": "2025-01-10T12:00:00Z",
+    "read": false
+  }
+]

@@ -4,6 +4,7 @@ import { YsDashboard } from './components/ys-dashboard/ys-dashboard';
 import { YsProfile } from './components/ys-profile/ys-profile';
 import { YsDetails } from './components/ys-details/ys-details';
 import { YsEventList } from './components/ys-event-list/ys-event-list';
+import { NotificationsComponent } from '../../common-components/notifications.component/notifications.component';
 
 const routes: Routes = [
   {
@@ -26,7 +27,10 @@ const routes: Routes = [
   {
     path:'events',
     component:YsEventList
-  }
+  },
+    {
+      path:'notifications',component:NotificationsComponent
+    }
 ];
 
 

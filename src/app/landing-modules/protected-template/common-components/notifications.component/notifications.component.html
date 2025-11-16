@@ -1,0 +1,140 @@
+
+@if(loading){
+<div>
+  <app-loader></app-loader>
+</div>
+}
+@else{
+<div  class="min-h-full p-4 sm:p-6 md:p-10 bg-white">
+  <!-- Header -->
+  <div class="max-w-5xl mx-auto">
+    <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center gap-3">
+        <div 
+          class="w-12 h-12 rounded-full flex items-center justify-center shadow"
+          style="background: #115930;">
+          <!-- simple bell icon (svg) -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-semibold" style="color:#115930;">Notifications</h1>
+          <p class="text-sm text-gray-600">All notifications (read & unread) in the order received</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button
+          class="px-3 py-1 rounded-md text-sm font-medium shadow"
+          style="background:#C7D943; color:#000000;"
+          (click)="loadNotifications()"
+          aria-label="Refresh notifications">
+          Refresh
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading / Error -->
+    <div *ngIf="loading" class="text-center py-16">
+      <div class="inline-flex items-center gap-3">
+        <svg class="animate-spin w-5 h-5" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+        </svg>
+        <span>Loading notifications...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!loading && errorMessage" class="text-red-600 py-4">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Notification list card -->
+    <div class="bg-white rounded-2xl shadow p-3 sm:p-4 md:p-6">
+      <ul role="list" class="divide-y divide-gray-100">
+        <li *ngFor="let n of notifications; trackBy: trackById" class="py-4 sm:py-5">
+          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+            <div class="flex items-start gap-3 w-full">
+              <!-- Left: unread marker -->
+              <div class="flex-shrink-0 mt-1">
+                <div *ngIf="!n.read" aria-hidden="true" class="w-3.5 h-3.5 rounded-full"
+                     style="background: #F2C438;"></div>
+                <div *ngIf="n.read" aria-hidden="true" class="w-3.5 h-3.5 rounded-full opacity-30 bg-black"></div>
+              </div>
+
+              <!-- Content -->
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-sm sm:text-base font-semibold truncate"
+                      [ngClass]="{'text-black': n.read, 'text-[#115930]': !n.read}">
+                    {{ n.title }}
+                  </h3>
+                  <div class="text-xs text-gray-500 whitespace-nowrap ml-3">
+                    {{ formatDate(n.receivedAt) }}
+                  </div>
+                </div>
+
+                <p class="mt-1 text-sm sm:text-sm text-gray-700 break-words">
+                  {{ n.message }}
+                </p>
+
+                <!-- optional metadata / small tags -->
+                <div class="mt-2 flex flex-wrap gap-2">
+                  <span *ngIf="!n.read"
+                        class="text-xs px-2 py-1 rounded-md font-medium"
+                        style="background:#F2D479; color:#000000;">
+                    Unread
+                  </span>
+                  <span *ngIf="n.read"
+                        class="text-xs px-2 py-1 rounded-md font-medium"
+                        style="background:rgba(0,0,0,0.06); color:#000000;">
+                    Read
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex items-center gap-2 justify-end">
+              <button
+                class="text-sm px-3 py-1 rounded-md font-medium border shadow-sm"
+                [disabled]="n.read || markingInProgress.has(n.id)"
+                (click)="markNotificationAsRead(n)"
+                aria-label="Mark as read"
+                [attr.aria-disabled]="n.read || markingInProgress.has(n.id)"
+                [ngStyle]="{
+                  'background': n.read ? '#FFFFFF' : '#115930',
+                  'color': n.read ? '#000000' : '#FFFFFF',
+                  'border-color': n.read ? '#E5E7EB' : 'transparent'
+                }">
+                <ng-container *ngIf="n.read">✓ Read</ng-container>
+                <ng-container *ngIf="!n.read">
+                  <span *ngIf="!markingInProgress.has(n.id)">Mark as read</span>
+                  <span *ngIf="markingInProgress.has(n.id)">
+                    Marking...
+                  </span>
+                </ng-container>
+              </button>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+      <!-- Empty state -->
+      <div *ngIf="!loading && notifications.length === 0" class="text-center py-8">
+        <div class="mb-3">
+          <svg class="w-12 h-12 mx-auto" viewBox="0 0 24 24" fill="none" stroke="#115930" stroke-width="1.5">
+            <path d="M3 8l7-5 7 5v7a5 5 0 01-5 5H8a5 5 0 01-5-5z"/>
+            <path d="M9 14h6" stroke-linecap="round"></path>
+          </svg>
+        </div>
+        <p class="text-sm text-gray-600">No notifications yet</p>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Container -->
+
