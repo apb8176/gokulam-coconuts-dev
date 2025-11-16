@@ -86,7 +86,7 @@ export class AllUserData {
         this.cdr.detectChanges();
       },
     });
-     //https://civ0w2cemc.execute-api.eu-north-1.amazonaws.com/dev/admin/interested-list?classifiedId=c4dea4a6-48de-4e6b-850d-3afc47ca1eeb
+     
   }
 
   getRightList() {

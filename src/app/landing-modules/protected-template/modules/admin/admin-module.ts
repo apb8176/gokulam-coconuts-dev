@@ -7,6 +7,7 @@ import { AllRequestsComponent } from './components/all-requests-component/all-re
 import { FormsModule } from '@angular/forms';
 import { AllUserData } from './components/all-user-data/all-user-data';
 import { InterestListComponent } from './components/interest-list.component/interest-list.component';
+import { LoaderComponent } from '../../common-components/loader.component/loader.component';
 
 
 @NgModule({
@@ -18,7 +19,7 @@ import { InterestListComponent } from './components/interest-list.component/inte
   ],
   imports: [
     CommonModule,FormsModule,
-    AdminRoutingModule
+    AdminRoutingModule,LoaderComponent
   ],
   exports:[InterestListComponent]
 })

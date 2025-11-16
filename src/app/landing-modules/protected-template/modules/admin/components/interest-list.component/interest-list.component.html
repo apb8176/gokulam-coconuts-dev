@@ -7,10 +7,7 @@
        [ngStyle]="{ 'background': 'rgba(0,0,0,0.5)' }"
        aria-hidden="true"></div>
 
-  <!-- Modal panel:
-       - mobile: full-screen panel from bottom (mobile-first).
-       - md+: centered constrained panel.
-  -->
+  <!-- Modal panel -->
   <div
     role="dialog"
     aria-modal="true"
@@ -39,9 +36,6 @@
           <div class="text-white font-semibold text-sm md:text-lg truncate">
             Interested Users
           </div>
-          <!-- <div class="text-white text-xs opacity-90 truncate">
-            <span *ngIf="activeEnquiryId">Enquiry: <span class="font-medium">{{ activeEnquiryId }}</span></span>
-          </div> -->
         </div>
       </div>
 
@@ -61,7 +55,7 @@
       </div>
     </div>
 
-    <!-- Body: responsive scroll area -->
+    <!-- Body -->
     <div class="p-3 md:p-4 overflow-auto" style="max-height: calc(100vh - 150px);">
       <!-- Loading -->
       <div *ngIf="loading" class="flex items-center justify-center py-10">
@@ -79,10 +73,7 @@
         No interested users found.
       </div>
 
-      <!-- Items container:
-           - mobile: single column list (space-y)
-           - md+: 2-column grid (cards) for better use of horizontal space
-      -->
+      <!-- Items container -->
       <div *ngIf="!loading && items.length > 0"
            class="grid grid-cols-1 gap-3 md:grid-cols-2">
         <article *ngFor="let it of items"
@@ -96,7 +87,7 @@
                 class="w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center text-white font-semibold text-lg md:text-xl"
                 [ngStyle]="{ 'background': '#115930' }"
                 aria-hidden="true">
-                {{ (it.member.firstName || it.member.email || it.member.phone) | slice:0:1 | uppercase }}
+                {{ ((it.member.firstName || it.member.email || it.member.phone) | slice:0:1) | uppercase }}
               </div>
             </div>
 
@@ -144,7 +135,7 @@
             <div class="text-xs text-gray-600">Status: <span class="font-semibold">{{ it.enquiry.status || '—' }}</span></div>
 
             <div class="flex flex-wrap gap-2 mt-1">
-              <a *ngIf="it.member.email"
+              <!-- <a *ngIf="it.member.email"
                  [href]="'mailto:' + it.member.email"
                  class="px-3 py-1 rounded-md text-xs font-medium border"
                  style="border-color: #C7D943;">Email</a>
@@ -152,24 +143,30 @@
               <a *ngIf="it.member.phone"
                  [href]="'tel:' + it.member.phone"
                  class="px-3 py-1 rounded-md text-xs font-medium border"
-                 style="border-color: #C7D943;">Call</a>
+                 style="border-color: #C7D943;">Call</a> -->
+
+              <!-- Chat History Button -->
+              <button
+                (click)="openHistory(it)"
+                class="px-3 py-1 rounded-md text-xs font-medium focus:outline-none focus:ring-2"
+                [attr.aria-label]="'Open chat history for ' + (it.member.firstName || it.member.email || 'user')"
+                style="background: #F2D479; color: #000;">
+                Chat History
+              </button>
 
               <!-- Fallback small action on mobile -->
               <button *ngIf="!it.member.email && !it.member.phone"
-                      class="px-3 py-1 rounded-md text-xs font-medium bg-[#F2D479]">
+                      class="px-3 py-1 rounded-md text-xs font-medium"
+                      style="background: #F2D479">
                 No contact
               </button>
             </div>
-
-            <!-- <div class="hidden md:block text-xs text-gray-500 mt-1">
-              ID: <span class="font-mono text-xs">{{ it.enquiry.enquiryId }}</span>
-            </div> -->
           </div>
         </article>
       </div>
     </div>
 
-    <!-- Footer / Pagination (sticky on mobile bottom for easy access) -->
+    <!-- Footer / Pagination -->
     <div
       class="px-4 py-3 border-t bg-white"
       style="border-color: rgba(0,0,0,0.06);">
@@ -206,4 +203,68 @@
       </div>
     </div>
   </div>
+
+  <!-- Chat History Side Panel (fixed on right) -->
+  <aside
+    class="fixed top-0 right-0 h-full z-60"
+    [ngClass]="{ 'pointer-events-auto': historyOpen, 'pointer-events-none': !historyOpen }"
+    [attr.aria-hidden]="!historyOpen">
+    <!-- backdrop for panel (only visible when open) -->
+    <div *ngIf="historyOpen" (click)="closeHistory()" class="fixed inset-0 bg-black opacity-40"></div>
+    <app-loader *ngIf="loading"></app-loader>
+    <!-- panel -->
+    <div *ngIf="!loading"
+      role="dialog"
+      aria-modal="false"
+      aria-label="Chat history"
+      class="fixed right-0 top-0 h-full w-full md:w-[420px] bg-white shadow-2xl transform transition-transform duration-300 ease-in-out"
+      [ngClass]="{ 'translate-x-0': historyOpen, 'translate-x-full': !historyOpen }"
+      style="border-left: 4px solid #115930;"
+    >
+      <!-- panel header -->
+      <div class="flex items-center justify-between px-4 py-3" style="background: linear-gradient(90deg,#115930,#C7D943);">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold" style="background: rgba(255,255,255,0.18); border: 2px solid rgba(255,255,255,0.9);">
+            <svg class="w-5 h-5" fill="none" stroke="white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 10h.01M12 10h.01M16 10h.01M9 16h6M21 12c0 4.418-4.03 8-9 8s-9-3.582-9-8 4.03-8 9-8 9 3.582 9 8z"/>
+            </svg>
+          </div>
+          <div class="text-white font-semibold">Chat History</div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button (click)="closeHistory()" class="p-2 rounded-lg focus:outline-none" aria-label="Close chat history"
+                  [ngStyle]="{ 'background': '#F2C438' }">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#000">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- panel body -->
+      <div class="p-4 overflow-auto h-full" style="max-height: calc(100vh - 72px);">
+        <div *ngIf="selectedEnquiryLabel" class="text-sm text-gray-700 mb-3">
+          <span class="font-semibold text-[#115930]">Conversation for:</span>
+          <div class="text-sm mt-1 truncate">{{ selectedEnquiryLabel }}</div>
+        </div>
+
+        <div *ngIf="!selectedMessages || selectedMessages.length === 0" class="text-center text-sm text-gray-600 mt-8">
+          No messages available.
+        </div>
+
+        <ul *ngIf="selectedMessages && selectedMessages.length > 0" class="space-y-3">
+          <li *ngFor="let m of selectedMessages" class="border rounded-lg p-3">
+            <div class="flex items-center justify-between mb-1">
+              <div class="text-xs font-semibold" style="color: #115930;">{{ m.responderRole }}</div>
+              <div class="text-xs text-gray-500 whitespace-nowrap">{{ formatDate(m.createdAt) }}</div>
+            </div>
+            <div class="text-sm text-gray-800 whitespace-pre-wrap break-words">{{ m.message }}</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
 </div>

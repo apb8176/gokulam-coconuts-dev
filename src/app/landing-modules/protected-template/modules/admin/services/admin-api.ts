@@ -49,6 +49,8 @@ export class AdminApiService {
     return this.http.get(url, { headers });
   }
 
+  
+
   putProfile(profileData: any): Observable<any> {
     const token = this.tokenManager.getIdToken();
     const headers = new HttpHeaders({
@@ -169,4 +171,14 @@ export class AdminApiService {
     return this.http.get(url, { headers });
   }
 
+  getHistory(userId:any,enquirerUserId:any): Observable<any> {
+    const token = this.tokenManager.getIdToken();
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
+
+    const url = `${this.apiUrl}enquiries/thread-flexible?enquirerUserId=${enquirerUserId}&userId=${userId}`;
+    return this.http.get(url, { headers });
+  }
 }
