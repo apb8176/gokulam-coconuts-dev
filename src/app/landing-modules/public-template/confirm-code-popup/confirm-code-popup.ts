@@ -67,7 +67,7 @@ export class ConfirmCodePopup implements OnInit {
         this.confirm.emit(result);
         this.closePopup();
      
-        this.notify.showSuccess('Signup Successfull', 'Signin with your credentials');
+        //this.notify.showSuccess('Signup Successfull', 'Signin with your credentials');
        
       //  let createOrderReq = {
       //   userId: username,
@@ -150,7 +150,8 @@ export class ConfirmCodePopup implements OnInit {
 
 
 
-      } catch (error: any) {
+      } 
+      catch (error: any) {
         console.error('Confirmation failed:', error);
         this.errorMessage = error.message || 'Confirmation failed. Please try again.';
       }
