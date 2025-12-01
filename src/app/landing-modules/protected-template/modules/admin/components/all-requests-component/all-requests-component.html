@@ -142,7 +142,7 @@
                       <!-- Badges: User Type + Category/Source -->
                       <div class="flex items-center gap-2 ml-3">
                         <!-- Inferred user type badge -->
-                        <span class="text-xs font-semibold px-2 py-1 rounded-md"
+                        <!-- <span class="text-xs font-semibold px-2 py-1 rounded-md"
                               [ngClass]="{
                                 'bg-[#eef7ef] text-[#0b7a4a]': it.propertyUserId,
                                 'bg-[#eef3ff] text-[#2a2fa3]': it.businessId,
@@ -150,7 +150,7 @@
                                 'bg-[#f3f3f3] text-[#6b6b6b]': !it.propertyUserId && !it.businessId && !it.yogaStudioId
                               }">
                           {{ it.propertyUserId ? 'Property Owner' : (it.businessId ? 'Business Owner' : (it.yogaStudioId ? 'Yoga Studio' : (it.userId ? 'Community Member' : 'User'))) }}
-                        </span>
+                        </span> -->
 
                         <!-- Category/source badge (use _approval_index.sourceTable if present) -->
                         <span class="text-xs px-2 py-1 rounded-md font-medium"

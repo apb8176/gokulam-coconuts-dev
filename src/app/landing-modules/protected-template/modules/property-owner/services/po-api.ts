@@ -20,6 +20,14 @@ export class PoApi {
     
     return this.http.post(url, propertyData, { headers });
   }
+  putPropertyDetails(propertyData: any): Observable<any> {
+    const token = this.tokenManager.getIdToken();
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json',Authorization: `Bearer ${token}` });
+    let url = this.apiUrl + 'post_property_details';
+    
+    
+    return this.http.put(url, propertyData, { headers });
+  }
    getPropertyList(): Observable<any> {
      const token = this.tokenManager.getIdToken();
     const headers = new HttpHeaders({ 'Content-Type': 'application/json',Authorization: `Bearer ${token}` });

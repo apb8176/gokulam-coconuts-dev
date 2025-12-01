@@ -110,7 +110,7 @@ export class Cognito {
   /**
    * 🌐 Call your getUserType API after successful sign-in
    */
-  private async callGetUserTypeApi(username: string, idToken: string) {
+  async callGetUserTypeApi(username: string, idToken: string) {
     const body = JSON.stringify({ username });
     const headers = {
       'Content-Type': 'application/json',

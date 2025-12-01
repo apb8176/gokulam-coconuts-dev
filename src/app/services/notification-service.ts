@@ -48,7 +48,11 @@ export class NotificationService {
       isConfirm: true,
       okText,
       cancelText,
-    });
+    });   
+    console.log(result,title);
+    if(title==='Payment is pending'){
+      window.location.reload();
+    }
     return !!result;
   }
 }

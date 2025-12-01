@@ -87,21 +87,30 @@ export class TokenManagerService {
   }
 
   /** Check if the token is expired and refresh if needed */
-  async checkToken(): Promise<void> {
-    try {
-      
-      
-      const expiresAt = parseInt(localStorage.getItem('token_expires_at') || '0', 30);
-      console.log('console.log(expiresAt);',expiresAt);
-      const now = Date.now();
-      const shouldRefresh = !expiresAt || now > expiresAt - 60_000; // refresh 1 min early
-      if (shouldRefresh) {
-        await this.refreshTokens();
-      }
-    } catch (e) {
-      console.error('checkToken error', e);
+async checkToken(): Promise<void> {
+  try {
+    const expiresAtStr = localStorage.getItem('token_expires_at');
+
+    // If token_expires_at is missing → DO NOT call refreshTokens()
+    if (!expiresAtStr) {
+      console.log('No token_expires_at found → skipping refresh');
+      return;
     }
+
+    const expiresAt = parseInt(expiresAtStr, 10);
+    const now = Date.now();
+
+    // Refresh 1 min early
+    const shouldRefresh = now > expiresAt - 60_000;
+
+    if (shouldRefresh) {
+      await this.refreshTokens();
+    }
+  } catch (e) {
+    console.error('checkToken error', e);
   }
+}
+
 
   /**
    * Call Cognito to refresh tokens (single inflight promise)
@@ -163,11 +172,11 @@ export class TokenManagerService {
           (String(awsMessage).toLowerCase().includes('invalid refresh token'));
 
         if (isInvalidRefresh) {
-          await this.handleInvalidRefresh(awsMessage || 'Invalid Refresh Token');
+          await this.handleInvalidRefresh(awsMessage + 'Invalid Refresh Token');
         } else {
           // for other errors you might want to retry later; for now, log and clear if repeated failure
           console.warn('Refresh failed (non NotAuthorized). Clearing tokens to be safe.');
-          await this.handleInvalidRefresh(awsMessage || 'Refresh failed');
+          await this.handleInvalidRefresh(awsMessage + 'Refresh failed');
         }
       } finally {
         // reset inflight promise

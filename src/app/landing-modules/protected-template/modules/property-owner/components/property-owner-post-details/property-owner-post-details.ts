@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { PoApi } from '../../services/po-api';
 import { MultipartUpload } from '../../services/multipart-upload';
 
+import { Router } from '@angular/router';
 type PhotoItem = {
   key: string; // unique key for this photo, sent as form field name
   file: File; // actual File object (binary)
@@ -18,7 +19,8 @@ export class PropertyOwnerPostDetails {
   videos: any = [];
   constructor(private propertyService: PoApi, 
     private uploadService: MultipartUpload,
-    private cdr : ChangeDetectorRef) {}
+    private cdr : ChangeDetectorRef,
+  private router : Router) {}
 
   @Input() propertySelected: any ;
   // = {
@@ -99,6 +101,9 @@ export class PropertyOwnerPostDetails {
     console.log('this.uploadService.selectedItem',this.uploadService.selectedItem());
     
     this.propertySelected =this.uploadService.selectedItem(); 
+    if (!this.propertySelected) {
+      this.isEditMode = true; // new property
+     }
     this.propertys = this.propertySelected;
     this.loadSelectedPropertyToForm();
     console.log(this.propertySelected);
@@ -123,7 +128,7 @@ export class PropertyOwnerPostDetails {
       this.property.status = this.propertySelected.status || '';
       this.property.conditions = this.propertySelected.conditions || '';
       this.property.postedOn = this.propertySelected.postedOn || this.property.postedOn;
-
+      this.property.owner = this.propertySelected.ownerName || '';
       // Photos: normalize legacy URL strings to PhotoItem with previewUrl only
       const initialPhotos = this.propertySelected.photos || [];
       this.property.photos = initialPhotos.map((p: any, idx: number) => {
@@ -176,6 +181,9 @@ export class PropertyOwnerPostDetails {
 
   toggleEdit() {
     this.isEditMode = !this.isEditMode;
+    if (!this.isEditMode && !this.propertySelected) {
+        this.router.navigate(['/landing/property-owner/listing']);
+    }
   }
 
   addFacility() {
@@ -252,9 +260,9 @@ export class PropertyOwnerPostDetails {
       propertyName: this.property.propertyName || '',
       address: this.property.address || '',
       googleMapUrl: this.property.googleMapUrl || '',
-      owner: this.property.contact?.owner || '',
-      phone: this.property.contact?.phone || '',
-      email: this.property.contact?.email || '',
+      owner: this.property.owner || '',
+      phone: this.property.phone || '',
+      email: this.property.email || '',
       type: this.property.type || '',
       details: this.property.details || '',
       facilities: this.property.facilities || [],
@@ -262,23 +270,45 @@ export class PropertyOwnerPostDetails {
       purpose: this.property.purpose || '',
       buildingAge: this.property.buildingAge || '',
       status: this.property.status || '',
-      photos: this.property.photos
+      photos: this.property.photos,
       // Uncomment if needed later
-      // conditions: this.property.conditions || '',
+      conditions: this.property.conditions || '',
       // postedOn: this.property.postedOn || ''
     };
      this.videos?payload['videos']= this.videos :null;
 
     console.log('Payload:', payload);
-
-    this.propertyService.postPropertyDetails(payload).subscribe({
+    if(this.propertySelected){
+      payload['propertyId']= this.propertySelected.propertyId;
+        this.propertyService.putPropertyDetails(payload).subscribe({
       next: (response) => {
         console.log('✅ Property added successfully:', response);
+       
+        this.propertySelected = response.item;
+       this.propertySelected['propertyId']= response['propertyId'];
+        this.loadSelectedPropertyToForm();
+         this.isEditMode = false;
+        this.cdr.detectChanges();
+        // this.router.navigate(['/landing/property-owner/listing']);
       },
       error: (error) => {
         console.error('❌ Error adding property:', error);
       },
     });
+  
+    }
+    else{
+this.propertyService.postPropertyDetails(payload).subscribe({
+      next: (response) => {
+        console.log('✅ Property added successfully:', response);
+        this.router.navigate(['/landing/property-owner/listing']);
+      },
+      error: (error) => {
+        console.error('❌ Error adding property:', error);
+      },
+    });
+    }
+  
   }
 
   // smaller helper if you wish to download/inspect a photo

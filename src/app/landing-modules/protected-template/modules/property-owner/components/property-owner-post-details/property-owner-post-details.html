@@ -1,7 +1,7 @@
 
 <div class="max-w-7xl mx-auto p-4 md:p-8 bg-white">
     <!-- Interested People -->
-  <div class="max-w-7xl bg-white rounded-xl p-4 md:p-8 shadow border border-[#F2D479] mt-6">
+  <div *ngIf="!isEditMode" class="max-w-7xl bg-white rounded-xl p-4 md:p-8 shadow border border-[#F2D479] mt-6">
     <h3 class="text-xl font-semibold text-[#0D0D0D] mb-4">Interested People</h3>
 
     <!-- Toggle Button -->
@@ -72,7 +72,7 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div>
         <label class="block font-semibold text-[#0D0D0D]">Owner</label>
-        <input [(ngModel)]="property.ownerName" name="owner"
+        <input [(ngModel)]="property.owner" name="owner"
           class="w-full p-2 border border-[#F2D479] rounded-lg">
       </div>
       <div>
@@ -289,7 +289,7 @@
         [ngClass]="propertySelected.status === 'Available' ? 'bg-[#115930]' : 'bg-red-600'">
         {{ propertySelected.status }}
       </span>
-      <p class="text-sm mt-2 text-[#0D0D0D]/70">Posted on: {{ propertySelected.postedOn }}</p>
+      <p class="text-sm mt-2 text-[#0D0D0D]/70">Posted on: {{ propertySelected.createdAt }}</p>
     </div>
   </div>
 

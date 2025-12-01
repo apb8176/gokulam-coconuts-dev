@@ -12,7 +12,7 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   canActivate(): boolean | UrlTree {
-    const user = this.auth.getUser();
+    const user:any = this.auth.getUser();
    
     // Not signed in -> go to public template (root)
     if (!user) {
@@ -23,10 +23,18 @@ export class AuthGuard implements CanActivate {
       return true;
     }
     // If pending approval -> remain on home (public root) and show waiting popup
+    
     if (user.approval === 'pending') {
-      this.notify.showInfo('Waiting for approval', 'Your account is pending admin approval.');
+      if(user.user_type === 'business-owner'||user.user_type === 'property-owner'||user.user_type === 'yoga-studio'){
+        this.notify.confirm('Payment is pending', 'Complete payment to continue .');
+        this.router.navigateByUrl('/');
+      }
+      else{
+        this.notify.showInfo('Waiting for approval', 'Your account is pending admin approval.');
+        return this.router.parseUrl('/');
+      }
       // ensure user stays at public/home (you said: "stay at home page while signing in")
-      return this.router.parseUrl('/');
+      
     }
 
     // If rejected -> show reject message and remain on public home

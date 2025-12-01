@@ -17,16 +17,17 @@
 
     <!-- Header -->
     <h2
-      class="text-2xl font-bold text-center text-[#115930] border-b-2 border-[#C7D943] pb-2 mb-6"
+      class="text-2xl font-bold text-center text-[#115930] border-b-2 border-[#C7D943] pb-2 mb-2"
     >
       Billing Details
     </h2>
+    <p class="text-center pb-2 mb-4">Complete Payment to Continue</p>
 
     <!-- Form -->
     <form [formGroup]="billingForm" (ngSubmit)="onSubmit()" class="space-y-4">
       <!-- Name -->
       <div>
-        <label class="block text-sm font-semibold text-[#0D0D0D] mb-1">Full Name</label>
+        <label class="block text-sm font-semibold text-[#0D0D0D] mb-1">Full Name <span class="text-red-500">*</span></label>
         <input
           type="text"
           formControlName="name"
@@ -43,7 +44,7 @@
 
       <!-- Phone -->
       <div>
-        <label class="block text-sm font-semibold text-[#0D0D0D] mb-1">Phone</label>
+        <label class="block text-sm font-semibold text-[#0D0D0D] mb-1">Phone<span class="text-red-500">*</span></label>
         <input
           type="tel"
           maxlength="10"
@@ -61,7 +62,7 @@
 
       <!-- Email -->
       <div>
-        <label class="block text-sm font-semibold text-[#0D0D0D] mb-1">Email</label>
+        <label class="block text-sm font-semibold text-[#0D0D0D] mb-1">Email<span class="text-red-500">*</span></label>
         <input
           type="email"
           formControlName="email"
@@ -78,7 +79,7 @@
 
       <!-- Address -->
       <div>
-        <label class="block text-sm font-semibold text-[#0D0D0D] mb-1">Address</label>
+        <label class="block text-sm font-semibold text-[#0D0D0D] mb-1">Address<span class="text-red-500">*</span></label>
         <textarea
           formControlName="address"
           rows="2"
@@ -119,7 +120,7 @@
       <button
         type="submit"
         [disabled]="billingForm.invalid || loading"
-        class="w-full py-3 rounded-xl font-semibold text-[#0D0D0D] bg-[#F2C438] hover:bg-[#C7D943] transition flex items-center justify-center"
+        class="w-full py-3 rounded-xl font-semibold disabled:bg-slate-300 text-[#0D0D0D] bg-[#F2C438] hover:bg-[#C7D943] transition flex items-center justify-center"
       >
         <span *ngIf="!loading">Proceed to Payment</span>
         <svg

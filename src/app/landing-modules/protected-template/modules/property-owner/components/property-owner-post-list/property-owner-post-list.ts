@@ -26,6 +26,7 @@ export class PropertyOwnerPostList {
   }
 
   navigateToForm() {
+    this.uploadService.setSelectedItem(null);
     this.router.navigateByUrl('landing/property-owner/details');
   }
 

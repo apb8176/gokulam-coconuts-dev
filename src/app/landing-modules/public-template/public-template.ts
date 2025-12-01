@@ -3,6 +3,7 @@ import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { filter } from 'rxjs/operators';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-public-template',
@@ -22,12 +23,25 @@ export class PublicTemplate implements OnInit {
 
   configuration$ = this.oidcSecurityService.getConfiguration();
   userData$ = this.oidcSecurityService.userData$;
-  constructor(private cdr:ChangeDetectorRef){}
+  constructor( private auth: AuthService,private cdr:ChangeDetectorRef){}
   isAuthenticated = false;
 showBillingPopup: boolean = false;
   userData: any;
 
   ngOnInit(): void {
+     let  user:any = this.auth.getUser();
+   
+    // Not signed in -> go to public template (root)
+  
+    
+    // If pending approval -> remain on home (public root) and show waiting popup
+    
+    if (user &&  user.approval && user.approval === 'pending') {
+      if(user.user_type === 'business-owner'||user.user_type === 'property-owner'||user.user_type === 'yoga-studio'){
+        this.showBillingPopup = true;
+      }
+     
+    }
     // keep template mobile menu state tidy on route change
     this.router.events.pipe(filter((e) => e instanceof NavigationEnd)).subscribe(() => {
       this.mobileMenuOpen = false;
@@ -66,10 +80,10 @@ showBillingPopup: boolean = false;
   returnConfirmData(event: any) {
     console.log('Confirm returned to parent:', event);
     this.showConfirmUserForm = false;
-     if(this.userData.role === 'business-owner'||this.userData.role === 'property-owner'||this.userData.role === 'yoga-studio'){
-      this.showBillingPopup = true;
-    }
-    
+    this.showLoginForm = true;
+    // if(this.userData.role === 'business-owner'||this.userData.role === 'property-owner'||this.userData.role === 'yoga-studio'){
+    //   this.showBillingPopup = true;
+    // }
     this.cdr.detectChanges(); 
   }
 
