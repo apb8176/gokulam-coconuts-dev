@@ -188,8 +188,8 @@ loadPage(page: number = 1, cursor: string | null = null) {
     item.id = raw.propertyId || raw.id || raw.itemId || raw.propertyId || raw._rawId || '';
 
     // title / name
-    item.title = raw.title || raw.name || raw.details || raw.summary || '';
-    item.name = raw.name || raw.ownerName || raw.title || item.title;
+    item.title = raw.propertyName || raw.title || raw.name || raw.details || raw.summary || '';
+    item.name = raw.ownerName || raw.name || raw.title || item.title;
 
     // type / date
     item.type = raw.type || raw.requestType || (raw._approval_index && raw._approval_index.title) || '';
@@ -199,6 +199,34 @@ loadPage(page: number = 1, cursor: string | null = null) {
     // summary / details
     item.summary = raw.summary || (typeof raw.details === 'string' ? raw.details : '') || null;
     item.details = raw.details || raw.description || raw.detailsText || null;
+
+    // specific property fields
+    item.purpose = raw.purpose || null;
+    item.price = raw.price || null;
+    item.phone = raw.phone || null;
+    item.email = raw.email || null;
+    item.address = raw.address || null;
+    item.buildingAge = raw.buildingAge || null;
+    item.conditions = raw.conditions || null;
+    item.googleMapUrl = raw.googleMapUrl || null;
+    item.propertyName = raw.propertyName || null;
+    item.isPublic = raw.isPublic || null;
+    item.status = raw.status || null;
+
+    // facilities (handle stringified array or normal array)
+    if (raw.facilities) {
+      if (typeof raw.facilities === 'string') {
+        try {
+          item.facilities = JSON.parse(raw.facilities);
+        } catch (e) {
+          item.facilities = [raw.facilities];
+        }
+      } else {
+        item.facilities = raw.facilities;
+      }
+    } else {
+      item.facilities = [];
+    }
 
     // owner/user ids
     item.propertyUserId = raw.propertyUserId || raw.userId || raw.ownerId || raw.propertyOwnerId || null;

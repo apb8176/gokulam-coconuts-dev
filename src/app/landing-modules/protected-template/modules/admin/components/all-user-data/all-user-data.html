@@ -53,36 +53,157 @@
         </button>
 
         <!-- Top details area -->
-        <div class="mb-6 p-4 rounded-lg border-2 border-dashed border-[#C7D943] bg-white shadow-sm">
-          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-            <div>
-              <h2 class="text-2xl md:text-3xl font-extrabold text-[#115930] mb-1">
+        <div class="mb-6 p-6 rounded-xl border border-[#F2C438] bg-white shadow-lg">
+          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+            <div class="flex-1">
+              <h2 class="text-3xl font-extrabold text-[#115930] mb-4">
                 {{ getTopTitle() }}
               </h2>
-              <p class="text-sm text-[#0D0D0D] opacity-80">
-                <span *ngIf="selectedItem.owner"><strong>Owner / Contact:</strong> {{ selectedItem.owner }}</span>
-                <span *ngIf="!selectedItem.owner && selectedItem.name"><strong>Name:</strong> {{ selectedItem.name
-                  }}</span>
-                <span *ngIf="selectedItem.phone"> • {{ selectedItem.phone }}</span>
-                <span *ngIf="selectedItem.email"> • {{ selectedItem.email }}</span>
-                <span *ngIf="selectedItem.address"> • {{ selectedItem.address }}</span>
-              </p>
-              <p class="mt-3 text-sm text-[#0D0D0D]">
-                <span *ngIf="selectedItem.details">{{ selectedItem.details }}</span>
-                <span *ngIf="!selectedItem.details && selectedItem.tagline">{{ selectedItem.tagline }}</span>
-              </p>
+              
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+                <!-- Common fields -->
+                <div *ngIf="selectedItem.owner || selectedItem.name" class="flex flex-col">
+                  <span class="text-gray-500 font-medium">Owner / Contact</span>
+                  <span class="text-[#0D0D0D] font-semibold">{{ selectedItem.owner || selectedItem.name }}</span>
+                </div>
+                <div *ngIf="selectedItem.phone" class="flex flex-col">
+                  <span class="text-gray-500 font-medium">Phone</span>
+                  <span class="text-[#0D0D0D] font-semibold">{{ selectedItem.phone }}</span>
+                </div>
+                <div *ngIf="selectedItem.email" class="flex flex-col">
+                  <span class="text-gray-500 font-medium">Email</span>
+                  <span class="text-[#0D0D0D] font-semibold">{{ selectedItem.email }}</span>
+                </div>
+                
+                <!-- Real Estate specific fields -->
+                <ng-container *ngIf="activeSection === 'Real Estate'">
+                  <div *ngIf="selectedItem.price" class="flex flex-col">
+                    <span class="text-gray-500 font-medium">Price</span>
+                    <span class="text-[#115930] font-bold text-lg">{{ selectedItem.price }}</span>
+                  </div>
+                  <div *ngIf="selectedItem.type" class="flex flex-col">
+                    <span class="text-gray-500 font-medium">Type</span>
+                    <span class="text-[#0D0D0D] font-semibold">{{ selectedItem.type }}</span>
+                  </div>
+                  <div *ngIf="selectedItem.purpose" class="flex flex-col">
+                    <span class="text-gray-500 font-medium">Purpose</span>
+                    <span class="px-2 py-0.5 rounded text-xs w-fit font-bold" 
+                      [ngClass]="selectedItem.purpose === 'Sale' ? 'bg-blue-100 text-blue-800' : 'bg-orange-100 text-orange-800'">
+                      {{ selectedItem.purpose }}
+                    </span>
+                  </div>
+                  <div *ngIf="selectedItem.status" class="flex flex-col">
+                    <span class="text-gray-500 font-medium">Status</span>
+                    <span class="text-[#0D0D0D] font-semibold">{{ selectedItem.status }}</span>
+                  </div>
+                  <div *ngIf="selectedItem.approval" class="flex flex-col">
+                    <span class="text-gray-500 font-medium">Approval</span>
+                    <span class="px-2 py-0.5 rounded text-xs w-fit font-bold"
+                      [ngClass]="{
+                        'bg-yellow-100 text-yellow-800': selectedItem.approval === 'pending',
+                        'bg-green-100 text-green-800': selectedItem.approval === 'approved',
+                        'bg-red-100 text-red-800': selectedItem.approval === 'rejected'
+                      }">
+                      {{ selectedItem.approval | titlecase }}
+                    </span>
+                  </div>
+                  <div *ngIf="selectedItem.buildingAge" class="flex flex-col">
+                    <span class="text-gray-500 font-medium">Building Age</span>
+                    <span class="text-[#0D0D0D] font-semibold">{{ selectedItem.buildingAge }}</span>
+                  </div>
+                  <div *ngIf="selectedItem.conditions" class="flex flex-col">
+                    <span class="text-gray-500 font-medium">Condition</span>
+                    <span class="text-[#0D0D0D] font-semibold">{{ selectedItem.conditions }}</span>
+                  </div>
+                  <div *ngIf="selectedItem.isPublic" class="flex flex-col">
+                    <span class="text-gray-500 font-medium">Public Visibility</span>
+                    <span class="text-[#0D0D0D] font-semibold">{{ selectedItem.isPublic === 'true' ? 'Public' : 'Private' }}</span>
+                  </div>
+                  <div *ngIf="selectedItem.createdAt" class="flex flex-col">
+                    <span class="text-gray-500 font-medium">Created At</span>
+                    <span class="text-[#0D0D0D] font-semibold">{{ selectedItem.createdAt | date:'mediumDate' }}</span>
+                  </div>
+                </ng-container>
+              </div>
+
+              <!-- Address & Details (Full Width) -->
+              <div class="mt-6 space-y-4">
+                <div *ngIf="selectedItem.address" class="flex flex-col p-3 bg-gray-50 rounded-lg border border-gray-100">
+                  <span class="text-xs text-gray-500 uppercase font-bold mb-1">Address</span>
+                  <span class="text-[#0D0D0D]">{{ selectedItem.address }}</span>
+                  <a *ngIf="selectedItem.googleMapUrl" [href]="selectedItem.googleMapUrl" target="_blank" 
+                    class="text-blue-600 hover:underline text-xs mt-1 flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
+                    View on Maps
+                  </a>
+                </div>
+                
+                <div *ngIf="selectedItem.details || selectedItem.tagline" class="flex flex-col p-3 bg-gray-50 rounded-lg border border-gray-100">
+                  <span class="text-xs text-gray-500 uppercase font-bold mb-1">Description / Details</span>
+                  <span class="text-[#0D0D0D] whitespace-pre-line">{{ selectedItem.details || selectedItem.tagline }}</span>
+                </div>
+
+                <!-- Facilities -->
+                <div *ngIf="selectedItem.facilities && selectedItem.facilities.length" class="flex flex-col">
+                  <span class="text-xs text-gray-500 uppercase font-bold mb-2">Facilities</span>
+                  <div class="flex flex-wrap gap-2">
+                    <span *ngFor="let facility of selectedItem.facilities" 
+                      class="px-3 py-1 bg-[#F2C438] bg-opacity-20 text-[#115930] rounded-full text-xs font-semibold border border-[#F2C438]">
+                      {{ facility }}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Photos/Videos counts -->
+                <div class="flex gap-4 text-xs font-medium text-gray-500">
+                  <span *ngIf="photoUrls.length">📸 {{ photoUrls.length }} {{ photoUrls.length === 1 ? 'Photo' : 'Photos' }}</span>
+                  <span *ngIf="videoUrls.length">🎥 {{ videoUrls.length }} {{ videoUrls.length === 1 ? 'Video' : 'Videos' }}</span>
+                </div>
+
+                <!-- Photos & Videos gallery -->
+                <div *ngIf="photoUrls.length || videoUrls.length" class="mt-6 space-y-6">
+                  <ng-container *ngIf="photoUrls as photoList">
+                    <div *ngIf="photoList.length" class="space-y-3">
+                      <div class="text-xs text-gray-500 uppercase font-bold tracking-wider">Photos</div>
+                      <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        <div *ngFor="let url of photoList" class="rounded-xl border border-gray-200 overflow-hidden bg-gray-50 shadow-sm">
+                          <a [href]="url" target="_blank" rel="noopener noreferrer" class="block h-full">
+                            <img [src]="url" [alt]="getTopTitle() + ' photo'" class="h-32 w-full object-cover transition duration-200 hover:scale-105" loading="lazy" />
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+
+                  <ng-container *ngIf="videoUrls as videoList">
+                    <div *ngIf="videoList.length" class="space-y-3">
+                      <div class="text-xs text-gray-500 uppercase font-bold tracking-wider">Videos</div>
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div *ngFor="let url of videoList" class="rounded-xl border border-gray-200 overflow-hidden bg-black shadow-sm">
+                          <video [src]="url" controls preload="metadata" class="h-48 w-full object-cover" [attr.aria-label]="getTopTitle() + ' video'"></video>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
             </div>
 
             <!-- Actions -->
-            <div class="flex items-center gap-3">
-              <button (click)="toggleEnable(selectedItem)" class="px-3 py-2 rounded-md font-medium border shadow-sm"
-                [ngClass]="{'bg-red-500 text-white border-red-600': !selectedItem.enabled, 'bg-green-600 text-white border-green-700': selectedItem.enabled}">
-                {{ selectedItem.enabled ? 'Enabled' : 'Disabled' }}
+            <div class="flex flex-col sm:flex-row md:flex-col items-stretch gap-3 min-w-[140px]">
+              <button (click)="toggleEnable(selectedItem)" class="px-4 py-2.5 rounded-lg font-bold border shadow-md transition-all active:scale-95"
+                [ngClass]="{'bg-red-500 text-white border-red-600 hover:bg-red-600': !selectedItem.isEnable || selectedItem.isEnable === 'false', 'bg-green-600 text-white border-green-700 hover:bg-green-700': selectedItem.isEnable === 'true'}">
+                {{ selectedItem.isEnable === 'true' ? 'Enabled' : 'Disabled' }}
               </button>
 
               <button (click)="sendMessageToUser(selectedItem)"
-                class="px-3 py-2 rounded-md font-medium border border-[#C7D943] bg-[#F2C438] text-[#0D0D0D] shadow-sm">
+                class="px-4 py-2.5 rounded-lg font-bold border border-[#C7D943] bg-[#F2C438] text-[#0D0D0D] shadow-md hover:bg-[#E2B428] transition-all active:scale-95">
                 Send Message
+              </button>
+              
+              <button *ngIf="activeSection === 'Real Estate'" (click)="showInterestList({eventId: selectedItem.id})"
+                class="px-4 py-2.5 rounded-lg font-bold border border-gray-200 bg-white text-[#115930] shadow-md hover:bg-gray-50 transition-all active:scale-95">
+                View Interests
               </button>
             </div>
           </div>

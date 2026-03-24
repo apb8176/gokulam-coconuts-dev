@@ -175,7 +175,7 @@
                 </div>
 
                 <!-- Short summary / key details row -->
-                <div class="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs" style="color:#8b8b93;">
+                <div class="mt-3 grid grid-cols-1 sm:grid-cols-4 gap-2 text-xs" style="color:#8b8b93;">
                   <!-- Address / location -->
                   <div *ngIf="it.address">
                     <div class="font-medium text-[13px]" style="color:#0b0b0c;">Address</div>
@@ -183,15 +183,31 @@
                   </div>
 
                   <!-- Details / summary -->
-                  <div *ngIf="it.details || it.summary">
-                    <div class="font-medium text-[13px]" style="color:#0b0b0c;">Details</div>
-                    <div class="mt-0.5 truncate">{{ it.details || it.summary }}</div>
+                  <div *ngIf="it.details || it.summary || it.purpose">
+                    <div class="font-medium text-[13px]" style="color:#0b0b0c;">Purpose / Details</div>
+                    <div class="mt-0.5 truncate">
+                      <span *ngIf="it.purpose" class="font-semibold text-[#0b7a4a] mr-1">[{{ it.purpose }}]</span>
+                      {{ it.details || it.summary || '—' }}
+                    </div>
+                  </div>
+
+                  <!-- Price / Building Age -->
+                  <div *ngIf="it.price || it.buildingAge">
+                    <div class="font-medium text-[13px]" style="color:#0b0b0c;">Price / Age</div>
+                    <div class="mt-0.5 truncate">
+                      <span *ngIf="it.price">{{ it.price }}</span>
+                      <span *ngIf="it.price && it.buildingAge"> • </span>
+                      <span *ngIf="it.buildingAge">{{ it.buildingAge }}</span>
+                    </div>
                   </div>
 
                   <!-- Owner / contact -->
                   <div>
-                    <div class="font-medium text-[13px]" style="color:#0b0b0c;">Owner</div>
-                    <div class="mt-0.5 truncate">{{ it.ownerName || it.userName || it.owner || it.userId || '—' }}</div>
+                    <div class="font-medium text-[13px]" style="color:#0b0b0c;">Owner / Contact</div>
+                    <div class="mt-0.5 truncate">
+                      {{ it.ownerName || it.userName || it.owner || it.userId || '—' }}
+                      <span *ngIf="it.phone" class="block text-[11px]">{{ it.phone }}</span>
+                    </div>
                   </div>
                 </div>
 
@@ -275,33 +291,74 @@
 
                   <dl class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-xs" style="color:#8b8b93;">
                     <div *ngIf="it.details">
-                      <dt class="font-medium">Details</dt>
+                      <dt class="font-medium text-[11px] uppercase tracking-wider" style="color:#0b0b0c;">Details</dt>
                       <dd class="mt-0.5">{{ it.details }}</dd>
                     </div>
 
-                    <div *ngIf="it.facilities">
-                      <dt class="font-medium">Facilities</dt>
-                      <dd class="mt-0.5">{{ it.facilities }}</dd>
+                    <div *ngIf="it.purpose">
+                      <dt class="font-medium text-[11px] uppercase tracking-wider" style="color:#0b0b0c;">Purpose</dt>
+                      <dd class="mt-0.5">{{ it.purpose }}</dd>
+                    </div>
+
+                    <div *ngIf="it.price">
+                      <dt class="font-medium text-[11px] uppercase tracking-wider" style="color:#0b0b0c;">Price</dt>
+                      <dd class="mt-0.5 text-[#0b7a4a] font-bold">{{ it.price }}</dd>
+                    </div>
+
+                    <div *ngIf="it.buildingAge">
+                      <dt class="font-medium text-[11px] uppercase tracking-wider" style="color:#0b0b0c;">Building Age</dt>
+                      <dd class="mt-0.5">{{ it.buildingAge }}</dd>
+                    </div>
+
+                    <div *ngIf="it.facilities && it.facilities.length">
+                      <dt class="font-medium text-[11px] uppercase tracking-wider" style="color:#0b0b0c;">Facilities</dt>
+                      <dd class="mt-0.5">
+                        <span *ngFor="let f of it.facilities; let last = last" class="inline-block bg-[#f0f9f4] text-[#0b7a4a] px-2 py-0.5 rounded mr-1 mb-1">
+                          {{ f }}
+                        </span>
+                      </dd>
                     </div>
 
                     <div *ngIf="it.conditions">
-                      <dt class="font-medium">Conditions</dt>
+                      <dt class="font-medium text-[11px] uppercase tracking-wider" style="color:#0b0b0c;">Conditions</dt>
                       <dd class="mt-0.5">{{ it.conditions }}</dd>
                     </div>
 
-                    <div *ngIf="it.googleMapUrl">
-                      <dt class="font-medium">Map</dt>
+                    <div *ngIf="it.phone || it.email">
+                      <dt class="font-medium text-[11px] uppercase tracking-wider" style="color:#0b0b0c;">Contact Info</dt>
                       <dd class="mt-0.5">
-                        <a [href]="it.googleMapUrl" target="_blank" rel="noopener" class="text-xs underline">
+                        <div *ngIf="it.phone">📞 {{ it.phone }}</div>
+                        <div *ngIf="it.email">✉️ {{ it.email }}</div>
+                      </dd>
+                    </div>
+
+                    <div *ngIf="it.googleMapUrl">
+                      <dt class="font-medium text-[11px] uppercase tracking-wider" style="color:#0b0b0c;">Map</dt>
+                      <dd class="mt-0.5">
+                        <a [href]="it.googleMapUrl" target="_blank" rel="noopener" class="text-xs text-[#0b7a4a] hover:underline flex items-center gap-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
                           Open in Google Maps
                         </a>
                       </dd>
                     </div>
 
+                    <div *ngIf="it.status">
+                      <dt class="font-medium text-[11px] uppercase tracking-wider" style="color:#0b0b0c;">Property Status</dt>
+                      <dd class="mt-0.5">
+                        <span class="px-2 py-0.5 rounded text-[11px] font-bold uppercase" 
+                              [ngClass]="{'bg-green-100 text-green-700': it.status === 'Available', 'bg-red-100 text-red-700': it.status !== 'Available'}">
+                          {{ it.status }}
+                        </span>
+                      </dd>
+                    </div>
+
                     <!-- Generic fallbacks for properties unknown ahead of time -->
-                    <div *ngIf="!it.details && !it.facilities && !it.conditions && !it.googleMapUrl">
+                    <div *ngIf="!it.details && !it.facilities?.length && !it.conditions && !it.googleMapUrl && !it.purpose && !it.price">
                       <dt class="font-medium">Raw JSON</dt>
-                      <dd class="mt-0.5"><pre class="text-xs whitespace-pre-wrap">{{ it | json }}</pre></dd>
+                      <dd class="mt-0.5"><pre class="text-[10px] whitespace-pre-wrap max-h-32 overflow-auto bg-gray-50 p-2 rounded">{{ it | json }}</pre></dd>
                     </div>
                   </dl>
 
@@ -392,16 +449,51 @@
         </div>
 
         <div class="px-4 pb-4 sm:px-6">
-          <div class="border rounded-lg p-3 mb-4" style="border-color:#e6e6e6;">
-            <div class="flex items-start justify-between gap-3">
-              <div>
-                <div class="text-sm font-medium" style="color:#0b0b0c;">{{ selectedItem()?.name || selectedItem()?.title || '—' }}</div>
-                <div class="text-xs mt-1" style="color:#8b8b93;">{{ selectedItem()?.type || '—' }} • {{ selectedItem()?.createdAt || selectedItem()?.date || '—' }}</div>
-                <p class="text-xs mt-2" style="color:#8b8b93;">{{ selectedItem()?.details || selectedItem()?.summary }}</p>
+          <div class="border rounded-lg p-4 mb-4 bg-[#fcfdfc]" style="border-color:#e6e6e6;">
+            <div class="flex items-start justify-between gap-4">
+              <div class="flex-1">
+                <div class="text-sm font-bold" style="color:#0b0b0c;">{{ selectedItem()?.propertyName || selectedItem()?.name || selectedItem()?.title || '—' }}</div>
+                <div class="text-[11px] mt-1 flex items-center gap-2" style="color:#8b8b93;">
+                  <span class="bg-gray-100 px-1.5 py-0.5 rounded">{{ selectedItem()?.type || '—' }}</span>
+                  <span>•</span>
+                  <span>{{ (selectedItem()?.createdAt || selectedItem()?.date) | date:'medium' }}</span>
+                </div>
+                
+                <div class="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
+                  <div *ngIf="selectedItem()?.purpose">
+                    <span class="text-[#8b8b93]">Purpose:</span>
+                    <span class="ml-1 font-medium text-[#0b0b0c]">{{ selectedItem()?.purpose }}</span>
+                  </div>
+                  <div *ngIf="selectedItem()?.price">
+                    <span class="text-[#8b8b93]">Price:</span>
+                    <span class="ml-1 font-medium text-[#0b7a4a]">{{ selectedItem()?.price }}</span>
+                  </div>
+                  <div *ngIf="selectedItem()?.ownerName">
+                    <span class="text-[#8b8b93]">Owner:</span>
+                    <span class="ml-1 font-medium text-[#0b0b0c]">{{ selectedItem()?.ownerName }}</span>
+                  </div>
+                  <div *ngIf="selectedItem()?.phone">
+                    <span class="text-[#8b8b93]">Phone:</span>
+                    <span class="ml-1 font-medium text-[#0b0b0c]">{{ selectedItem()?.phone }}</span>
+                  </div>
+                </div>
+
+                <div class="mt-3 pt-3 border-t border-gray-100" *ngIf="selectedItem()?.address">
+                  <div class="text-[11px] text-[#8b8b93] font-medium uppercase tracking-wider">Address</div>
+                  <div class="text-xs mt-0.5 text-[#0b0b0c]">{{ selectedItem()?.address }}</div>
+                </div>
+
+                <div class="mt-3 pt-3 border-t border-gray-100" *ngIf="selectedItem()?.details || selectedItem()?.summary">
+                  <div class="text-[11px] text-[#8b8b93] font-medium uppercase tracking-wider">Details</div>
+                  <p class="text-xs mt-0.5 text-[#0b0b0c] leading-relaxed">{{ selectedItem()?.details || selectedItem()?.summary }}</p>
+                </div>
               </div>
-              <div class="text-xs text-right" style="color:#8b8b93;">
-                <div class="mb-1">Category</div>
-                <div class="font-medium">{{ selectedItem()?._approval_index?.sourceTable || selectedItem()?.source || '—' }}</div>
+              
+              <div class="hidden sm:block">
+                <div class="text-[10px] text-[#8b8b93] font-bold uppercase tracking-widest text-right mb-1">Source</div>
+                <div class="px-2 py-1 rounded text-[11px] font-medium bg-[#f0f9f4] text-[#075f38] border border-[#d1e7dd] text-center">
+                  {{ selectedItem()?._approval_index?.sourceTable || selectedItem()?.source || '—' }}
+                </div>
               </div>
             </div>
           </div>

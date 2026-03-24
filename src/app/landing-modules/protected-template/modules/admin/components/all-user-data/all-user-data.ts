@@ -24,6 +24,26 @@ export class AllUserData {
   searchText = '';
   searchRightText = '';
   selectedItem: any = null;
+  get photoUrls(): string[] {
+    if (!this.selectedItem) return [];
+    const combined = [
+      ...(Array.isArray(this.selectedItem.photos_urls) ? this.selectedItem.photos_urls : []),
+      ...(Array.isArray(this.selectedItem.photos) ? this.selectedItem.photos : []),
+      ...(Array.isArray(this.selectedItem.images) ? this.selectedItem.images : []),
+      ...this.getMediaByType('image'),
+    ];
+    return this.normalizeMediaList(combined);
+  }
+
+  get videoUrls(): string[] {
+    if (!this.selectedItem) return [];
+    const combined = [
+      ...(Array.isArray(this.selectedItem.videos_urls) ? this.selectedItem.videos_urls : []),
+      ...(Array.isArray(this.selectedItem.videos) ? this.selectedItem.videos : []),
+      ...this.getMediaByType('video'),
+    ];
+    return this.normalizeMediaList(combined);
+  }
 
   // Modal state
   modalVisible = false;
@@ -63,6 +83,71 @@ export class AllUserData {
         .map((v: any) => String(v).toLowerCase());
       return values.some((v: string) => v.includes(q));
     });
+  }
+
+  private getMediaByType(type: 'image' | 'video'): any[] {
+    const media = Array.isArray(this.selectedItem?.media) ? this.selectedItem.media : [];
+    if (!media.length) return [];
+    return media.filter((entry: any) =>
+      type === 'image' ? this.isImageEntry(entry) : this.isVideoEntry(entry)
+    );
+  }
+
+  private normalizeMediaList(list: any): string[] {
+    const entries = Array.isArray(list) ? list : list ? [list] : [];
+    const urls = entries
+      .map((entry) => this.resolveEntryUrl(entry))
+      .filter((url): url is string => typeof url === 'string' && url.trim().length > 0);
+    return Array.from(new Set(urls));
+  }
+
+  private resolveEntryUrl(entry: any): string | null {
+    if (!entry) return null;
+    if (typeof entry === 'string') return entry;
+    const candidateProps = [
+      'url',
+      'uri',
+      'link',
+      'signedUrl',
+      'fileUrl',
+      'path',
+      'src',
+      'mediaUrl',
+      'downloadLink',
+      'attachmentUrl',
+    ];
+    for (const prop of candidateProps) {
+      const value = entry[prop];
+      if (typeof value === 'string' && value.trim()) {
+        return value;
+      }
+    }
+    if (entry.file && typeof entry.file === 'string' && entry.file.trim()) {
+      return entry.file;
+    }
+    if (entry.file?.url) return entry.file.url;
+    if (entry.data?.url) return entry.data.url;
+    return null;
+  }
+
+  private getMediaTypeHints(entry: any): string[] {
+    if (!entry || typeof entry !== 'object') return [];
+    return ['mediaType', 'type', 'mimeType', 'fileType', 'category']
+      .map((key) => entry[key])
+      .filter(Boolean)
+      .map((hint) => String(hint).toLowerCase());
+  }
+
+  private isImageEntry(entry: any): boolean {
+    const hints = this.getMediaTypeHints(entry);
+    const keywords = ['image', 'photo', 'jpeg', 'jpg', 'png', 'gif', 'webp', 'heic', 'heif', 'bmp'];
+    return hints.some((hint) => keywords.some((keyword) => hint.includes(keyword)));
+  }
+
+  private isVideoEntry(entry: any): boolean {
+    const hints = this.getMediaTypeHints(entry);
+    const keywords = ['video', 'mp4', 'mov', 'avi', 'mpeg', 'webm', 'mkv'];
+    return hints.some((hint) => keywords.some((keyword) => hint.includes(keyword)));
   }
 
   showInterestList(_t105: any) {
@@ -213,7 +298,11 @@ export class AllUserData {
     this.modalVisible = false;
 
     if (action === 'toggleEnable') {
-      target.enabled = !target.enabled;
+      if (target.isEnable !== undefined) {
+        target.isEnable = target.isEnable === 'true' ? 'false' : 'true';
+      } else {
+        target.enabled = !target.enabled;
+      }
       // TODO: persist via API
       return;
     }
@@ -264,7 +353,8 @@ export class AllUserData {
   // -------------------------
   // Toggle enable with confirm
   toggleEnable(item: any) {
-    const will = item.enabled ? 'Disable' : 'Enable';
+    const isCurrentlyEnabled = item.isEnable !== undefined ? item.isEnable === 'true' : item.enabled;
+    const will = isCurrentlyEnabled ? 'Disable' : 'Enable';
     this.openConfirm(
       `${will} item`,
       `Are you sure you want to ${will.toLowerCase()} this item?`,
@@ -281,7 +371,7 @@ export class AllUserData {
 
   // Send message: open message modal
   sendMessageToUser(item: any) {
-    const defaultMsg = `Hello ${item.owner || item.name || item.title || ''},\n\n`;
+    const defaultMsg = `Hello ${item.contactName || item.owner || item.name || item.title || ''},\n\n`;
     this.openMessageModal('Send message', defaultMsg, item, 'sendMessage');
   }
 
@@ -356,6 +446,7 @@ export class AllUserData {
         this.data['Businesses'] = [];
         bussinessList.items.forEach((property: any) => {
           this.data['Businesses'].push({
+            ...property,
             id: property.businessUserId,
             title: property.name ? property.name : 'No Name',
             shortDesc: property.tagline ? property.tagline : '',
@@ -365,6 +456,7 @@ export class AllUserData {
         this.data['Yoga Studio'] = [];
         studioList.items.forEach((property: any) => {
           this.data['Yoga Studio'].push({
+            ...property,
             id: property.studioUserId,
             title: property.name ? property.name : 'No Name',
             shortDesc: property.tagline ? property.tagline : '',
@@ -374,6 +466,7 @@ export class AllUserData {
         this.data['Classifieds'] = [];
         classifiedList.items.forEach((property: any) => {
           this.data['Classifieds'].push({
+            ...property,
             id: property.classifiedId,
             title: property.title ? property.title : 'No Name',
             shortDesc: property.location ? property.location : '',
@@ -385,6 +478,7 @@ export class AllUserData {
         
         memeberList.items.forEach((property: any) => {
           this.data['Community Members'].push({
+            ...property,
             id: property.communityUserId,
             title: property.firstName ? property.firstName+ ' '+property.lastName : 'No Name',
             shortDesc: property.phone ? property.phone : '',
@@ -458,10 +552,12 @@ export class AllUserData {
         this.data['Real Estate'] = [];
         response.items.forEach((property: any) => {
           this.data['Real Estate'].push({
+            ...property,
             id: property.propertyId,
             title: property.propertyName ? property.propertyName : 'No Name',
             shortDesc: property.details ? property.details : '',
             details: property.details,
+            owner: property.ownerName,
           });
         });
         this.loading = false;

@@ -352,7 +352,7 @@ export class ItemList {
   }
   sendMessageToUser(item: any, subItem?: any) {
     this.currentSubItem = subItem;
-    const defaultMsg = `Hello ${item.owner || item.name || item.title || ''},\n\n`;
+    const defaultMsg = `Hello ${item.contactName || item.owner || item.name || item.title || ''},\n\n`;
     this.openMessageModal('Send message', defaultMsg, item, 'sendMessage');
   }
   // Toggle visibility (no confirm needed)
