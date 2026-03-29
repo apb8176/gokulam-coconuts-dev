@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Cognito } from '../../../services/cognito.service';
 import { PaymentService } from '../../../services/payment.service';
 import { HttpClient } from '@angular/common/http';
 import { NotificationService } from '../../../services/notification-service';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Subject, takeUntil } from 'rxjs';
+import { SignupPopupService } from '../signup-popup.service';
 
 declare const Razorpay: any; // loader will put this on window
 
@@ -14,7 +15,7 @@ declare const Razorpay: any; // loader will put this on window
   templateUrl: './signup-popup-component.html',
   styleUrls: ['./signup-popup-component.scss']
 })
-export class SignupPopupComponent implements OnInit {
+export class SignupPopupComponent implements OnInit, OnDestroy {
   @Input() isVisible: boolean = false;
   @Output() close = new EventEmitter<void>();
   @Output() signup = new EventEmitter<any>();
@@ -40,8 +41,11 @@ export class SignupPopupComponent implements OnInit {
     private cognitoService: Cognito,
     private paymentService: PaymentService,
     private http: HttpClient,
-     private notify: NotificationService
+    private notify: NotificationService,
+    private readonly signupPopupService: SignupPopupService
   ) {}
+
+  private readonly destroy$ = new Subject<void>();
 
   ngOnInit(): void {
     this.signupForm = this.fb.group({
@@ -52,6 +56,23 @@ export class SignupPopupComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/)]],
       role: ['', Validators.required]
     });
+
+    this.signupPopupService.selectedRole$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((role) => {
+        if (!this.signupForm) {
+          return;
+        }
+        this.signupForm.patchValue(
+          { role: role ?? '' },
+          { emitEvent: false }
+        );
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   get f() { return this.signupForm.controls; }

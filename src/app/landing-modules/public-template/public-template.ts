@@ -1,9 +1,11 @@
 // public-template.component.ts
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
-import { filter } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
+import { Subject } from 'rxjs';
+import { SignupPopupService } from './signup-popup.service';
 
 @Component({
   selector: 'app-public-template',
@@ -12,18 +14,23 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./public-template.scss'],
   standalone: false,
 })
-export class PublicTemplate implements OnInit {
+export class PublicTemplate implements OnInit, OnDestroy {
   mobileMenuOpen = false;
   showSignupPopup = false;
   showLoginForm = false;
   showConfirmUserForm = false;
+  private readonly destroy$ = new Subject<void>();
 
   private readonly oidcSecurityService = inject(OidcSecurityService);
   private readonly router = inject(Router);
 
   configuration$ = this.oidcSecurityService.getConfiguration();
   userData$ = this.oidcSecurityService.userData$;
-  constructor( private auth: AuthService,private cdr:ChangeDetectorRef){}
+  constructor(
+    private readonly auth: AuthService,
+    private readonly cdr: ChangeDetectorRef,
+    private readonly signupPopupService: SignupPopupService
+  ) { }
   isAuthenticated = false;
 showBillingPopup: boolean = false;
   userData: any;
@@ -46,6 +53,12 @@ showBillingPopup: boolean = false;
     this.router.events.pipe(filter((e) => e instanceof NavigationEnd)).subscribe(() => {
       this.mobileMenuOpen = false;
     });
+
+    this.signupPopupService.isVisible$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        this.showSignupPopup = value;
+      });
 
     // subscribe auth state
     this.oidcSecurityService.isAuthenticated$.subscribe(
@@ -73,7 +86,7 @@ showBillingPopup: boolean = false;
   returnSignupData(event: any) {
     this.userData = event.input;
     console.log('Signup returned to parent:', event);
-    this.showSignupPopup = false;
+    this.signupPopupService.hide();
     this.showConfirmUserForm = true;
   }
 
@@ -88,10 +101,18 @@ showBillingPopup: boolean = false;
   }
 
   // toggles signup popup when called from header button
-  handleSignup(event: any) {
-    // If event is emitted from a child popup keep logic; if called from header button it will be undefined
-    this.showSignupPopup = !this.showSignupPopup;
+  handleSignup(event?: any) {
+    this.signupPopupService.toggle();
     console.log('handleSignup called, payload:', event);
+  }
+
+  closeSignupPopup() {
+    this.signupPopupService.hide();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   // toggles login popup
