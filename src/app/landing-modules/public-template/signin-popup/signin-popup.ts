@@ -15,6 +15,7 @@ export class SigninPopup implements OnInit {
   @Input() isVisible: boolean = false;
   @Output() close = new EventEmitter<any>();
   @Output() signin = new EventEmitter<any>();
+  @Output() requestSignup = new EventEmitter<void>();
 
   signinForm!: FormGroup;
   forgotPasswordForm!: FormGroup;
@@ -307,6 +308,12 @@ export class SigninPopup implements OnInit {
 
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
+  }
+
+  redirectToSignup(): void {
+    if (this.isAnyLoading()) return;
+    this.closePopup();
+    this.requestSignup.emit();
   }
 
   // add this helper inside the component class

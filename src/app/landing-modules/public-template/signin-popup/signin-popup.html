@@ -90,9 +90,20 @@
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
           </svg>
           <span *ngIf="!isLoadingSignIn">Sign In</span>
-          <span *ngIf="isLoadingSignIn">Signing in...</span>
-        </button>
-      </form>
+        <span *ngIf="isLoadingSignIn">Signing in...</span>
+      </button>
+    </form>
+    <p class="text-center mt-4 text-sm text-[#0D0D0D]">
+      New to Gokulam Coconuts?
+      <button
+        type="button"
+        (click)="redirectToSignup()"
+        [disabled]="isAnyLoading()"
+        class="text-[#115930] font-semibold underline focus:outline-none"
+      >
+        Register
+      </button>
+    </p>
     </div>
 
     <!-- ============================= -->

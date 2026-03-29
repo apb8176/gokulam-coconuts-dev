@@ -110,6 +110,18 @@ showBillingPopup: boolean = false;
     this.signupPopupService.hide();
   }
 
+  openLoginFromSignup(): void {
+    this.signupPopupService.hide();
+    this.showLoginForm = true;
+    this.cdr.detectChanges();
+  }
+
+  openSignupFromLogin(): void {
+    this.showLoginForm = false;
+    this.signupPopupService.show();
+    this.cdr.detectChanges();
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

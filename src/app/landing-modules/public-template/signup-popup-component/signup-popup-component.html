@@ -143,6 +143,17 @@
       </span>
     </button>
   </div>
+  <p class="text-center text-sm text-[#0D0D0D] mt-4">
+    Already have an account?
+    <button
+      type="button"
+      class="text-[#115930] font-semibold underline focus:outline-none"
+      (click)="switchToLogin()"
+      [disabled]="loading"
+    >
+      Login
+    </button>
+  </p>
     </form>
   </div>
 </div>

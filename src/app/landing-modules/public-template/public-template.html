@@ -106,10 +106,10 @@
 
       <!-- Signup / Login / Confirm popups (inputs / outputs preserved) -->
       <app-signup-popup [isVisible]="showSignupPopup" (close)="closeSignupPopup()"
-        (signup)="returnSignupData($event)"></app-signup-popup>
+        (signup)="returnSignupData($event)" (navigateToLogin)="openLoginFromSignup()"></app-signup-popup>
 
       <app-signin-popup *ngIf="showLoginForm" [isVisible]="showLoginForm" (close)="showLoginForm = false"
-        (signup)="handleSignup($event)"></app-signin-popup>
+        (signup)="handleSignup($event)" (requestSignup)="openSignupFromLogin()"></app-signin-popup>
 
       <app-confirm-code-popup *ngIf="showConfirmUserForm" [isVisible]="showConfirmUserForm" [data]="this.userData"
         (close)="showConfirmUserForm = false" (confirm)="returnConfirmData($event)"></app-confirm-code-popup>

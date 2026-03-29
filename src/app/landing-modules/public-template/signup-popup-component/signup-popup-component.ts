@@ -19,6 +19,7 @@ export class SignupPopupComponent implements OnInit, OnDestroy {
   @Input() isVisible: boolean = false;
   @Output() close = new EventEmitter<void>();
   @Output() signup = new EventEmitter<any>();
+  @Output() navigateToLogin = new EventEmitter<void>();
 
   signupForm!: FormGroup;
   roles: any = [
@@ -85,6 +86,11 @@ export class SignupPopupComponent implements OnInit, OnDestroy {
     Object.keys(this.signupForm.controls).forEach(key => {
       this.signupForm.controls[key].setErrors(null);
     });
+  }
+
+  switchToLogin(): void {
+    this.closePopup();
+    this.navigateToLogin.emit();
   }
 
   private amountForRole(role: string): number /* paise */ {
