@@ -15,16 +15,22 @@
         </p>
         <div class="mt-8 flex flex-wrap gap-4 items-center">
           <!-- Outlined -->
-          <a href="#"
-            class="inline-flex items-center justify-center px-6 py-3 rounded-md border-2 border-white/40 text-white text-sm font-semibold hover:border-white transition">
+          <button
+            type="button"
+            (click)="openSignupForm($event, 'property-owner')"
+            class="inline-flex items-center justify-center px-6 py-3 rounded-md border-2 border-white/40 text-white text-sm font-semibold hover:border-white transition"
+          >
             LIST YOUR HOME
-          </a>
+          </button>
 
           <!-- Filled Yellow -->
-          <a href="#"
-            class="inline-flex items-center justify-center px-6 py-3 rounded-md bg-[#F2C438] text-[#0D0D0D] font-semibold text-sm hover:brightness-95 transition">
+          <button
+            type="button"
+            (click)="openSignupForm($event)"
+            class="inline-flex items-center justify-center px-6 py-3 rounded-md bg-[#F2C438] text-[#0D0D0D] font-semibold text-sm hover:brightness-95 transition"
+          >
             GET STARTED
-          </a>
+          </button>
         </div>
 
       </div>
