@@ -2,68 +2,121 @@
 :host {
   display: block;
   min-height: 100vh;
-  position: relative;
-  overflow: hidden;
+  background: linear-gradient(180deg, #f8f4e8 0%, #ffffff 100%);
 }
 
-:host::before {
-  content: "";
+.home-placeholder {
+  min-height: calc(100vh - 220px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+}
+
+.home-placeholder__card {
+  position: relative;
+  overflow: hidden;
+  width: min(100%, 900px);
+  min-height: clamp(420px, 62vh, 640px);
+  border: 1px solid rgba(17, 89, 48, 0.12);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 24px 60px rgba(17, 89, 48, 0.08);
+  padding: clamp(2.5rem, 5vw, 4rem) 1.5rem;
+  isolation: isolate;
+}
+
+.home-placeholder__logo-wrap {
   position: absolute;
   inset: 0;
-  background-image: url("/assets/logo.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: clamp(220px, 40vw, 520px);
-  opacity: 0.08;
-  pointer-events: none;
-  z-index: -1;
-}
-/* 1. Base style for all screens */
-.section-watermark {
-  position: relative;
-  overflow: hidden;
-}
-
-.section-watermark::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  
-  /* Responsive sizing */
- width: clamp(250px, 40vw, 500px);
-  height: clamp(250px, 40vw, 500px);
-  background-image: url('/assets/logo.png');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  
-  /* Appearance */
-  opacity: 0.06; 
-  transform: translate(-50%, -50%) rotate(-15deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   pointer-events: none;
   z-index: 0;
-  mix-blend-mode: multiply; 
 }
 
-/* 2. Specific fix for the Dark Green Hero Section */
-/* This ensures the logo is white on the dark background */
-section.bg-\[\#115930\].section-watermark::before {
-  filter: brightness(0) invert(1);
-  mix-blend-mode: screen;
-  opacity: 0.04;
+.home-placeholder__logo {
+  width: clamp(240px, 42vw, 420px);
+  max-width: 72%;
+  max-height: calc(100% - 3rem);
+  opacity: 0.08;
+  transform: rotate(-12deg);
+  object-fit: contain;
 }
 
-/* 3. Mobile specific adjustments (All 3 sections) */
+.home-placeholder__content {
+  position: relative;
+  z-index: 1;
+  max-width: 560px;
+  min-height: clamp(300px, 46vh, 420px);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.home-placeholder__eyebrow {
+  margin: 0 0 1rem;
+  color: #115930;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.home-placeholder__title {
+  margin: 0;
+  color: #163020;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3.75rem);
+  line-height: 1.1;
+}
+
+.home-placeholder__text {
+  margin: 1.25rem 0 0;
+  color: #4b5563;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
 @media (max-width: 767px) {
-  .section-watermark::before {
-    width: 280px;  /* Smaller for phone screens */
-    height: 280px;
-    opacity: 0.08; /* Fainter to keep text readable */
-    transform: translate(-50%, -50%) rotate(-10deg);
+  .home-placeholder {
+    min-height: calc(100vh - 180px);
+    padding: 2rem 1rem;
   }
 
-  section.bg-\[\#115930\].section-watermark::before {
-    opacity: 0.02; /* Extra faint on the dark mobile hero */
+  .home-placeholder__card {
+    min-height: clamp(360px, 55vh, 520px);
+    padding: 2.5rem 1.25rem;
+    border-radius: 20px;
+  }
+
+  .home-placeholder__logo {
+    width: min(78%, 280px);
+    max-height: calc(100% - 2.5rem);
+    opacity: 0.07;
+  }
+
+  .home-placeholder__content {
+    min-height: 280px;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-placeholder__card {
+    min-height: 340px;
+    padding: 2rem 1rem;
+  }
+
+  .home-placeholder__title {
+    font-size: clamp(1.7rem, 8vw, 2.4rem);
+  }
+
+  .home-placeholder__text {
+    font-size: 0.98rem;
+    line-height: 1.6;
   }
 }
