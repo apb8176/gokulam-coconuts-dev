@@ -10,11 +10,20 @@ import { SigninPopup } from './signin-popup/signin-popup';
 import { PublicTemplate } from './public-template';
 import { BillingPopupComponent } from './billing-popup-component/billing-popup-component';
 import { GalleryComponent } from './gallery-component/gallery-component';
+import { ServicesComponent } from './services/services.component';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
     PublicTemplate,
-    HomeComponent,SignupPopupComponent, ConfirmCodePopup, SigninPopup, BillingPopupComponent, GalleryComponent
+    HomeComponent,
+    SignupPopupComponent,
+    ConfirmCodePopup,
+    SigninPopup,
+    BillingPopupComponent,
+    GalleryComponent,
+    ServicesComponent,
+    AboutComponent
   ],
   imports: [
     CommonModule,FormsModule,  ReactiveFormsModule,

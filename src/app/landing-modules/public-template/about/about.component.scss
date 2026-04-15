@@ -1,0 +1,51 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+:host::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/assets/logo.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: clamp(220px, 40vw, 520px);
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.section-watermark {
+  position: relative;
+  overflow: hidden;
+}
+
+.section-watermark::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(250px, 40vw, 500px);
+  height: clamp(250px, 40vw, 500px);
+  background-image: url('/assets/logo.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: 0.06;
+  transform: translate(-50%, -50%) rotate(-15deg);
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: multiply;
+}
+
+@media (max-width: 767px) {
+  .section-watermark::before {
+    width: 280px;
+    height: 280px;
+    opacity: 0.08;
+    transform: translate(-50%, -50%) rotate(-10deg);
+  }
+}

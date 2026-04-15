@@ -1,28 +1,28 @@
 
 :host {
   display: block;
-  min-height: 100vh;
+  height: 100%;
   background: linear-gradient(180deg, #f8f4e8 0%, #ffffff 100%);
 }
 
 .home-placeholder {
-  min-height: calc(100vh - 220px);
+  min-height: calc(100dvh - 132px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 3rem 1.5rem;
+  padding: clamp(0.75rem, 2vh, 1.5rem) 1.5rem;
 }
 
 .home-placeholder__card {
   position: relative;
   overflow: hidden;
   width: min(100%, 900px);
-  min-height: clamp(420px, 62vh, 640px);
+  min-height: clamp(280px, 44vh, 460px);
   border: 1px solid rgba(17, 89, 48, 0.12);
   border-radius: 24px;
   background: rgba(255, 255, 255, 0.92);
   box-shadow: 0 24px 60px rgba(17, 89, 48, 0.08);
-  padding: clamp(2.5rem, 5vw, 4rem) 1.5rem;
+  padding: clamp(1.5rem, 4vw, 3rem) 1.5rem;
   isolation: isolate;
 }
 
@@ -49,7 +49,7 @@
   position: relative;
   z-index: 1;
   max-width: 560px;
-  min-height: clamp(300px, 46vh, 420px);
+  min-height: clamp(200px, 28vh, 300px);
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -83,13 +83,13 @@
 
 @media (max-width: 767px) {
   .home-placeholder {
-    min-height: calc(100vh - 180px);
-    padding: 2rem 1rem;
+    min-height: auto;
+    padding: 1rem;
   }
 
   .home-placeholder__card {
-    min-height: clamp(360px, 55vh, 520px);
-    padding: 2.5rem 1.25rem;
+    min-height: 320px;
+    padding: 1.5rem 1.25rem;
     border-radius: 20px;
   }
 
@@ -100,15 +100,23 @@
   }
 
   .home-placeholder__content {
-    min-height: 280px;
+    min-height: 220px;
     max-width: 100%;
   }
 }
 
 @media (max-width: 480px) {
+  .home-placeholder {
+    padding: 0.75rem;
+  }
+
   .home-placeholder__card {
-    min-height: 340px;
-    padding: 2rem 1rem;
+    min-height: 280px;
+    padding: 1.25rem 1rem;
+  }
+
+  .home-placeholder__content {
+    min-height: 200px;
   }
 
   .home-placeholder__title {
